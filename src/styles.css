@@ -97,6 +97,28 @@
   --sidebar-ring: oklch(0.704 0.04 256.788);
 }
 
+:root {
+  --fed-navy: oklch(0.25 0.09 265);
+  --fed-navy-deep: oklch(0.16 0.06 265);
+  --fed-gold: oklch(0.78 0.15 75);
+  --rag-critical: oklch(0.58 0.22 25);
+  --rag-warning: oklch(0.78 0.16 70);
+  --rag-ontrack: oklch(0.62 0.17 150);
+  --rag-info: oklch(0.6 0.14 220);
+  --gradient-header: linear-gradient(135deg, oklch(0.18 0.07 265), oklch(0.3 0.11 260));
+  --shadow-card: 0 1px 3px oklch(0.2 0.05 260 / 0.08), 0 8px 24px oklch(0.2 0.05 260 / 0.06);
+}
+
+@theme inline {
+  --color-fed-navy: var(--fed-navy);
+  --color-fed-navy-deep: var(--fed-navy-deep);
+  --color-fed-gold: var(--fed-gold);
+  --color-rag-critical: var(--rag-critical);
+  --color-rag-warning: var(--rag-warning);
+  --color-rag-ontrack: var(--rag-ontrack);
+  --color-rag-info: var(--rag-info);
+}
+
 .dark {
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
