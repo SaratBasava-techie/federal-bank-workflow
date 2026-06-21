@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 const tabs = [
   { to: "/", label: "RAG Summary" },
   { to: "/program", label: "Program Overview" },
+  { to: "/tracker", label: "Work Tracker" },
 ];
 
 export function DashboardShell({ children }: { children: ReactNode }) {
