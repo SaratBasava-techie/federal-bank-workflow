@@ -204,5 +204,3 @@ function Table({ headers, children }: { headers: string[]; children: React.React
 function Td({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return <td className={`px-4 py-3 align-top text-foreground/80 ${className}`}>{children}</td>;
 }
-  );
-}
