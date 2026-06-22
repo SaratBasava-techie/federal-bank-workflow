@@ -215,7 +215,10 @@ interface RawActivity {
   month: string;
 }
 
-const ALL_ACTIVITIES = activitiesData as RawActivity[];
+const ALL_ACTIVITIES = (activitiesData as RawActivity[]).map((a) => ({
+  ...a,
+  ledBy: a.ledBy === "Client" ? "client" : "FI-PS",
+}));
 
 const WORKSTREAM_ORDER = [
   "Approach & Key Decisions",
