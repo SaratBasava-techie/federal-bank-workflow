@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -22,6 +23,7 @@ import {
   immediateAttention,
   programKpis,
 } from "@/lib/dashboard-data";
+import activitiesData from "@/lib/workflow-activities.json";
 
 export const Route = createFileRoute("/program")({
   head: () => ({
