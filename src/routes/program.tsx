@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -22,6 +23,7 @@ import {
   immediateAttention,
   programKpis,
 } from "@/lib/dashboard-data";
+import activitiesData from "@/lib/workflow-activities.json";
 
 export const Route = createFileRoute("/program")({
   head: () => ({
@@ -197,7 +199,164 @@ function ProgramPage() {
           </ol>
         </Panel>
       </div>
+
+      <ActivityList />
     </DashboardShell>
+  );
+}
+
+interface RawActivity {
+  sr: number;
+  workstream: string;
+  phase: string;
+  ledBy: string;
+  activity: string;
+  endDate: string;
+  month: string;
+}
+
+const ALL_ACTIVITIES = activitiesData as RawActivity[];
+
+const WORKSTREAM_ORDER = [
+  "Approach & Key Decisions",
+  "Platform/Infrastructure",
+  "Application Build & Support",
+  "Data Migration",
+  "Scheme & Compliance",
+  "Channel Connectivity",
+  "Business",
+  "Contracting",
+];
+
+function ActivityList() {
+  const [search, setSearch] = useState("");
+  const [openStreams, setOpenStreams] = useState<Record<string, boolean>>(() => {
+    const init: Record<string, boolean> = {};
+    WORKSTREAM_ORDER.forEach((w) => (init[w] = true));
+    return init;
+  });
+
+  const grouped = useMemo(() => {
+    const map = new Map<string, RawActivity[]>();
+    ALL_ACTIVITIES.forEach((a) => {
+      const list = map.get(a.workstream) || [];
+      list.push(a);
+      map.set(a.workstream, list);
+    });
+    WORKSTREAM_ORDER.forEach((w) => {
+      if (!map.has(w)) map.set(w, []);
+    });
+    return Array.from(map.entries()).filter(([, list]) => list.length > 0);
+  }, []);
+
+  const toggle = (w: string) => setOpenStreams((s) => ({ ...s, [w]: !s[w] }));
+
+  const filtered = grouped.map(([ws, list]) => {
+    if (!search.trim()) return [ws, list] as const;
+    const q = search.toLowerCase();
+    const filteredList = list.filter(
+      (a) =>
+        a.activity.toLowerCase().includes(q) ||
+        a.ledBy.toLowerCase().includes(q) ||
+        a.phase.toLowerCase().includes(q) ||
+        a.endDate.toLowerCase().includes(q),
+    );
+    return [ws, filteredList] as const;
+  });
+
+  const totalShown = filtered.reduce((sum, [, list]) => sum + list.length, 0);
+
+  return (
+    <div className="mt-6">
+      <Panel title={`Activities by Workstream (${totalShown})`}>
+        <div className="mb-3 flex flex-wrap items-center gap-3">
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search activity, lead, phase or deadline…"
+            className="flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm"
+          />
+          <button
+            onClick={() =>
+              setOpenStreams((s) => {
+                const allOpen = WORKSTREAM_ORDER.every((w) => s[w] !== false);
+                const next: Record<string, boolean> = {};
+                WORKSTREAM_ORDER.forEach((w) => (next[w] = !allOpen));
+                return next;
+              })
+            }
+            className="rounded-md border border-border bg-background px-3 py-2 text-xs font-medium hover:bg-muted"
+          >
+            Expand / Collapse All
+          </button>
+        </div>
+
+        <div className="space-y-3">
+          {filtered.map(([ws, list]) => {
+            const isOpen = openStreams[ws] !== false;
+            return (
+              <div
+                key={ws}
+                className="overflow-hidden rounded-lg border border-border"
+              >
+                <button
+                  onClick={() => toggle(ws)}
+                  className="flex w-full items-center justify-between bg-muted/40 px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-muted/70"
+                >
+                  <span>
+                    {ws}{" "}
+                    <span className="ml-1 text-xs font-normal text-muted-foreground">
+                      ({list.length})
+                    </span>
+                  </span>
+                  <span className="text-muted-foreground">{isOpen ? "−" : "+"}</span>
+                </button>
+                {isOpen && (
+                  <div className="overflow-x-auto">
+                    <table className="w-full min-w-[700px] text-sm">
+                      <thead className="bg-muted/30 text-left text-xs uppercase tracking-wide text-muted-foreground">
+                        <tr>
+                          <th className="px-3 py-2">#</th>
+                          <th className="px-3 py-2">Activity</th>
+                          <th className="px-3 py-2">Phase</th>
+                          <th className="px-3 py-2">Lead</th>
+                          <th className="px-3 py-2">Deadline</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {list.map((a) => (
+                          <tr key={a.sr} className="border-t border-border">
+                            <td className="px-3 py-2 text-xs text-muted-foreground">
+                              {a.sr}
+                            </td>
+                            <td className="px-3 py-2">{a.activity}</td>
+                            <td className="px-3 py-2 text-xs">{a.phase || "—"}</td>
+                            <td className="px-3 py-2 text-xs">{a.ledBy || "—"}</td>
+                            <td className="px-3 py-2 whitespace-nowrap text-xs">
+                              {a.endDate}
+                            </td>
+                          </tr>
+                        ))}
+                        {list.length === 0 && (
+                          <tr>
+                            <td
+                              colSpan={5}
+                              className="px-3 py-6 text-center text-sm text-muted-foreground"
+                            >
+                              No activities match your search.
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </Panel>
+    </div>
   );
 }
 
