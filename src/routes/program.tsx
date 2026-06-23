@@ -233,6 +233,8 @@ const WORKSTREAM_ORDER = [
 
 function ActivityList() {
   const [search, setSearch] = useState("");
+  const [leadFilter, setLeadFilter] = useState<"all" | "FI-PS" | "client">("all");
+  const [urgencyFilter, setUrgencyFilter] = useState<"all" | "overdue" | "soon" | "later">("all");
   const [openStreams, setOpenStreams] = useState<Record<string, boolean>>(() => {
     const init: Record<string, boolean> = {};
     WORKSTREAM_ORDER.forEach((w) => (init[w] = true));
@@ -255,29 +257,56 @@ function ActivityList() {
   const toggle = (w: string) => setOpenStreams((s) => ({ ...s, [w]: !s[w] }));
 
   const filtered = grouped.map(([ws, list]) => {
-    if (!search.trim()) return [ws, list] as const;
     const q = search.toLowerCase();
     const filteredList = list.filter(
-      (a) =>
-        a.activity.toLowerCase().includes(q) ||
-        a.ledBy.toLowerCase().includes(q) ||
-        a.phase.toLowerCase().includes(q) ||
-        a.endDate.toLowerCase().includes(q),
+      (a) => {
+        if (leadFilter !== "all" && a.ledBy !== leadFilter) return false;
+        if (urgencyFilter !== "all" && urgencyOf(a.endDate) !== urgencyFilter) return false;
+        if (!q) return true;
+        return (
+          a.activity.toLowerCase().includes(q) ||
+          a.ledBy.toLowerCase().includes(q) ||
+          a.phase.toLowerCase().includes(q) ||
+          a.endDate.toLowerCase().includes(q)
+        );
+      },
     );
     return [ws, filteredList] as const;
   });
 
   const totalShown = filtered.reduce((sum, [, list]) => sum + list.length, 0);
+  const totalAll = ALL_ACTIVITIES.length;
 
   return (
     <div className="mt-6">
-      <Panel title={`Activities by Workstream (${totalShown})`}>
-        <div className="mb-3 flex flex-wrap items-center gap-3">
+      <Panel title={`Activities by Workstream — ${totalShown} of ${totalAll}`}>
+        <div className="mb-4 flex flex-wrap items-center gap-2">
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search activity, lead, phase or deadline…"
-            className="flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm"
+            className="min-w-[200px] flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm transition focus:border-[var(--fed-gold)] focus:outline-none focus:ring-2 focus:ring-[var(--fed-gold)]/30"
+          />
+          <FilterChips
+            label="Lead"
+            value={leadFilter}
+            onChange={(v) => setLeadFilter(v as typeof leadFilter)}
+            options={[
+              { v: "all", label: "All" },
+              { v: "FI-PS", label: "FI-PS" },
+              { v: "client", label: "Client" },
+            ]}
+          />
+          <FilterChips
+            label="Status"
+            value={urgencyFilter}
+            onChange={(v) => setUrgencyFilter(v as typeof urgencyFilter)}
+            options={[
+              { v: "all", label: "All" },
+              { v: "overdue", label: "Overdue", tone: "critical" },
+              { v: "soon", label: "Due soon", tone: "warning" },
+              { v: "later", label: "On track", tone: "ontrack" },
+            ]}
           />
           <button
             onClick={() =>
@@ -288,7 +317,7 @@ function ActivityList() {
                 return next;
               })
             }
-            className="rounded-md border border-border bg-background px-3 py-2 text-xs font-medium hover:bg-muted"
+            className="rounded-md border border-border bg-background px-3 py-2 text-xs font-medium transition hover:bg-muted hover:shadow-sm"
           >
             Expand / Collapse All
           </button>
@@ -297,25 +326,53 @@ function ActivityList() {
         <div className="space-y-3">
           {filtered.map(([ws, list]) => {
             const isOpen = openStreams[ws] !== false;
+            const overdue = list.filter((a) => urgencyOf(a.endDate) === "overdue").length;
+            const soon = list.filter((a) => urgencyOf(a.endDate) === "soon").length;
             return (
               <div
                 key={ws}
-                className="overflow-hidden rounded-lg border border-border"
+                className="overflow-hidden rounded-lg border border-border bg-card transition hover:border-[var(--fed-gold)]/60 hover:shadow-md"
               >
                 <button
                   onClick={() => toggle(ws)}
-                  className="flex w-full items-center justify-between bg-muted/40 px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-muted/70"
+                  className="group flex w-full items-center justify-between gap-3 bg-gradient-to-r from-muted/60 to-muted/20 px-4 py-3 text-sm font-semibold text-foreground transition hover:from-muted/80 hover:to-muted/40"
                 >
-                  <span>
-                    {ws}{" "}
-                    <span className="ml-1 text-xs font-normal text-muted-foreground">
-                      ({list.length})
+                  <span className="flex flex-wrap items-center gap-2">
+                    <span
+                      className="inline-block h-2.5 w-2.5 rounded-full"
+                      style={{ background: streamColor(ws) }}
+                    />
+                    <span>{ws}</span>
+                    <span className="rounded-full bg-background/80 px-2 py-0.5 text-[11px] font-normal text-muted-foreground">
+                      {list.length}
                     </span>
+                    {overdue > 0 && (
+                      <span
+                        className="rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
+                        style={{ background: "var(--rag-critical)" }}
+                      >
+                        {overdue} overdue
+                      </span>
+                    )}
+                    {soon > 0 && (
+                      <span
+                        className="rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
+                        style={{ background: "var(--rag-watch, #d97706)" }}
+                      >
+                        {soon} due soon
+                      </span>
+                    )}
                   </span>
-                  <span className="text-muted-foreground">{isOpen ? "−" : "+"}</span>
+                  <span
+                    className="flex h-6 w-6 items-center justify-center rounded-full bg-background/80 text-muted-foreground transition-transform duration-200"
+                    style={{ transform: isOpen ? "rotate(180deg)" : "rotate(0deg)" }}
+                    aria-hidden
+                  >
+                    ▾
+                  </span>
                 </button>
                 {isOpen && (
-                  <div className="overflow-x-auto">
+                  <div className="animate-fade-in overflow-x-auto">
                     <table className="w-full min-w-[700px] text-sm">
                       <thead className="bg-muted/30 text-left text-xs uppercase tracking-wide text-muted-foreground">
                         <tr>
@@ -328,15 +385,20 @@ function ActivityList() {
                       </thead>
                       <tbody>
                         {list.map((a) => (
-                          <tr key={a.sr} className="border-t border-border">
+                          <tr
+                            key={a.sr}
+                            className="border-t border-border transition-colors hover:bg-muted/40"
+                          >
                             <td className="px-3 py-2 text-xs text-muted-foreground">
                               {a.sr}
                             </td>
-                            <td className="px-3 py-2">{a.activity}</td>
+                            <td className="px-3 py-2 text-foreground/90">{a.activity}</td>
                             <td className="px-3 py-2 text-xs">{a.phase || "—"}</td>
-                            <td className="px-3 py-2 text-xs">{a.ledBy || "—"}</td>
+                            <td className="px-3 py-2 text-xs">
+                              <LeadBadge lead={a.ledBy} />
+                            </td>
                             <td className="px-3 py-2 whitespace-nowrap text-xs">
-                              {a.endDate}
+                              <DeadlinePill date={a.endDate} />
                             </td>
                           </tr>
                         ))}
@@ -361,6 +423,120 @@ function ActivityList() {
       </Panel>
     </div>
   );
+}
+
+function FilterChips({
+  label,
+  value,
+  onChange,
+  options,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  options: { v: string; label: string; tone?: "critical" | "warning" | "ontrack" }[];
+}) {
+  return (
+    <div className="flex items-center gap-1 rounded-md border border-border bg-background p-1 shadow-sm">
+      <span className="px-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+        {label}
+      </span>
+      {options.map((o) => {
+        const active = o.v === value;
+        const toneColor =
+          o.tone === "critical"
+            ? "var(--rag-critical)"
+            : o.tone === "warning"
+              ? "#d97706"
+              : o.tone === "ontrack"
+                ? "var(--rag-ontrack)"
+                : "var(--fed-navy, #0b2545)";
+        return (
+          <button
+            key={o.v}
+            onClick={() => onChange(o.v)}
+            className="rounded px-2 py-1 text-xs font-medium transition"
+            style={{
+              background: active ? toneColor : "transparent",
+              color: active ? "white" : "var(--color-muted-foreground)",
+            }}
+          >
+            {o.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function LeadBadge({ lead }: { lead: string }) {
+  if (!lead) return <span>—</span>;
+  const isClient = lead === "client";
+  return (
+    <span
+      className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold"
+      style={{
+        background: isClient
+          ? "color-mix(in oklab, var(--rag-ontrack) 18%, transparent)"
+          : "color-mix(in oklab, var(--fed-gold, #f59e0b) 22%, transparent)",
+        color: isClient ? "var(--rag-ontrack)" : "var(--fed-navy, #0b2545)",
+      }}
+    >
+      <span
+        className="h-1.5 w-1.5 rounded-full"
+        style={{ background: isClient ? "var(--rag-ontrack)" : "var(--fed-gold, #f59e0b)" }}
+      />
+      {isClient ? "Client" : "FI-PS"}
+    </span>
+  );
+}
+
+function urgencyOf(date: string): "overdue" | "soon" | "later" | "unknown" {
+  const t = Date.parse(date);
+  if (Number.isNaN(t)) return "unknown";
+  const now = Date.now();
+  const days = (t - now) / 86400000;
+  if (days < 0) return "overdue";
+  if (days <= 30) return "soon";
+  return "later";
+}
+
+function DeadlinePill({ date }: { date: string }) {
+  const u = urgencyOf(date);
+  const color =
+    u === "overdue"
+      ? "var(--rag-critical)"
+      : u === "soon"
+        ? "#d97706"
+        : u === "later"
+          ? "var(--rag-ontrack)"
+          : "var(--color-muted-foreground)";
+  return (
+    <span
+      className="inline-flex items-center gap-1 rounded-md px-2 py-0.5 font-medium"
+      style={{
+        background: `color-mix(in oklab, ${color} 14%, transparent)`,
+        color,
+      }}
+    >
+      <span className="h-1.5 w-1.5 rounded-full" style={{ background: color }} />
+      {date || "—"}
+    </span>
+  );
+}
+
+const STREAM_COLORS: Record<string, string> = {
+  "Approach & Key Decisions": "#6366f1",
+  "Platform/Infrastructure": "#0ea5e9",
+  "Application Build & Support": "#14b8a6",
+  "Data Migration": "#f59e0b",
+  "Scheme & Compliance": "#ef4444",
+  "Channel Connectivity": "#8b5cf6",
+  Business: "#22c55e",
+  Contracting: "#ec4899",
+};
+function streamColor(ws: string) {
+  return STREAM_COLORS[ws] || "#94a3b8";
 }
 
 function pct(n: number, d: number) {
