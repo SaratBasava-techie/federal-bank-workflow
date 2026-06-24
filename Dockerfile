@@ -9,7 +9,8 @@ COPY . .
 
 RUN npm run build
 
-EXPOSE 8080
-ENV PORT=8080
+RUN npm install -g serve
 
-CMD ["node", ".output/server/index.mjs"]
+EXPOSE 8080
+
+CMD ["serve", "-s", "dist/client", "-l", "8080"]
