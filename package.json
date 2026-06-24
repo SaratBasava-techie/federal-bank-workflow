@@ -8,7 +8,7 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
-     "start": "node dist/server/server.js",
+     "start": "npx serve dist/client -s -l 8080",
     "lint": "eslint .",
     "format": "prettier --write ."
   },
