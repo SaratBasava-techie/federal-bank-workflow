@@ -7,9 +7,10 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Serve
-FROM nginx:alpine
-RUN rm -rf /etc/nginx/conf.d/*
-COPY --from=build /app/dist/client /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+FROM node:20-alpine
+WORKDIR /app
+RUN npm install -g serve
+COPY --from=build /app/dist/client ./dist/client
 EXPOSE 8080
-CMD ["nginx", "-g", "daemon off;"]
+ENV PORT=8080
+CMD ["serve", "dist/client", "-s", "-l", "8080"]
