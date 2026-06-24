@@ -7,7 +7,14 @@ export default defineConfig({
   tanstackStart: {
     server: { entry: "server" },
     nitro: {
-      preset: "node",         // ← change from cloudflare to node
+      preset: "node",
+      serveStatic: true,        // ← serve static files from dist/client
+      publicAssets: [
+        {
+          dir: "../client",
+          maxAge: 31536000,
+        }
+      ],
     },
   },
 });
