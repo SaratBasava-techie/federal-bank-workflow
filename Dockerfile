@@ -6,7 +6,7 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-# Stage 2: Serve static files
+# Stage 2: Serve
 FROM nginx:alpine
 RUN rm -rf /etc/nginx/conf.d/*
 COPY --from=build /app/dist/client /usr/share/nginx/html
