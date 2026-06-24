@@ -22,7 +22,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                 Federal Bank · Credit Card Portfolio Migration
               </div>
               <h1 className="mt-1 text-2xl font-semibold tracking-tight">
-                Standard Chartered → Federal Bank Transition Programme
+                Project Soulfire - Executive Dashboard
               </h1>
             </div>
             <div className="rounded-md border border-white/15 bg-white/5 px-3 py-1.5 text-xs text-white/80">
