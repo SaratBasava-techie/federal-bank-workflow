@@ -1,5 +1,5 @@
 # ---------- Build stage ----------
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 
 WORKDIR /app
 
@@ -7,16 +7,16 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-# Copy source and build the SSR bundle (outputs to /app/dist).
+# Copy source and build the SSR bundle (outputs to /app/.output).
 # NITRO_PRESET=node-server makes Nitro emit a self-listening Node server
-# at dist/server/index.mjs (instead of a Cloudflare Workers module),
+# at .output/server/index.mjs (instead of a Cloudflare Workers module),
 # which is what Cloud Run / generic Docker hosts need.
 ENV NITRO_PRESET=node-server
 COPY . .
 RUN npm run build
 
 # ---------- Runtime stage ----------
-FROM node:20-alpine AS runner
+FROM node:22-alpine AS runner
 
 WORKDIR /app
 
@@ -28,11 +28,11 @@ ENV NITRO_HOST=0.0.0.0
 ENV HOST=0.0.0.0
 ENV PORT=8080
 
-# The node-server preset bundles all runtime deps into dist/, so we don't
+# The node-server preset bundles all runtime deps into .output/, so we don't
 # need to reinstall node_modules in the runtime image.
-COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/.output ./.output
 
 EXPOSE 8080
 
 # Start the self-listening Nitro Node server.
-CMD ["node", "dist/server/index.mjs"]
+CMD ["node", ".output/server/index.mjs"]
