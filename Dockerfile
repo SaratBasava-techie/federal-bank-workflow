@@ -1,38 +1,30 @@
+# syntax=docker/dockerfile:1
+
 # ---------- Build stage ----------
-FROM node:22-alpine AS builder
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Install dependencies (use lockfile if present for reproducible builds)
 COPY package*.json ./
 RUN npm install
 
-# Copy source and build the SSR bundle (outputs to /app/.output).
-# NITRO_PRESET=node-server makes Nitro emit a self-listening Node server
-# at .output/server/index.mjs (instead of a Cloudflare Workers module),
-# which is what Cloud Run / generic Docker hosts need.
-ENV NITRO_PRESET=node-server
 COPY . .
+
+ENV NITRO_PRESET=node-server
 RUN npm run build
 
 # ---------- Runtime stage ----------
-FROM node:22-alpine AS runner
+FROM node:20-alpine AS runner
 
 WORKDIR /app
 
 ENV NODE_ENV=production
-# Cloud Run injects PORT (defaults to 8080) and expects the container
-# to listen on 0.0.0.0 at that port. Nitro's node-server preset honors
-# the standard NITRO_HOST / NITRO_PORT (and PORT) env vars.
-ENV NITRO_HOST=0.0.0.0
-ENV HOST=0.0.0.0
 ENV PORT=8080
+ENV HOST=0.0.0.0
 
-# The node-server preset bundles all runtime deps into .output/, so we don't
-# need to reinstall node_modules in the runtime image.
-COPY --from=builder /app/.output ./.output
+COPY package*.json ./
+RUN npm install --omit=dev && npm cache clean --force
 
+COPY --from=builder /app/.output /app/.output
 EXPOSE 8080
-
-# Start the self-listening Nitro Node server.
 CMD ["node", ".output/server/index.mjs"]
