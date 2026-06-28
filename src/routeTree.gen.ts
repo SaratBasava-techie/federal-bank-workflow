@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TrackerRouteImport } from './routes/tracker'
 import { Route as ProgramRouteImport } from './routes/program'
+import { Route as JointChecklistRouteImport } from './routes/joint-checklist'
 import { Route as IndexRouteImport } from './routes/index'
 
 const TrackerRoute = TrackerRouteImport.update({
@@ -23,6 +24,11 @@ const ProgramRoute = ProgramRouteImport.update({
   path: '/program',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JointChecklistRoute = JointChecklistRouteImport.update({
+  id: '/joint-checklist',
+  path: '/joint-checklist',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -31,30 +37,34 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/joint-checklist': typeof JointChecklistRoute
   '/program': typeof ProgramRoute
   '/tracker': typeof TrackerRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/joint-checklist': typeof JointChecklistRoute
   '/program': typeof ProgramRoute
   '/tracker': typeof TrackerRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/joint-checklist': typeof JointChecklistRoute
   '/program': typeof ProgramRoute
   '/tracker': typeof TrackerRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/program' | '/tracker'
+  fullPaths: '/' | '/joint-checklist' | '/program' | '/tracker'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/program' | '/tracker'
-  id: '__root__' | '/' | '/program' | '/tracker'
+  to: '/' | '/joint-checklist' | '/program' | '/tracker'
+  id: '__root__' | '/' | '/joint-checklist' | '/program' | '/tracker'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  JointChecklistRoute: typeof JointChecklistRoute
   ProgramRoute: typeof ProgramRoute
   TrackerRoute: typeof TrackerRoute
 }
@@ -75,6 +85,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProgramRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/joint-checklist': {
+      id: '/joint-checklist'
+      path: '/joint-checklist'
+      fullPath: '/joint-checklist'
+      preLoaderRoute: typeof JointChecklistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -87,6 +104,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  JointChecklistRoute: JointChecklistRoute,
   ProgramRoute: ProgramRoute,
   TrackerRoute: TrackerRoute,
 }
