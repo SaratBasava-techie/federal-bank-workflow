@@ -5,6 +5,7 @@ const tabs = [
   { to: "/", label: "RAG Summary" },
   { to: "/program", label: "Program Overview" },
   { to: "/tracker", label: "Work Tracker" },
+  { to: "/joint-checklist", label: "Joint Workstream Checklist" },
 ];
 
 export function DashboardShell({ children }: { children: ReactNode }) {
