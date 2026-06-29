@@ -211,29 +211,39 @@ interface RawActivity {
   phase: string;
   ledBy: string;
   activity: string;
+  owner: string;
+  status: string;
   endDate: string;
   month: string;
 }
 
 const ALL_ACTIVITIES = (activitiesData as RawActivity[]).map((a) => ({
   ...a,
-  ledBy: a.ledBy === "Client" ? "client" : "FI-PS",
+  status: normalizeStatus(a.status),
 }));
 
-const WORKSTREAM_ORDER = [
-  "Approach & Key Decisions",
-  "Platform/Infrastructure",
-  "Application Build & Support",
-  "Data Migration",
-  "Scheme & Compliance",
-  "Channel Connectivity",
-  "Business",
-  "Contracting",
-];
+function normalizeStatus(s: string): "Completed" | "WIP" | "In Progress" | "Not Started" {
+  const v = (s || "").trim().toLowerCase();
+  if (v === "completed" || v === "complete") return "Completed";
+  if (v === "wip") return "WIP";
+  if (v === "in progress" || v === "inprogress") return "In Progress";
+  return "Not Started";
+}
+
+const STATUS_META: Record<string, { color: string; label: string }> = {
+  Completed: { color: "#16a34a", label: "Completed" },
+  WIP: { color: "#f59e0b", label: "WIP" },
+  "In Progress": { color: "#0ea5e9", label: "In Progress" },
+  "Not Started": { color: "#94a3b8", label: "Not Started" },
+};
+
+const WORKSTREAM_ORDER = Array.from(
+  new Set((activitiesData as RawActivity[]).map((a) => a.workstream)),
+);
 
 function ActivityList() {
   const [search, setSearch] = useState("");
-  const [leadFilter, setLeadFilter] = useState<"all" | "FI-PS" | "client">("all");
+  const [statusFilter, setStatusFilter] = useState<"all" | "Completed" | "WIP" | "In Progress" | "Not Started">("all");
   const [urgencyFilter, setUrgencyFilter] = useState<"all" | "overdue" | "soon" | "later">("all");
   const [openStreams, setOpenStreams] = useState<Record<string, boolean>>(() => {
     const init: Record<string, boolean> = {};
@@ -260,12 +270,12 @@ function ActivityList() {
     const q = search.toLowerCase();
     const filteredList = list.filter(
       (a) => {
-        if (leadFilter !== "all" && a.ledBy !== leadFilter) return false;
+        if (statusFilter !== "all" && a.status !== statusFilter) return false;
         if (urgencyFilter !== "all" && urgencyOf(a.endDate) !== urgencyFilter) return false;
         if (!q) return true;
         return (
           a.activity.toLowerCase().includes(q) ||
-          a.ledBy.toLowerCase().includes(q) ||
+          (a.owner || "").toLowerCase().includes(q) ||
           a.phase.toLowerCase().includes(q) ||
           a.endDate.toLowerCase().includes(q)
         );
@@ -288,24 +298,26 @@ function ActivityList() {
             className="min-w-[200px] flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm transition focus:border-[var(--fed-gold)] focus:outline-none focus:ring-2 focus:ring-[var(--fed-gold)]/30"
           />
           <FilterChips
-            label="Lead"
-            value={leadFilter}
-            onChange={(v) => setLeadFilter(v as typeof leadFilter)}
+            label="Status"
+            value={statusFilter}
+            onChange={(v) => setStatusFilter(v as typeof statusFilter)}
             options={[
               { v: "all", label: "All" },
-              { v: "FI-PS", label: "FI-PS" },
-              { v: "client", label: "Client" },
+              { v: "Completed", label: "Completed", swatch: STATUS_META.Completed.color },
+              { v: "WIP", label: "WIP", swatch: STATUS_META.WIP.color },
+              { v: "In Progress", label: "In Progress", swatch: STATUS_META["In Progress"].color },
+              { v: "Not Started", label: "Not Started", swatch: STATUS_META["Not Started"].color },
             ]}
           />
           <FilterChips
-            label="Status"
+            label="Deadline"
             value={urgencyFilter}
             onChange={(v) => setUrgencyFilter(v as typeof urgencyFilter)}
             options={[
               { v: "all", label: "All" },
-              { v: "overdue", label: "Overdue", tone: "critical" },
-              { v: "soon", label: "Due soon", tone: "warning" },
-              { v: "later", label: "On track", tone: "ontrack" },
+              { v: "overdue", label: "Overdue", swatch: "#dc2626" },
+              { v: "soon", label: "Due soon", swatch: "#2563eb" },
+              { v: "later", label: "On track", swatch: "#16a34a" },
             ]}
           />
           <button
@@ -379,8 +391,9 @@ function ActivityList() {
                           <th className="px-3 py-2">#</th>
                           <th className="px-3 py-2">Activity</th>
                           <th className="px-3 py-2">Phase</th>
-                          <th className="px-3 py-2">Lead</th>
+                          <th className="px-3 py-2">Owner</th>
                           <th className="px-3 py-2">Deadline</th>
+                          <th className="px-3 py-2">Status</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -395,17 +408,20 @@ function ActivityList() {
                             <td className="px-3 py-2 text-foreground/90">{a.activity}</td>
                             <td className="px-3 py-2 text-xs">{a.phase || "—"}</td>
                             <td className="px-3 py-2 text-xs">
-                              <LeadBadge lead={a.ledBy} />
+                              <OwnerBadge owner={a.owner} />
                             </td>
                             <td className="px-3 py-2 whitespace-nowrap text-xs">
                               <DeadlinePill date={a.endDate} />
+                            </td>
+                            <td className="px-3 py-2 whitespace-nowrap text-xs">
+                              <StatusPill status={a.status} />
                             </td>
                           </tr>
                         ))}
                         {list.length === 0 && (
                           <tr>
                             <td
-                              colSpan={5}
+                              colSpan={6}
                               className="px-3 py-6 text-center text-sm text-muted-foreground"
                             >
                               No activities match your search.
@@ -434,7 +450,7 @@ function FilterChips({
   label: string;
   value: string;
   onChange: (v: string) => void;
-  options: { v: string; label: string; tone?: "critical" | "warning" | "ontrack" }[];
+  options: { v: string; label: string; swatch?: string }[];
 }) {
   return (
     <div className="flex items-center gap-1 rounded-md border border-border bg-background p-1 shadow-sm">
@@ -443,24 +459,23 @@ function FilterChips({
       </span>
       {options.map((o) => {
         const active = o.v === value;
-        const toneColor =
-          o.tone === "critical"
-            ? "var(--rag-critical)"
-            : o.tone === "warning"
-              ? "#d97706"
-              : o.tone === "ontrack"
-                ? "var(--rag-ontrack)"
-                : "var(--fed-navy, #0b2545)";
+        const toneColor = o.swatch || "var(--fed-navy, #0b2545)";
         return (
           <button
             key={o.v}
             onClick={() => onChange(o.v)}
-            className="rounded px-2 py-1 text-xs font-medium transition"
+            className="flex items-center gap-1 rounded px-2 py-1 text-xs font-medium transition"
             style={{
               background: active ? toneColor : "transparent",
               color: active ? "white" : "var(--color-muted-foreground)",
             }}
           >
+            {o.swatch && (
+              <span
+                className="inline-block h-2 w-2 rounded-full"
+                style={{ background: active ? "white" : o.swatch }}
+              />
+            )}
             {o.label}
           </button>
         );
@@ -469,30 +484,48 @@ function FilterChips({
   );
 }
 
-function LeadBadge({ lead }: { lead: string }) {
-  if (!lead) return <span>—</span>;
-  const isClient = lead === "client";
+function OwnerBadge({ owner }: { owner: string }) {
+  if (!owner) return <span className="text-muted-foreground">—</span>;
   return (
     <span
       className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold"
       style={{
-        background: isClient
-          ? "color-mix(in oklab, var(--rag-ontrack) 18%, transparent)"
-          : "color-mix(in oklab, var(--fed-gold, #f59e0b) 22%, transparent)",
-        color: isClient ? "var(--rag-ontrack)" : "var(--fed-navy, #0b2545)",
+        background: "color-mix(in oklab, var(--fed-gold, #f59e0b) 22%, transparent)",
+        color: "var(--fed-navy, #0b2545)",
       }}
     >
       <span
         className="h-1.5 w-1.5 rounded-full"
-        style={{ background: isClient ? "var(--rag-ontrack)" : "var(--fed-gold, #f59e0b)" }}
+        style={{ background: "var(--fed-gold, #f59e0b)" }}
       />
-      {isClient ? "Client" : "FI-PS"}
+      {owner}
+    </span>
+  );
+}
+
+function StatusPill({ status }: { status: string }) {
+  const meta = STATUS_META[status] || STATUS_META["Not Started"];
+  return (
+    <span
+      className="inline-flex items-center gap-1 rounded-md px-2 py-0.5 font-semibold"
+      style={{
+        background: `color-mix(in oklab, ${meta.color} 18%, transparent)`,
+        color: meta.color,
+      }}
+    >
+      <span className="h-1.5 w-1.5 rounded-full" style={{ background: meta.color }} />
+      {meta.label}
     </span>
   );
 }
 
 function urgencyOf(date: string): "overdue" | "soon" | "later" | "unknown" {
-  const t = Date.parse(date);
+  // Source format e.g. "30-Jun" or "5-Oct" — assume programme year 2026.
+  let t = Date.parse(date);
+  if (Number.isNaN(t)) {
+    const m = /^(\d{1,2})-([A-Za-z]{3})$/.exec(date.trim());
+    if (m) t = Date.parse(`${m[1]} ${m[2]} 2026`);
+  }
   if (Number.isNaN(t)) return "unknown";
   const now = Date.now();
   const days = (t - now) / 86400000;
@@ -505,22 +538,20 @@ function DeadlinePill({ date }: { date: string }) {
   const u = urgencyOf(date);
   const color =
     u === "overdue"
-      ? "var(--rag-critical)"
+      ? "#dc2626"
       : u === "soon"
-        ? "#d97706"
+        ? "#2563eb"
         : u === "later"
-          ? "var(--rag-ontrack)"
+          ? "#16a34a"
           : "var(--color-muted-foreground)";
   return (
-    <span
-      className="inline-flex items-center gap-1 rounded-md px-2 py-0.5 font-medium"
-      style={{
-        background: `color-mix(in oklab, ${color} 14%, transparent)`,
-        color,
-      }}
-    >
-      <span className="h-1.5 w-1.5 rounded-full" style={{ background: color }} />
-      {date || "—"}
+    <span className="inline-flex items-center gap-1.5 font-medium text-foreground/80">
+      <span
+        className="inline-block h-2.5 w-2.5 rounded-full ring-2"
+        style={{ background: color, boxShadow: `0 0 0 2px color-mix(in oklab, ${color} 25%, transparent)` }}
+        title={u}
+      />
+      <span className="tabular-nums">{date || "—"}</span>
     </span>
   );
 }
