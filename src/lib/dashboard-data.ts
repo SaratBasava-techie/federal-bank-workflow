@@ -120,3 +120,87 @@ export const immediateAttention = [
   "KYC risk categorization note overdue from Business workstream.",
   "Production encryption key provisioning awaiting TSYS confirmation.",
 ];
+
+export type DecisionRiskType = "Decision" | "Risk";
+export type DecisionRiskStatus = "Open" | "Closed" | "In Review";
+
+export interface DecisionRiskLog {
+  sn: number;
+  type: DecisionRiskType;
+  workstream: string;
+  description: string;
+  owner: string;
+  raised: string;
+  target: string;
+  status: DecisionRiskStatus;
+  impact: "High" | "Medium" | "Low";
+}
+
+export const decisionRiskLogs: DecisionRiskLog[] = [
+  {
+    sn: 1,
+    type: "Decision",
+    workstream: "Platform/Infrastructure",
+    description: "AWS account & VPC design approved by CISO with private-link based connectivity to TSYS.",
+    owner: "Dinu",
+    raised: "04-06-2026",
+    target: "19-06-2026",
+    status: "Closed",
+    impact: "High",
+  },
+  {
+    sn: 2,
+    type: "Decision",
+    workstream: "Business",
+    description: "KYC risk categorisation approach — to follow FB internal scorecard rather than legacy SCB model.",
+    owner: "Sreejith",
+    raised: "05-06-2026",
+    target: "20-06-2026",
+    status: "In Review",
+    impact: "High",
+  },
+  {
+    sn: 3,
+    type: "Risk",
+    workstream: "Data Migration",
+    description: "Final data migration scoping document delayed from TSYS — risk to dry-run schedule.",
+    owner: "Nitin",
+    raised: "19-06-2026",
+    target: "30-06-2026",
+    status: "Open",
+    impact: "High",
+  },
+  {
+    sn: 4,
+    type: "Risk",
+    workstream: "Channel Connectivity",
+    description: "WhatsApp banking integration with TSYS / IVR — requirements pending from business.",
+    owner: "Bhagyashree",
+    raised: "26-06-2026",
+    target: "30-06-2026",
+    status: "Open",
+    impact: "Medium",
+  },
+  {
+    sn: 5,
+    type: "Decision",
+    workstream: "Scheme & Compliance",
+    description: "Production encryption key ceremony to be conducted jointly with TSYS and FB CISO.",
+    owner: "Jason / Mahendra",
+    raised: "18-06-2026",
+    target: "30-06-2026",
+    status: "Open",
+    impact: "High",
+  },
+  {
+    sn: 6,
+    type: "Risk",
+    workstream: "Application Build & Support",
+    description: "MB/IB API gateway hosting alignment between FB IT and PRIME team pending.",
+    owner: "Dinesh",
+    raised: "20-06-2026",
+    target: "10-07-2026",
+    status: "In Review",
+    impact: "Medium",
+  },
+];
