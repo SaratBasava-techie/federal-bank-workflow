@@ -3,6 +3,8 @@ import { DashboardShell } from "@/components/DashboardShell";
 import {
   ragSummary,
   pendingFromTsys,
+  decisionRiskLogs,
+  type DecisionRiskStatus,
   type RagStatus,
 } from "@/lib/dashboard-data";
 
@@ -81,7 +83,72 @@ function Index() {
           </Table>
         </Card>
       </div>
+
+      <div className="mt-6">
+        <Card>
+          <CardHeader title="Decision and Risk Logs" />
+          <Table
+            headers={["SN", "Type", "Workstream", "Description", "Owner", "Raised", "Target", "Impact", "Status"]}
+          >
+            {decisionRiskLogs.map((r) => (
+              <tr key={r.sn} className="border-t border-border/70 hover:bg-muted/40">
+                <Td>{r.sn}</Td>
+                <Td><TypePill type={r.type} /></Td>
+                <Td className="font-medium text-foreground">{r.workstream}</Td>
+                <Td className="max-w-[480px] text-foreground/80">{r.description}</Td>
+                <Td>{r.owner}</Td>
+                <Td className="tabular-nums">{r.raised}</Td>
+                <Td className="tabular-nums">{r.target}</Td>
+                <Td><ImpactPill impact={r.impact} /></Td>
+                <Td><DRStatusPill status={r.status} /></Td>
+              </tr>
+            ))}
+          </Table>
+        </Card>
+      </div>
     </DashboardShell>
+  );
+}
+
+function TypePill({ type }: { type: "Decision" | "Risk" }) {
+  const isRisk = type === "Risk";
+  const color = isRisk ? "var(--rag-critical)" : "var(--fed-navy, #0b2545)";
+  return (
+    <span
+      className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold"
+      style={{
+        background: `color-mix(in oklab, ${color} 14%, transparent)`,
+        color,
+      }}
+    >
+      <span className="h-1.5 w-1.5 rounded-full" style={{ background: color }} />
+      {type}
+    </span>
+  );
+}
+
+function ImpactPill({ impact }: { impact: "High" | "Medium" | "Low" }) {
+  const color = impact === "High" ? "#dc2626" : impact === "Medium" ? "#d97706" : "#16a34a";
+  return (
+    <span
+      className="inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-semibold"
+      style={{ background: `color-mix(in oklab, ${color} 16%, transparent)`, color }}
+    >
+      {impact}
+    </span>
+  );
+}
+
+function DRStatusPill({ status }: { status: DecisionRiskStatus }) {
+  const color =
+    status === "Open" ? "#dc2626" : status === "In Review" ? "#d97706" : "#16a34a";
+  return (
+    <span
+      className="inline-flex min-w-[80px] items-center justify-center rounded-sm px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-white"
+      style={{ background: color }}
+    >
+      {status}
+    </span>
   );
 }
 
