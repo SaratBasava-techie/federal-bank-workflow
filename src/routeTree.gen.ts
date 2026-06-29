@@ -9,16 +9,10 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TrackerRouteImport } from './routes/tracker'
 import { Route as ProgramRouteImport } from './routes/program'
 import { Route as JointChecklistRouteImport } from './routes/joint-checklist'
 import { Route as IndexRouteImport } from './routes/index'
 
-const TrackerRoute = TrackerRouteImport.update({
-  id: '/tracker',
-  path: '/tracker',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ProgramRoute = ProgramRouteImport.update({
   id: '/program',
   path: '/program',
@@ -39,45 +33,34 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/joint-checklist': typeof JointChecklistRoute
   '/program': typeof ProgramRoute
-  '/tracker': typeof TrackerRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/joint-checklist': typeof JointChecklistRoute
   '/program': typeof ProgramRoute
-  '/tracker': typeof TrackerRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/joint-checklist': typeof JointChecklistRoute
   '/program': typeof ProgramRoute
-  '/tracker': typeof TrackerRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/joint-checklist' | '/program' | '/tracker'
+  fullPaths: '/' | '/joint-checklist' | '/program'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/joint-checklist' | '/program' | '/tracker'
-  id: '__root__' | '/' | '/joint-checklist' | '/program' | '/tracker'
+  to: '/' | '/joint-checklist' | '/program'
+  id: '__root__' | '/' | '/joint-checklist' | '/program'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   JointChecklistRoute: typeof JointChecklistRoute
   ProgramRoute: typeof ProgramRoute
-  TrackerRoute: typeof TrackerRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/tracker': {
-      id: '/tracker'
-      path: '/tracker'
-      fullPath: '/tracker'
-      preLoaderRoute: typeof TrackerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/program': {
       id: '/program'
       path: '/program'
@@ -106,7 +89,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   JointChecklistRoute: JointChecklistRoute,
   ProgramRoute: ProgramRoute,
-  TrackerRoute: TrackerRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
