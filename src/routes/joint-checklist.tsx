@@ -33,6 +33,61 @@ const seed: ChecklistItem[] = [
   { sn: 8, workstream: "Customer Service", task: "Based on Credit cards Queries received by CE through various channels, work with Comms Workstream to produce FAQs to support transition", finish: "TBD", by: "Bhagyashree", owner: "SCB", status: "NS" },
   { sn: 9, workstream: "Customer Service", task: "Agree the list of Pre Migration CE activities, including approach to re-route queries pertaining to Scoped clients to FB", finish: "TBD", by: "Nisha/Bhagyashree", owner: "Jointly", status: "NS" },
   { sn: 10, workstream: "Customer Service", task: "Agree the list of Post Migration CE activities, including assigning the owner of the activities", finish: "TBD", by: "Nisha/Bhagyashree", owner: "SCB", status: "NS" },
+
+  // KYC & DD
+  { sn: 11, workstream: "KYC & DD", task: "Scope finalization for KYC data transfer between banks", finish: "TBD", by: "Bindiya / Varelaxmi & Mathews", owner: "Jointly", status: "NS" },
+  { sn: 12, workstream: "KYC & DD", task: "Customer KYC data migration approach finalization", finish: "TBD", by: "Bindiya / Varelaxmi & Mathews", owner: "Jointly", status: "NS" },
+  { sn: 13, workstream: "KYC & DD", task: "Fields mapping for KYC details", finish: "TBD", by: "Bindiya / Varelaxmi & Mathews", owner: "Jointly", status: "NS" },
+  { sn: 14, workstream: "KYC & DD", task: "SCB to share the List of online and offline documents collected for onboarding and ReKYC", finish: "TBD", by: "Bindiya / Varelaxmi & Mathews", owner: "Jointly", status: "NS" },
+
+  // Operations
+  { sn: 15, workstream: "Operations", task: "Process for handover of documents both for physical & digital", finish: "TBD", by: "—", owner: "SCB", status: "IP", comments: "Timelines depend on agreement; digital handover in IT workstream" },
+  { sn: 16, workstream: "Operations", task: "Data transfers related to customer's transactional details and financial payments modes (NEFT)", finish: "TBD", by: "—", owner: "SCB", status: "IP", comments: "Part of TSYS workstream" },
+  { sn: 17, workstream: "Operations", task: "Confirmation from SCB Head Operations for NIL balance in cheque suspense account", finish: "Fri, 30-Oct-26", by: "Vibhor", owner: "SCB", status: "NS", comments: "Post Cutoff activity" },
+  { sn: 18, workstream: "Operations", task: "Handover of other payment suspense balances on the date of migration", finish: "Fri, 30-Oct-26", by: "Vibhor", owner: "Jointly", status: "NS", comments: "Post Cutoff activity" },
+  { sn: 19, workstream: "Operations", task: "Dispute Handling post migration (support required for next 90 days for chargeback / backward settlement)", finish: "TBD", by: "—", owner: "Jointly", status: "NS" },
+  { sn: 20, workstream: "Operations", task: "Customer holding multiple variant cards — dispute approach", finish: "Fri, 12-Jun-26", by: "—", owner: "Jointly", status: "D", comments: "Discussed in last Chargeback/Disputes call with Federal" },
+  { sn: 21, workstream: "Operations", task: "List of pending grievances, litigation, regulatory cases + last 3 months closed complaints and resolution", finish: "Fri, 30-Oct-26", by: "Perveen", owner: "SCB", status: "NS", comments: "Query — share now or post cutoff?" },
+  { sn: 22, workstream: "Operations", task: "Payment channel wise data breakup (count & amount, last 3 months)", finish: "TBD", by: "—", owner: "SCB", status: "NS", comments: "Part of TSYS workstream" },
+  { sn: 23, workstream: "Operations", task: "Transaction data to be provided since inception of cards", finish: "TBD", by: "—", owner: "SCB", status: "NS", comments: "Part of TSYS workstream" },
+  { sn: 24, workstream: "Operations", task: "Count of dispute cases for last 6 months for migrated base (presentment, pre-arb etc.)", finish: "TBD", by: "—", owner: "SCB", status: "NS" },
+  { sn: 25, workstream: "Operations", task: "Success % of chargeback to be provided", finish: "TBD", by: "—", owner: "SCB", status: "NS" },
+  { sn: 26, workstream: "Operations", task: "Document / SOP for dispute process currently followed at SCB", finish: "TBD", by: "—", owner: "SCB", status: "NS" },
+  { sn: 27, workstream: "Operations", task: "In-flight transaction support up to 120 days for filing/closing dispute cases", finish: "TBD", by: "—", owner: "SCB", status: "NS" },
+  { sn: 28, workstream: "Operations", task: "POD of card delivered cases for last 3 months", finish: "TBD", by: "—", owner: "SCB", status: "NS" },
+  { sn: 29, workstream: "Operations", task: "GL data to be provided on date of cut off", finish: "TBD", by: "—", owner: "SCB", status: "NS", comments: "Part of Finance workstream" },
+  { sn: 30, workstream: "Operations", task: "Deaf balance available with SCB (closed accounts not migrated)", finish: "TBD", by: "—", owner: "SCB", status: "NS" },
+  { sn: 31, workstream: "Operations", task: "Process for intermediary phase data sharing (chargeback, complaints via IVR / digital channels)", finish: "TBD", by: "—", owner: "SCB", status: "NS" },
+
+  // Product
+  { sn: 32, workstream: "Product", task: "EMT introductory meeting with FB team", finish: "NA", by: "Rahoul / Jaydithya", owner: "SCB", status: "D" },
+  { sn: 33, workstream: "Product", task: "DigiSmart Card alliance", finish: "Tue, 30-Jun-26", by: "Libu", owner: "Jointly", status: "IP", comments: "Discussion initiated with SCB; Libu to set up engagement call with partner" },
+  { sn: 34, workstream: "Product", task: "Present and share services currently provided at SCB", finish: "TBD", by: "Rahoul / Jaydithya", owner: "SCB", status: "IP" },
+  { sn: 35, workstream: "Product", task: "Agree on current services to migrate / continue / seize post cutover", finish: "Wed, 17-Jun-26", by: "Libu", owner: "FB", status: "IP", comments: "Flexi-loan & EMI Card continuation to be decided" },
+  { sn: 36, workstream: "Product", task: "Testing of services offered at Destination Product suite", finish: "TBD", by: "Libu", owner: "FB", status: "NS", comments: "Post production setup" },
+  { sn: 37, workstream: "Product", task: "Coordinate with SCB to provide 360 rewards features", finish: "TBD", by: "Rahoul / Jaydithya", owner: "SCB", status: "D", comments: "R360 portal — 75% vouchers / 25% products" },
+  { sn: 38, workstream: "Product", task: "Finalise Product mapping exercise", finish: "NA", by: "Libu", owner: "FB", status: "D" },
+  { sn: 39, workstream: "Product", task: "EMI / Loan rates configuration", finish: "Tue, 30-Jun-26", by: "Rahoul / Jaydithya", owner: "SCB", status: "IP" },
+  { sn: 40, workstream: "Product", task: "Card name decision making", finish: "Tue, 30-Jun-26", by: "Leadership", owner: "Jointly", status: "IP" },
+  { sn: 41, workstream: "Product", task: "Flexi-loan current outstanding list of customers / vol. / remaining tenure", finish: "Tue, 30-Jun-26", by: "Rahoul / Jaydithya", owner: "SCB", status: "IP", comments: "43 active flexi loans, balance 22,68,082. SCB to obtain consent and convert to DAL" },
+  { sn: 42, workstream: "Product", task: "Understand list of services / campaigns from TSYS and discuss jointly (SCB, TSYS, FB)", finish: "Tue, 30-Jun-26", by: "Libu", owner: "FB", status: "NS" },
+  { sn: 43, workstream: "Product", task: "Customer type — scope finalisation", finish: "Tue, 30-Jun-26", by: "—", owner: "Jointly", status: "NS" },
+  { sn: 44, workstream: "Product", task: "Approach for transfer of data (structured/unstructured/transactional); decision on digital copies transfer", finish: "Tue, 30-Jun-26", by: "—", owner: "Jointly", status: "NS", comments: "List of digital copies shared with SCB" },
+  { sn: 45, workstream: "Product", task: "Alignment on statement, billing, collections during cutover", finish: "Tue, 30-Jun-26", by: "—", owner: "Jointly", status: "NS" },
+
+  // IT
+  { sn: 46, workstream: "IT", task: "Agreement on mechanism for transferring unstructured data", finish: "Tue, 30-Jun-26", by: "Reema, Dinu", owner: "Jointly", status: "D", comments: "Data via SFTP; MOM shared 23 Jun" },
+  { sn: 47, workstream: "IT", task: "Testing of files placed through SFTP (file and size)", finish: "Fri, 03-Jul-26", by: "Dinu", owner: "Jointly", status: "NS" },
+  { sn: 48, workstream: "IT", task: "Document from SCB describing unique identifier and data folder organisation mechanism", finish: "Fri, 03-Jul-26", by: "Sandhya", owner: "Jointly", status: "IP", comments: "By 26 Jun per Sandhya" },
+  { sn: 49, workstream: "IT", task: "Feasibility check on the scope of unstructured data", finish: "Fri, 31-Jul-26", by: "—", owner: "Jointly", status: "NS" },
+  { sn: 50, workstream: "IT", task: "FB to share CIF creation template with SCB for review", finish: "Wed, 03-Jun-26", by: "Dinu", owner: "FB", status: "D", comments: "Details shared for SCB review" },
+  { sn: 51, workstream: "IT", task: "Alignment on CIF creation template and CKYC details", finish: "Thu, 18-Jun-26", by: "Sandhya, Utkarsh", owner: "SCB", status: "D" },
+  { sn: 52, workstream: "IT", task: "Sample data to be received by SCB", finish: "Mon, 29-Jun-26", by: "Utkarsh", owner: "SCB", status: "IP", comments: "Data received 25 Jun; Dinu requested mapping" },
+  { sn: 53, workstream: "IT", task: "Transformation and loading scripts for FB", finish: "Wed, 15-Jul-26", by: "Dinu", owner: "FB", status: "NS" },
+  { sn: 54, workstream: "IT", task: "Testing of sample data", finish: "Thu, 30-Jul-26", by: "Dinu", owner: "Jointly", status: "NS" },
+  { sn: 55, workstream: "IT", task: "SCB to share the production customer data for CIF creation", finish: "Sat, 01-Aug-26", by: "Reema", owner: "SCB", status: "NS" },
+  { sn: 56, workstream: "IT", task: "FB to create the customer profiles", finish: "Fri, 31-Jul-26", by: "Dinu", owner: "FB", status: "NS" },
+  { sn: 57, workstream: "IT", task: "Migration dry runbook (cutover time, freeze period, downtime/uptime)", finish: "TBD", by: "Reema, Dinu", owner: "Jointly", status: "NS" },
 ];
 
 const STORAGE_KEY = "joint-checklist-v1";
