@@ -6,8 +6,6 @@ import {
   CartesianGrid,
   Cell,
   Legend,
-  Line,
-  LineChart,
   Pie,
   PieChart,
   ResponsiveContainer,
@@ -17,7 +15,6 @@ import {
 } from "recharts";
 import { DashboardShell } from "@/components/DashboardShell";
 import {
-  activitiesPerWeek,
   completionByPhase,
   completionStatus,
   programKpis,
