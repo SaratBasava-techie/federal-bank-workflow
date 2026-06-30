@@ -16,6 +16,84 @@ import {
 import { DashboardShell } from "@/components/DashboardShell";
 import activitiesData from "@/lib/workflow-activities.json";
 
+interface RawActivity {
+  sr: number;
+  displaySr: string;
+  workstream: string;
+  phase: string;
+  ledBy: string;
+  activity: string;
+  owner: string;
+  department: string;
+  status: string;
+  deadline: string;
+  month: string;
+}
+
+function normalizeStatusEarly(s: string): "Completed" | "WIP" | "In Progress" | "Not Started" {
+  const v = (s || "").trim().toLowerCase();
+  if (v === "completed" || v === "complete") return "Completed";
+  if (v === "wip") return "WIP";
+  if (v === "in progress" || v === "inprogress") return "In Progress";
+  return "Not Started";
+}
+
+function isOverdue(date: string): boolean {
+  let t = Date.parse(date);
+  if (Number.isNaN(t)) {
+    const m = /^(\d{1,2})-([A-Za-z]{3})$/.exec((date || "").trim());
+    if (m) t = Date.parse(`${m[1]} ${m[2]} 2026`);
+  }
+  if (Number.isNaN(t)) return false;
+  return t < Date.now();
+}
+
+const _ACTS = (activitiesData as RawActivity[]).map((a) => ({
+  ...a,
+  status: normalizeStatusEarly(a.status),
+}));
+
+const _total = _ACTS.length;
+const _completed = _ACTS.filter((a) => a.status === "Completed").length;
+const _wip = _ACTS.filter((a) => a.status === "WIP").length;
+const _inProgress = _ACTS.filter((a) => a.status === "In Progress").length;
+const _notStarted = _ACTS.filter((a) => a.status === "Not Started").length;
+const _overdue = _ACTS.filter((a) => a.status !== "Completed" && isOverdue(a.deadline)).length;
+
+const programKpis = {
+  total: _total,
+  completed: _completed,
+  wip: _wip,
+  inProgress: _inProgress,
+  notStarted: _notStarted,
+  overdue: _overdue,
+  overall: _total === 0 ? 0 : Math.round((_completed / _total) * 100),
+};
+
+const completionStatus: { name: string; value: number; color: string }[] = [
+  { name: "Completed", value: _completed, color: "#16a34a" },
+  { name: "WIP", value: _wip, color: "#f59e0b" },
+  { name: "In Progress", value: _inProgress, color: "#0ea5e9" },
+  { name: "Not Started", value: _notStarted, color: "#94a3b8" },
+].filter((d) => d.value > 0);
+
+const completionByPhase = (() => {
+  const map = new Map<string, { total: number; completed: number }>();
+  _ACTS.forEach((a) => {
+    const p = a.phase || "Unassigned";
+    const row = map.get(p) || { total: 0, completed: 0 };
+    row.total += 1;
+    if (a.status === "Completed") row.completed += 1;
+    map.set(p, row);
+  });
+  return Array.from(map.entries())
+    .map(([phase, { total, completed }]) => ({
+      phase,
+      pct: total === 0 ? 0 : Math.round((completed / total) * 100),
+    }))
+    .sort((a, b) => b.pct - a.pct);
+})();
+
 export const Route = createFileRoute("/program")({
   head: () => ({
     meta: [
