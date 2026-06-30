@@ -206,9 +206,9 @@ function JointChecklistPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {rows.map((r) => (
+                  {rows.map((r, idx) => (
                     <tr key={r.sn} className="border-t hover:bg-muted/20">
-                      <td className="px-3 py-2 text-muted-foreground">{r.sn}</td>
+                      <td className="px-3 py-2 text-muted-foreground">{idx + 1}</td>
                       <td className="px-3 py-2 max-w-md">{r.task}</td>
                       <td className="px-3 py-2 whitespace-nowrap text-xs">{r.finish || "—"}</td>
                       <td className="px-3 py-2 whitespace-nowrap text-xs">{r.by}</td>
