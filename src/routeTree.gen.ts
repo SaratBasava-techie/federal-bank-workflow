@@ -9,10 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RiskLogRouteImport } from './routes/risk-log'
 import { Route as ProgramRouteImport } from './routes/program'
 import { Route as JointChecklistRouteImport } from './routes/joint-checklist'
+import { Route as DecisionLogRouteImport } from './routes/decision-log'
 import { Route as IndexRouteImport } from './routes/index'
 
+const RiskLogRoute = RiskLogRouteImport.update({
+  id: '/risk-log',
+  path: '/risk-log',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProgramRoute = ProgramRouteImport.update({
   id: '/program',
   path: '/program',
@@ -23,6 +30,11 @@ const JointChecklistRoute = JointChecklistRouteImport.update({
   path: '/joint-checklist',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DecisionLogRoute = DecisionLogRouteImport.update({
+  id: '/decision-log',
+  path: '/decision-log',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -31,36 +43,62 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/decision-log': typeof DecisionLogRoute
   '/joint-checklist': typeof JointChecklistRoute
   '/program': typeof ProgramRoute
+  '/risk-log': typeof RiskLogRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/decision-log': typeof DecisionLogRoute
   '/joint-checklist': typeof JointChecklistRoute
   '/program': typeof ProgramRoute
+  '/risk-log': typeof RiskLogRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/decision-log': typeof DecisionLogRoute
   '/joint-checklist': typeof JointChecklistRoute
   '/program': typeof ProgramRoute
+  '/risk-log': typeof RiskLogRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/joint-checklist' | '/program'
+  fullPaths:
+    | '/'
+    | '/decision-log'
+    | '/joint-checklist'
+    | '/program'
+    | '/risk-log'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/joint-checklist' | '/program'
-  id: '__root__' | '/' | '/joint-checklist' | '/program'
+  to: '/' | '/decision-log' | '/joint-checklist' | '/program' | '/risk-log'
+  id:
+    | '__root__'
+    | '/'
+    | '/decision-log'
+    | '/joint-checklist'
+    | '/program'
+    | '/risk-log'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DecisionLogRoute: typeof DecisionLogRoute
   JointChecklistRoute: typeof JointChecklistRoute
   ProgramRoute: typeof ProgramRoute
+  RiskLogRoute: typeof RiskLogRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/risk-log': {
+      id: '/risk-log'
+      path: '/risk-log'
+      fullPath: '/risk-log'
+      preLoaderRoute: typeof RiskLogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/program': {
       id: '/program'
       path: '/program'
@@ -75,6 +113,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JointChecklistRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/decision-log': {
+      id: '/decision-log'
+      path: '/decision-log'
+      fullPath: '/decision-log'
+      preLoaderRoute: typeof DecisionLogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -87,8 +132,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DecisionLogRoute: DecisionLogRoute,
   JointChecklistRoute: JointChecklistRoute,
   ProgramRoute: ProgramRoute,
+  RiskLogRoute: RiskLogRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

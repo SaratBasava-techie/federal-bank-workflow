@@ -1,12 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
 import { DashboardShell } from "@/components/DashboardShell";
 import {
   ragSummary,
   pendingFromTsys,
-  riskLogs,
-  decisionLogs,
-  type LogStatus,
   type RagStatus,
 } from "@/lib/dashboard-data";
 
@@ -27,11 +23,6 @@ function Index() {
     (acc, r) => ((acc[r.rag] = (acc[r.rag] ?? 0) + 1), acc),
     {} as Record<RagStatus, number>,
   );
-
-  const [riskFilter, setRiskFilter] = useState<LogStatus | "All">("All");
-  const [decisionFilter, setDecisionFilter] = useState<LogStatus | "All">("All");
-  const filteredRisks = riskFilter === "All" ? riskLogs : riskLogs.filter((r) => r.status === riskFilter);
-  const filteredDecisions = decisionFilter === "All" ? decisionLogs : decisionLogs.filter((r) => r.status === decisionFilter);
 
   return (
     <DashboardShell>
@@ -89,102 +80,7 @@ function Index() {
           </Table>
         </Card>
       </div>
-
-      <div className="mt-6">
-        <Card>
-          <CardHeader title="Risk Log" accent />
-          <StatusFilterBar value={riskFilter} onChange={setRiskFilter} />
-          <Table
-            headers={["SN", "Workstream", "Issue / Risk Detail", "Date Raised", "Status"]}
-          >
-            {filteredRisks.map((r) => (
-              <tr key={r.sn} className="border-t border-border/70 hover:bg-muted/40">
-                <Td>{r.sn}</Td>
-                <Td className="font-medium text-foreground">{r.workstream}</Td>
-                <Td className="max-w-[380px] text-foreground/80">{r.detail}</Td>
-                <Td className="tabular-nums whitespace-nowrap">{r.raised}</Td>
-                <Td><LogStatusPill status={r.status} /></Td>
-              </tr>
-            ))}
-          </Table>
-        </Card>
-      </div>
-
-      <div className="mt-6">
-        <Card>
-          <CardHeader title="Decision Log" />
-          <StatusFilterBar value={decisionFilter} onChange={setDecisionFilter} />
-          <Table
-            headers={["SN", "Workstream", "Decision Area", "Decision Details", "Owner", "Status"]}
-          >
-            {filteredDecisions.map((r) => (
-              <tr key={r.sn} className="border-t border-border/70 hover:bg-muted/40">
-                <Td>{r.sn}</Td>
-                <Td className="font-medium text-foreground">{r.workstream}</Td>
-                <Td className="whitespace-nowrap">{r.area}</Td>
-                <Td className="max-w-[480px] text-foreground/80">{r.details}</Td>
-                <Td className="whitespace-nowrap">{r.owner}</Td>
-                <Td><LogStatusPill status={r.status} /></Td>
-              </tr>
-            ))}
-          </Table>
-        </Card>
-      </div>
     </DashboardShell>
-  );
-}
-
-function StatusFilterBar({
-  value,
-  onChange,
-}: {
-  value: LogStatus | "All";
-  onChange: (v: LogStatus | "All") => void;
-}) {
-  const opts: (LogStatus | "All")[] = ["All", "Open", "WIP", "Closed"];
-  const colorFor = (o: LogStatus | "All") =>
-    o === "Open" ? "#dc2626" : o === "WIP" ? "#d97706" : o === "Closed" ? "#16a34a" : "#475569";
-  return (
-    <div className="flex flex-wrap items-center gap-2 border-b border-border bg-muted/30 px-4 py-2">
-      <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-        Filter
-      </span>
-      {opts.map((o) => {
-        const active = value === o;
-        const c = colorFor(o);
-        return (
-          <button
-            key={o}
-            type="button"
-            onClick={() => onChange(o)}
-            className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide transition"
-            style={{
-              background: active ? c : "transparent",
-              color: active ? "white" : c,
-              borderColor: c,
-            }}
-          >
-            <span
-              className="inline-block h-2 w-2 rounded-full"
-              style={{ background: active ? "white" : c }}
-            />
-            {o}
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
-function LogStatusPill({ status }: { status: LogStatus }) {
-  const color = status === "Open" ? "#dc2626" : status === "WIP" ? "#d97706" : "#16a34a";
-  return (
-    <span
-      className="inline-flex min-w-[72px] items-center justify-center rounded-sm px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-white"
-      style={{ background: color }}
-    >
-      {status}
-    </span>
   );
 }
 
