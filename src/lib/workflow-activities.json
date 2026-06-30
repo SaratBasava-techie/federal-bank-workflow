@@ -2688,19 +2688,19 @@
     "sr": 168
   },
   {
-    "displaySr": "B",
-    "workstream": "C",
-    "phase": "D",
-    "ledBy": "E",
-    "jointFlag": "F",
-    "milestone": "G",
-    "activity": "H",
-    "owner": "I",
-    "department": "J",
-    "deadline": "K",
-    "status": "L",
-    "remarks": "M",
-    "month": "N",
+    "displaySr": "A",
+    "workstream": "B",
+    "phase": "C",
+    "ledBy": "D",
+    "jointFlag": "E",
+    "milestone": "F",
+    "activity": "G",
+    "owner": "H",
+    "department": "I",
+    "deadline": "J",
+    "status": "K",
+    "remarks": "L",
+    "month": "M",
     "sr": 169
   },
   {
@@ -2736,36 +2736,116 @@
     "sr": 171
   },
   {
+    "displaySr": "9.1",
+    "workstream": "Recarding",
+    "phase": "Recarding",
+    "ledBy": "Client",
+    "jointFlag": "",
+    "milestone": "",
+    "activity": "Welcome calling",
+    "owner": "Sreejith",
+    "department": "Business",
+    "deadline": "20-Oct",
+    "status": "Not Started",
+    "remarks": "",
+    "month": "Oct",
+    "sr": 172
+  },
+  {
+    "displaySr": "9.2",
+    "workstream": "Recarding",
+    "phase": "Recarding",
+    "ledBy": "Client",
+    "jointFlag": "",
+    "milestone": "",
+    "activity": "Monitor card activiation",
+    "owner": "Sreejith",
+    "department": "Business",
+    "deadline": "20-Oct",
+    "status": "Not Started",
+    "remarks": "",
+    "month": "Oct",
+    "sr": 173
+  },
+  {
+    "displaySr": "9.3",
+    "workstream": "Recarding",
+    "phase": "Recarding",
+    "ledBy": "Client",
+    "jointFlag": "",
+    "milestone": "",
+    "activity": "Monitor channel onboarding",
+    "owner": "Sreejith",
+    "department": "Business",
+    "deadline": "20-Oct",
+    "status": "Not Started",
+    "remarks": "",
+    "month": "Oct",
+    "sr": 174
+  },
+  {
+    "displaySr": "9.4",
+    "workstream": "Recarding",
+    "phase": "Recarding",
+    "ledBy": "Client",
+    "jointFlag": "",
+    "milestone": "",
+    "activity": "Monitor pin setup",
+    "owner": "Sreejith",
+    "department": "Business",
+    "deadline": "20-Oct",
+    "status": "Not Started",
+    "remarks": "",
+    "month": "Oct",
+    "sr": 175
+  },
+  {
+    "displaySr": "I",
+    "workstream": "Production Readiness & Go-Live",
+    "phase": "Data Migration",
+    "ledBy": "FIS & Client",
+    "jointFlag": "",
+    "milestone": "",
+    "activity": "Dress Rehearsal",
+    "owner": "Dinu",
+    "department": "IT",
+    "deadline": "5-Oct",
+    "status": "Not Started",
+    "remarks": "",
+    "month": "Oct",
+    "sr": 176
+  },
+  {
     "displaySr": "Production Readiness & Go-Live",
     "workstream": "Data Migration",
     "phase": "FIS & Client",
     "ledBy": "",
     "jointFlag": "",
-    "milestone": "Dress Rehearsal",
+    "milestone": "Flight check for DR",
     "activity": "Dinu",
     "owner": "IT",
-    "department": "5-Oct",
-    "deadline": "Not Started",
-    "status": "",
-    "remarks": "Oct",
-    "month": "",
-    "sr": 172
-  },
-  {
-    "displaySr": "BAU Services & Readiness",
-    "workstream": "Go-Live",
-    "phase": "FIS & Client",
-    "ledBy": "",
-    "jointFlag": "",
-    "milestone": "Operation Readiness Confirmed",
-    "activity": "Brijesh",
-    "owner": "Operations",
-    "department": "30-Sep",
+    "department": "5-Sep",
     "deadline": "Not Started",
     "status": "",
     "remarks": "Sep",
     "month": "",
-    "sr": 173
+    "sr": 177
+  },
+  {
+    "displaySr": "J",
+    "workstream": "BAU Services & Readiness",
+    "phase": "Go-Live",
+    "ledBy": "FIS & Client",
+    "jointFlag": "",
+    "milestone": "",
+    "activity": "Operation Readiness Confirmed",
+    "owner": "Brijesh",
+    "department": "Operations",
+    "deadline": "30-Sep",
+    "status": "Not Started",
+    "remarks": "",
+    "month": "Sep",
+    "sr": 178
   },
   {
     "displaySr": "BAU Services & Readiness",
@@ -2781,7 +2861,7 @@
     "status": "",
     "remarks": "Aug",
     "month": "",
-    "sr": 174
+    "sr": 179
   },
   {
     "displaySr": "BAU Services & Readiness",
@@ -2797,23 +2877,87 @@
     "status": "",
     "remarks": "Aug",
     "month": "",
-    "sr": 175
+    "sr": 180
   },
   {
-    "displaySr": "BAU Services & Readiness",
-    "workstream": "Go-Live",
-    "phase": "Client",
-    "ledBy": "",
+    "displaySr": "2.1",
+    "workstream": "BAU Services & Readiness",
+    "phase": "Go-Live",
+    "ledBy": "Client",
     "jointFlag": "",
-    "milestone": "Command Centre structure and setup",
-    "activity": "Bhagyashree",
-    "owner": "SQD",
-    "department": "30-Sep",
-    "deadline": "Not Started",
-    "status": "",
-    "remarks": "Sep",
-    "month": "",
-    "sr": 176
+    "milestone": "",
+    "activity": "User access management for PRIME",
+    "owner": "Dinu",
+    "department": "IT",
+    "deadline": "15-Aug",
+    "status": "Not Started",
+    "remarks": "",
+    "month": "Aug",
+    "sr": 181
+  },
+  {
+    "displaySr": "2.2",
+    "workstream": "BAU Services & Readiness",
+    "phase": "Go-Live",
+    "ledBy": "Client",
+    "jointFlag": "",
+    "milestone": "",
+    "activity": "PRIME User Training",
+    "owner": "Dinu",
+    "department": "IT",
+    "deadline": "30-Sep",
+    "status": "Not Started",
+    "remarks": "",
+    "month": "Sep",
+    "sr": 182
+  },
+  {
+    "displaySr": "2.3",
+    "workstream": "BAU Services & Readiness",
+    "phase": "Go-Live",
+    "ledBy": "Client",
+    "jointFlag": "",
+    "milestone": "",
+    "activity": "PRIME VAPT & AppSec",
+    "owner": "Dinu",
+    "department": "IT",
+    "deadline": "30-Sep",
+    "status": "Not Started",
+    "remarks": "",
+    "month": "Sep",
+    "sr": 183
+  },
+  {
+    "displaySr": "2.4",
+    "workstream": "BAU Services & Readiness",
+    "phase": "Go-Live",
+    "ledBy": "Client",
+    "jointFlag": "",
+    "milestone": "",
+    "activity": "CISO and Risk approval for production movement",
+    "owner": "Dinu",
+    "department": "IT",
+    "deadline": "30-Sep",
+    "status": "Not Started",
+    "remarks": "",
+    "month": "Sep",
+    "sr": 184
+  },
+  {
+    "displaySr": "2.5",
+    "workstream": "BAU Services & Readiness",
+    "phase": "Go-Live",
+    "ledBy": "Client",
+    "jointFlag": "",
+    "milestone": "",
+    "activity": "Command Centre structure and setup",
+    "owner": "Bhagyashree",
+    "department": "SQD",
+    "deadline": "30-Sep",
+    "status": "Not Started",
+    "remarks": "",
+    "month": "Sep",
+    "sr": 185
   },
   {
     "displaySr": "BAU Services & Readiness",
@@ -2829,23 +2973,23 @@
     "status": "",
     "remarks": "Sep",
     "month": "",
-    "sr": 177
+    "sr": 186
   },
   {
-    "displaySr": "BAU Services & Readiness",
-    "workstream": "Go-Live",
-    "phase": "Client",
-    "ledBy": "Joint",
+    "displaySr": "3.1",
+    "workstream": "BAU Services & Readiness",
+    "phase": "Go-Live",
+    "ledBy": "Client",
     "jointFlag": "",
-    "milestone": "Headcount assessment",
-    "activity": "Libu",
-    "owner": "Business",
-    "department": "31-Jul",
-    "deadline": "Not Started",
-    "status": "",
-    "remarks": "Jul",
-    "month": "",
-    "sr": 178
+    "milestone": "",
+    "activity": "IVR flow",
+    "owner": "Bhagyashree",
+    "department": "SQD",
+    "deadline": "31-Jul",
+    "status": "WIP",
+    "remarks": "",
+    "month": "Jul",
+    "sr": 187
   },
   {
     "displaySr": "3.2",
@@ -2861,7 +3005,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Jul",
-    "sr": 179
+    "sr": 188
   },
   {
     "displaySr": "3.3",
@@ -2877,7 +3021,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Jul",
-    "sr": 180
+    "sr": 189
   },
   {
     "displaySr": "3.4",
@@ -2893,7 +3037,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 181
+    "sr": 190
   },
   {
     "displaySr": "3.5",
@@ -2909,7 +3053,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 182
+    "sr": 191
   },
   {
     "displaySr": "4",
@@ -2925,7 +3069,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 183
+    "sr": 192
   },
   {
     "displaySr": "K",
@@ -2941,7 +3085,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 184
+    "sr": 193
   },
   {
     "displaySr": "1",
@@ -2957,7 +3101,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 185
+    "sr": 194
   },
   {
     "displaySr": "2",
@@ -2973,7 +3117,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 186
+    "sr": 195
   },
   {
     "displaySr": "3",
@@ -2989,7 +3133,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 187
+    "sr": 196
   },
   {
     "displaySr": "4",
@@ -3005,7 +3149,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 188
+    "sr": 197
   },
   {
     "displaySr": "5",
@@ -3021,7 +3165,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 189
+    "sr": 198
   },
   {
     "displaySr": "6",
@@ -3037,7 +3181,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 190
+    "sr": 199
   },
   {
     "displaySr": "7",
@@ -3053,7 +3197,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 191
+    "sr": 200
   },
   {
     "displaySr": "8",
@@ -3069,7 +3213,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 192
+    "sr": 201
   },
   {
     "displaySr": "9",
@@ -3085,7 +3229,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 193
+    "sr": 202
   },
   {
     "displaySr": "10",
@@ -3101,23 +3245,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 194
-  },
-  {
-    "displaySr": "A",
-    "workstream": "B",
-    "phase": "C",
-    "ledBy": "D",
-    "jointFlag": "E",
-    "milestone": "F",
-    "activity": "G",
-    "owner": "H",
-    "department": "I",
-    "deadline": "J",
-    "status": "K",
-    "remarks": "L",
-    "month": "M",
-    "sr": 195
+    "sr": 203
   },
   {
     "displaySr": "10",
@@ -3133,7 +3261,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 196
+    "sr": 204
   },
   {
     "displaySr": "L",
@@ -3149,7 +3277,7 @@
     "status": "WIP",
     "remarks": "",
     "month": "Oct",
-    "sr": 197
+    "sr": 205
   },
   {
     "displaySr": "1",
@@ -3165,7 +3293,7 @@
     "status": "WIP",
     "remarks": "Discussion on TMS Prime initated on 19 Jun",
     "month": "Jul",
-    "sr": 198
+    "sr": 206
   },
   {
     "displaySr": "2",
@@ -3181,7 +3309,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 199
+    "sr": 207
   },
   {
     "displaySr": "3",
@@ -3197,7 +3325,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 200
+    "sr": 208
   },
   {
     "displaySr": "M",
@@ -3213,7 +3341,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Nov",
-    "sr": 201
+    "sr": 209
   },
   {
     "displaySr": "1",
@@ -3229,7 +3357,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 202
+    "sr": 210
   },
   {
     "displaySr": "2",
@@ -3245,7 +3373,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 203
+    "sr": 211
   },
   {
     "displaySr": "3",
@@ -3261,7 +3389,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 204
+    "sr": 212
   },
   {
     "displaySr": "4",
@@ -3277,7 +3405,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 205
+    "sr": 213
   },
   {
     "displaySr": "5",
@@ -3293,7 +3421,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Nov",
-    "sr": 206
+    "sr": 214
   },
   {
     "displaySr": "6",
@@ -3309,7 +3437,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Nov",
-    "sr": 207
+    "sr": 215
   },
   {
     "displaySr": "7",
@@ -3325,6 +3453,6 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Nov",
-    "sr": 208
+    "sr": 216
   }
 ]
