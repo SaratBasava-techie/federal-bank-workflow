@@ -73,7 +73,6 @@ const programKpis = {
 const completionStatus: { name: string; value: number; color: string }[] = [
   { name: "Completed", value: _completed, color: "#16a34a" },
   { name: "WIP", value: _wip, color: "#f59e0b" },
-  { name: "In Progress", value: _inProgress, color: "#0ea5e9" },
   { name: "Not Started", value: _notStarted, color: "#94a3b8" },
 ].filter((d) => d.value > 0);
 
@@ -193,7 +192,8 @@ function ProgramPage() {
                   dataKey="phase"
                   stroke="var(--color-muted-foreground)"
                   fontSize={11}
-                  width={78}
+                  width={120}
+                  interval={0}
                 />
                 <Tooltip
                   formatter={(v: number) => [`${v}%`, "Complete"]}
@@ -236,7 +236,6 @@ function ProgramPage() {
                 <Legend wrapperStyle={{ fontSize: 12 }} />
                 <Bar dataKey="Completed" stackId="a" fill="#16a34a" />
                 <Bar dataKey="WIP" stackId="a" fill="#f59e0b" />
-                <Bar dataKey="In Progress" stackId="a" fill="#0ea5e9" />
                 <Bar dataKey="Not Started" stackId="a" fill="#94a3b8" />
               </BarChart>
             </ResponsiveContainer>
