@@ -255,7 +255,6 @@ const WORKSTREAM_ORDER = Array.from(
 function ActivityList() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "Completed" | "WIP" | "In Progress" | "Not Started">("all");
-  const [urgencyFilter, setUrgencyFilter] = useState<"all" | "overdue" | "soon" | "later">("all");
   const [openStreams, setOpenStreams] = useState<Record<string, boolean>>(() => {
     const init: Record<string, boolean> = {};
     WORKSTREAM_ORDER.forEach((w) => (init[w] = true));
@@ -282,7 +281,6 @@ function ActivityList() {
     const filteredList = list.filter(
       (a) => {
         if (statusFilter !== "all" && a.status !== statusFilter) return false;
-        if (urgencyFilter !== "all" && urgencyOf(a.endDate) !== urgencyFilter) return false;
         if (!q) return true;
         return (
           a.activity.toLowerCase().includes(q) ||
@@ -320,17 +318,6 @@ function ActivityList() {
               { v: "Not Started", label: "Not Started", swatch: STATUS_META["Not Started"].color },
             ]}
           />
-          <FilterChips
-            label="Deadline"
-            value={urgencyFilter}
-            onChange={(v) => setUrgencyFilter(v as typeof urgencyFilter)}
-            options={[
-              { v: "all", label: "All" },
-              { v: "overdue", label: "Overdue", swatch: "#dc2626" },
-              { v: "soon", label: "Due soon", swatch: "#2563eb" },
-              { v: "later", label: "On track", swatch: "#16a34a" },
-            ]}
-          />
           <button
             onClick={() =>
               setOpenStreams((s) => {
@@ -349,8 +336,6 @@ function ActivityList() {
         <div className="space-y-3">
           {filtered.map(([ws, list]) => {
             const isOpen = openStreams[ws] !== false;
-            const overdue = list.filter((a) => urgencyOf(a.endDate) === "overdue").length;
-            const soon = list.filter((a) => urgencyOf(a.endDate) === "soon").length;
             return (
               <div
                 key={ws}
@@ -369,22 +354,6 @@ function ActivityList() {
                     <span className="rounded-full bg-background/80 px-2 py-0.5 text-[11px] font-normal text-muted-foreground">
                       {list.length}
                     </span>
-                    {overdue > 0 && (
-                      <span
-                        className="rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
-                        style={{ background: "var(--rag-critical)" }}
-                      >
-                        {overdue} overdue
-                      </span>
-                    )}
-                    {soon > 0 && (
-                      <span
-                        className="rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
-                        style={{ background: "var(--rag-watch, #d97706)" }}
-                      >
-                        {soon} due soon
-                      </span>
-                    )}
                   </span>
                   <span
                     className="flex h-6 w-6 items-center justify-center rounded-full bg-background/80 text-muted-foreground transition-transform duration-200"
@@ -414,7 +383,7 @@ function ActivityList() {
                             className="border-t border-border transition-colors hover:bg-muted/40"
                           >
                             <td className="px-3 py-2 text-xs text-muted-foreground">
-                              {a.sr}
+                              {DISPLAY_SR.get(a.sr) ?? a.sr}
                             </td>
                             <td className="px-3 py-2 text-foreground/90">{a.activity}</td>
                             <td className="px-3 py-2 text-xs">{a.phase || "—"}</td>
