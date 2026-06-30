@@ -180,13 +180,15 @@ function ProgramPage() {
 
 interface RawActivity {
   sr: number;
+  displaySr: string;
   workstream: string;
   phase: string;
   ledBy: string;
   activity: string;
   owner: string;
+  department: string;
   status: string;
-  endDate: string;
+  deadline: string;
   month: string;
 }
 
@@ -195,39 +197,26 @@ const ALL_ACTIVITIES = (activitiesData as RawActivity[]).map((a) => ({
   status: normalizeStatus(a.status),
 }));
 
-// Build hierarchical Sr (1, 1.1, 1.2, 2, 2.1 …) per workstream order.
-const DISPLAY_SR = new Map<number, string>();
-(() => {
-  const seen: Record<string, number> = {};
-  const order: string[] = [];
-  ALL_ACTIVITIES.forEach((a) => {
-    if (!(a.workstream in seen)) {
-      seen[a.workstream] = 0;
-      order.push(a.workstream);
-    }
-  });
-  ALL_ACTIVITIES.forEach((a) => {
-    const wsIdx = order.indexOf(a.workstream) + 1;
-    const sub = seen[a.workstream]++;
-    DISPLAY_SR.set(a.sr, sub === 0 ? `${wsIdx}` : `${wsIdx}.${sub}`);
-  });
-})();
-
-// Department × Status data for the new chart.
+// Department × Status data for the chart (real Department column).
 const departmentStatusData = (() => {
   const map = new Map<string, Record<string, number | string>>();
   ALL_ACTIVITIES.forEach((a) => {
-    const row = map.get(a.workstream) || {
-      dept: a.workstream,
+    const dept = a.department?.trim() || "Unassigned";
+    const row = map.get(dept) || {
+      dept,
       Completed: 0,
       WIP: 0,
       "In Progress": 0,
       "Not Started": 0,
     };
     row[a.status] = (row[a.status] as number) + 1;
-    map.set(a.workstream, row);
+    map.set(dept, row);
   });
-  return Array.from(map.values());
+  return Array.from(map.values()).sort(
+    (a, b) =>
+      (Number(b.Completed) + Number(b.WIP) + Number(b["In Progress"]) + Number(b["Not Started"])) -
+      (Number(a.Completed) + Number(a.WIP) + Number(a["In Progress"]) + Number(a["Not Started"])),
+  );
 })();
 
 function normalizeStatus(s: string): "Completed" | "WIP" | "In Progress" | "Not Started" {
@@ -283,7 +272,8 @@ function ActivityList() {
           a.activity.toLowerCase().includes(q) ||
           (a.owner || "").toLowerCase().includes(q) ||
           a.phase.toLowerCase().includes(q) ||
-          a.endDate.toLowerCase().includes(q)
+          (a.deadline || "").toLowerCase().includes(q) ||
+          (a.department || "").toLowerCase().includes(q)
         );
       },
     );
@@ -369,6 +359,7 @@ function ActivityList() {
                           <th className="px-3 py-2">Activity</th>
                           <th className="px-3 py-2">Phase</th>
                           <th className="px-3 py-2">Owner</th>
+                          <th className="px-3 py-2">Department</th>
                           <th className="px-3 py-2">Deadline</th>
                           <th className="px-3 py-2">Status</th>
                         </tr>
@@ -379,16 +370,19 @@ function ActivityList() {
                             key={a.sr}
                             className="border-t border-border transition-colors hover:bg-muted/40"
                           >
-                            <td className="px-3 py-2 text-xs text-muted-foreground">
-                              {DISPLAY_SR.get(a.sr) ?? a.sr}
+                            <td className="px-3 py-2 text-xs text-muted-foreground tabular-nums">
+                              {a.displaySr || a.sr}
                             </td>
                             <td className="px-3 py-2 text-foreground/90">{a.activity}</td>
                             <td className="px-3 py-2 text-xs">{a.phase || "—"}</td>
                             <td className="px-3 py-2 text-xs">
                               <OwnerBadge owner={a.owner} />
                             </td>
+                            <td className="px-3 py-2 text-xs text-muted-foreground">
+                              {a.department || "—"}
+                            </td>
                             <td className="px-3 py-2 whitespace-nowrap text-xs">
-                              <DeadlinePill date={a.endDate} />
+                              <DeadlinePill date={a.deadline} />
                             </td>
                             <td className="px-3 py-2 whitespace-nowrap text-xs">
                               <StatusPill status={a.status} />
@@ -398,7 +392,7 @@ function ActivityList() {
                         {list.length === 0 && (
                           <tr>
                             <td
-                              colSpan={6}
+                              colSpan={7}
                               className="px-3 py-6 text-center text-sm text-muted-foreground"
                             >
                               No activities match your search.
