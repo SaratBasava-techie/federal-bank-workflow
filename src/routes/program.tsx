@@ -20,7 +20,6 @@ import {
   activitiesPerWeek,
   completionByPhase,
   completionStatus,
-  immediateAttention,
   programKpis,
 } from "@/lib/dashboard-data";
 import activitiesData from "@/lib/workflow-activities.json";
@@ -180,27 +179,8 @@ function ProgramPage() {
       </div>
 
       <div className="mt-6">
-        <Panel title="Activities that require immediate attention">
-          <ol className="space-y-2">
-            {immediateAttention.map((item, i) => (
-              <li
-                key={i}
-                className="flex gap-3 rounded-md border border-border bg-background px-3 py-2.5 text-sm"
-              >
-                <span
-                  className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold text-white"
-                  style={{ background: "var(--rag-critical)" }}
-                >
-                  {i + 1}
-                </span>
-                <span className="text-foreground/85">{item}</span>
-              </li>
-            ))}
-          </ol>
-        </Panel>
+        <ActivityList />
       </div>
-
-      <ActivityList />
     </DashboardShell>
   );
 }

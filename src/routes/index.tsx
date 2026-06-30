@@ -40,11 +40,10 @@ function Index() {
         <Legend />
       </section>
 
-      <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
         <StatTile label="Open items" value={ragSummary.length} tone="info" />
         <StatTile label="Critical" value={counts.critical ?? 0} tone="critical" />
         <StatTile label="Possible delay" value={counts.warning ?? 0} tone="warning" />
-        <StatTile label="On track" value={counts.ontrack ?? 0} tone="ontrack" />
       </div>
 
       <Card>
@@ -156,7 +155,6 @@ function Legend() {
   const items: { label: string; status: RagStatus }[] = [
     { label: "Critical", status: "critical" },
     { label: "Possible delay", status: "warning" },
-    { label: "On track", status: "ontrack" },
   ];
   return (
     <div className="flex items-center gap-2 rounded-md border border-dashed border-border bg-card px-3 py-2 text-xs">
