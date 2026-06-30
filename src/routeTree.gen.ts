@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RiskLogRouteImport } from './routes/risk-log'
 import { Route as ProgramRouteImport } from './routes/program'
 import { Route as JointChecklistRouteImport } from './routes/joint-checklist'
 import { Route as IndexRouteImport } from './routes/index'
 
+const RiskLogRoute = RiskLogRouteImport.update({
+  id: '/risk-log',
+  path: '/risk-log',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProgramRoute = ProgramRouteImport.update({
   id: '/program',
   path: '/program',
@@ -33,34 +39,45 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/joint-checklist': typeof JointChecklistRoute
   '/program': typeof ProgramRoute
+  '/risk-log': typeof RiskLogRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/joint-checklist': typeof JointChecklistRoute
   '/program': typeof ProgramRoute
+  '/risk-log': typeof RiskLogRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/joint-checklist': typeof JointChecklistRoute
   '/program': typeof ProgramRoute
+  '/risk-log': typeof RiskLogRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/joint-checklist' | '/program'
+  fullPaths: '/' | '/joint-checklist' | '/program' | '/risk-log'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/joint-checklist' | '/program'
-  id: '__root__' | '/' | '/joint-checklist' | '/program'
+  to: '/' | '/joint-checklist' | '/program' | '/risk-log'
+  id: '__root__' | '/' | '/joint-checklist' | '/program' | '/risk-log'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   JointChecklistRoute: typeof JointChecklistRoute
   ProgramRoute: typeof ProgramRoute
+  RiskLogRoute: typeof RiskLogRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/risk-log': {
+      id: '/risk-log'
+      path: '/risk-log'
+      fullPath: '/risk-log'
+      preLoaderRoute: typeof RiskLogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/program': {
       id: '/program'
       path: '/program'
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   JointChecklistRoute: JointChecklistRoute,
   ProgramRoute: ProgramRoute,
+  RiskLogRoute: RiskLogRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
