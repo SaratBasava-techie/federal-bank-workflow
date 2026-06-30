@@ -1776,11 +1776,11 @@
     "sr": 111
   },
   {
-    "displaySr": "Data Migration",
+    "displaySr": "1.6",
     "workstream": "Data Migration",
-    "phase": "FIS & Client",
-    "ledBy": "Joint",
-    "jointFlag": "",
+    "phase": "Data Migration",
+    "ledBy": "FIS & Client",
+    "jointFlag": "Joint",
     "milestone": "",
     "activity": "Mock 2",
     "owner": "Nitin, Dinu",
@@ -1792,10 +1792,10 @@
     "sr": 112
   },
   {
-    "displaySr": "Data Migration",
+    "displaySr": "1.6.1",
     "workstream": "Data Migration",
-    "phase": "FIS & Client",
-    "ledBy": "",
+    "phase": "Data Migration",
+    "ledBy": "FIS & Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "SCB signoff to move the data",
@@ -1808,10 +1808,10 @@
     "sr": 113
   },
   {
-    "displaySr": "Data Migration",
+    "displaySr": "1.6.2",
     "workstream": "Data Migration",
-    "phase": "FIS & Client",
-    "ledBy": "",
+    "phase": "Data Migration",
+    "ledBy": "FIS & Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "ETL execution",
@@ -1824,10 +1824,10 @@
     "sr": 114
   },
   {
-    "displaySr": "Data Migration",
+    "displaySr": "1.6.3",
     "workstream": "Data Migration",
-    "phase": "FIS & Client",
-    "ledBy": "",
+    "phase": "Data Migration",
+    "ledBy": "FIS & Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "FB validation and recon signoff",
@@ -1840,12 +1840,12 @@
     "sr": 115
   },
   {
-    "displaySr": "Data Migration",
+    "displaySr": "1.7",
     "workstream": "Data Migration",
-    "phase": "FIS & Client",
-    "ledBy": "",
-    "jointFlag": "Y",
-    "milestone": "",
+    "phase": "Data Migration",
+    "ledBy": "FIS & Client",
+    "jointFlag": "",
+    "milestone": "Y",
     "activity": "Data migration code freeze",
     "owner": "Nitin, Dinu",
     "department": "IT",
@@ -1856,11 +1856,11 @@
     "sr": 116
   },
   {
-    "displaySr": "Data Migration",
+    "displaySr": "1.8",
     "workstream": "Data Migration",
-    "phase": "FIS & Client",
-    "ledBy": "Joint",
-    "jointFlag": "",
+    "phase": "Data Migration",
+    "ledBy": "FIS & Client",
+    "jointFlag": "Joint",
     "milestone": "",
     "activity": "Entry criteria for recarding",
     "owner": "Nitin, Dinu",
@@ -1888,10 +1888,10 @@
     "sr": 118
   },
   {
-    "displaySr": "Data Migration",
+    "displaySr": "2.1",
     "workstream": "Data Migration",
-    "phase": "Client",
-    "ledBy": "",
+    "phase": "Data Migration",
+    "ledBy": "Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "Data transfer approach finalization",
@@ -1904,10 +1904,10 @@
     "sr": 119
   },
   {
-    "displaySr": "Data Migration",
+    "displaySr": "2.2",
     "workstream": "Data Migration",
-    "phase": "Client",
-    "ledBy": "",
+    "phase": "Data Migration",
+    "ledBy": "Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "Data scope finalization (Application, Statement, Dispute Forms, etc)",
@@ -1920,10 +1920,10 @@
     "sr": 120
   },
   {
-    "displaySr": "Data Migration",
+    "displaySr": "2.3",
     "workstream": "Data Migration",
-    "phase": "Client",
-    "ledBy": "",
+    "phase": "Data Migration",
+    "ledBy": "Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "Data exchange testing",
@@ -1936,10 +1936,10 @@
     "sr": 121
   },
   {
-    "displaySr": "Data Migration",
+    "displaySr": "2.4",
     "workstream": "Data Migration",
-    "phase": "Client",
-    "ledBy": "",
+    "phase": "Data Migration",
+    "ledBy": "Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "Transfer of unstructure data",
@@ -1952,10 +1952,10 @@
     "sr": 122
   },
   {
-    "displaySr": "Data Migration",
+    "displaySr": "2.5",
     "workstream": "Data Migration",
-    "phase": "Client",
-    "ledBy": "",
+    "phase": "Data Migration",
+    "ledBy": "Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "Archival and retrieval of unstructured data",
@@ -1984,10 +1984,10 @@
     "sr": 124
   },
   {
-    "displaySr": "Data Migration",
+    "displaySr": "3.1",
     "workstream": "Data Migration",
-    "phase": "Client",
-    "ledBy": "",
+    "phase": "Data Migration",
+    "ledBy": "Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "Files in scope (PDDs++)",
@@ -2000,10 +2000,10 @@
     "sr": 125
   },
   {
-    "displaySr": "Data Migration",
+    "displaySr": "3.2",
     "workstream": "Data Migration",
-    "phase": "Client",
-    "ledBy": "",
+    "phase": "Data Migration",
+    "ledBy": "Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "Source location and organization mechanism",
@@ -2016,10 +2016,10 @@
     "sr": 126
   },
   {
-    "displaySr": "Data Migration",
+    "displaySr": "3.3",
     "workstream": "Data Migration",
-    "phase": "Client",
-    "ledBy": "",
+    "phase": "Data Migration",
+    "ledBy": "Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "Destination location and archival mechanism",
@@ -2032,10 +2032,10 @@
     "sr": 127
   },
   {
-    "displaySr": "Data Migration",
+    "displaySr": "3.4",
     "workstream": "Data Migration",
-    "phase": "Client",
-    "ledBy": "",
+    "phase": "Data Migration",
+    "ledBy": "Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "Archival and retrieval of physical data",
@@ -2048,10 +2048,10 @@
     "sr": 128
   },
   {
-    "displaySr": "Testing",
+    "displaySr": "E",
     "workstream": "Testing",
-    "phase": "FIS & Client",
-    "ledBy": "",
+    "phase": "Testing",
+    "ledBy": "FIS & Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "Testing",
@@ -2544,20 +2544,36 @@
     "sr": 159
   },
   {
+    "displaySr": "H",
+    "workstream": "Recarding",
+    "phase": "Recarding",
+    "ledBy": "FIS & Client",
+    "jointFlag": "",
+    "milestone": "",
+    "activity": "Recarding",
+    "owner": "Anubhav",
+    "department": "Business",
+    "deadline": "15-Oct",
+    "status": "Not Started",
+    "remarks": "",
+    "month": "Oct",
+    "sr": 160
+  },
+  {
     "displaySr": "Recarding",
     "workstream": "Recarding",
-    "phase": "FIS & Client",
-    "ledBy": "",
-    "jointFlag": "Recarding",
+    "phase": "Client",
+    "ledBy": "Joint",
+    "jointFlag": "Receive SCB data for CIF creation",
     "milestone": "",
     "activity": "Anubhav",
     "owner": "Business",
-    "department": "15-Oct",
+    "department": "1-Sep",
     "deadline": "Not Started",
     "status": "",
-    "remarks": "Oct",
+    "remarks": "Sep",
     "month": "",
-    "sr": 160
+    "sr": 161
   },
   {
     "displaySr": "Recarding",
@@ -2573,7 +2589,7 @@
     "status": "",
     "remarks": "Sep",
     "month": "",
-    "sr": 161
+    "sr": 162
   },
   {
     "displaySr": "Recarding",
@@ -2589,7 +2605,7 @@
     "status": "",
     "remarks": "Sep",
     "month": "",
-    "sr": 162
+    "sr": 163
   },
   {
     "displaySr": "Recarding",
@@ -2605,7 +2621,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 163
+    "sr": 164
   },
   {
     "displaySr": "Recarding",
@@ -2621,13 +2637,13 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 164
+    "sr": 165
   },
   {
-    "displaySr": "Recarding",
+    "displaySr": "9.1",
     "workstream": "Recarding",
-    "phase": "Client",
-    "ledBy": "",
+    "phase": "Recarding",
+    "ledBy": "Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "Welcome calling",
@@ -2637,13 +2653,13 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 165
+    "sr": 166
   },
   {
-    "displaySr": "Recarding",
+    "displaySr": "9.2",
     "workstream": "Recarding",
-    "phase": "Client",
-    "ledBy": "",
+    "phase": "Recarding",
+    "ledBy": "Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "Monitor card activiation",
@@ -2653,13 +2669,13 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 166
+    "sr": 167
   },
   {
-    "displaySr": "Recarding",
+    "displaySr": "9.3",
     "workstream": "Recarding",
-    "phase": "Client",
-    "ledBy": "",
+    "phase": "Recarding",
+    "ledBy": "Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "Monitor channel onboarding",
@@ -2669,13 +2685,13 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 167
+    "sr": 168
   },
   {
-    "displaySr": "Recarding",
+    "displaySr": "9.4",
     "workstream": "Recarding",
-    "phase": "Client",
-    "ledBy": "",
+    "phase": "Recarding",
+    "ledBy": "Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "Monitor pin setup",
@@ -2685,13 +2701,13 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 168
+    "sr": 169
   },
   {
-    "displaySr": "Production Readiness & Go-Live",
-    "workstream": "Data Migration",
-    "phase": "FIS & Client",
-    "ledBy": "",
+    "displaySr": "I",
+    "workstream": "Production Readiness & Go-Live",
+    "phase": "Data Migration",
+    "ledBy": "FIS & Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "Dress Rehearsal",
@@ -2701,7 +2717,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 169
+    "sr": 170
   },
   {
     "displaySr": "Production Readiness & Go-Live",
@@ -2717,7 +2733,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 170
+    "sr": 171
   },
   {
     "displaySr": "Production Readiness & Go-Live",
@@ -2733,7 +2749,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 171
+    "sr": 172
   },
   {
     "displaySr": "Production Readiness & Go-Live",
@@ -2749,7 +2765,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 172
+    "sr": 173
   },
   {
     "displaySr": "Production Readiness & Go-Live",
@@ -2765,7 +2781,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 173
+    "sr": 174
   },
   {
     "displaySr": "Production Readiness & Go-Live",
@@ -2781,13 +2797,13 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 174
+    "sr": 175
   },
   {
-    "displaySr": "BAU Services & Readiness",
-    "workstream": "Go-Live",
-    "phase": "FIS & Client",
-    "ledBy": "",
+    "displaySr": "J",
+    "workstream": "BAU Services & Readiness",
+    "phase": "Go-Live",
+    "ledBy": "FIS & Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "Operation Readiness Confirmed",
@@ -2797,7 +2813,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 175
+    "sr": 176
   },
   {
     "displaySr": "BAU Services & Readiness",
@@ -2813,7 +2829,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Aug",
-    "sr": 176
+    "sr": 177
   },
   {
     "displaySr": "BAU Services & Readiness",
@@ -2829,13 +2845,13 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Aug",
-    "sr": 177
+    "sr": 178
   },
   {
-    "displaySr": "BAU Services & Readiness",
-    "workstream": "Go-Live",
-    "phase": "Client",
-    "ledBy": "",
+    "displaySr": "2.1",
+    "workstream": "BAU Services & Readiness",
+    "phase": "Go-Live",
+    "ledBy": "Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "User access management for PRIME",
@@ -2845,13 +2861,13 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Aug",
-    "sr": 178
+    "sr": 179
   },
   {
-    "displaySr": "BAU Services & Readiness",
-    "workstream": "Go-Live",
-    "phase": "Client",
-    "ledBy": "",
+    "displaySr": "2.2",
+    "workstream": "BAU Services & Readiness",
+    "phase": "Go-Live",
+    "ledBy": "Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "PRIME User Training",
@@ -2861,13 +2877,13 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 179
+    "sr": 180
   },
   {
-    "displaySr": "BAU Services & Readiness",
-    "workstream": "Go-Live",
-    "phase": "Client",
-    "ledBy": "",
+    "displaySr": "2.3",
+    "workstream": "BAU Services & Readiness",
+    "phase": "Go-Live",
+    "ledBy": "Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "PRIME VAPT & AppSec",
@@ -2877,13 +2893,13 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 180
+    "sr": 181
   },
   {
-    "displaySr": "BAU Services & Readiness",
-    "workstream": "Go-Live",
-    "phase": "Client",
-    "ledBy": "",
+    "displaySr": "2.4",
+    "workstream": "BAU Services & Readiness",
+    "phase": "Go-Live",
+    "ledBy": "Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "CISO and Risk approval for production movement",
@@ -2893,13 +2909,13 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 181
+    "sr": 182
   },
   {
-    "displaySr": "BAU Services & Readiness",
-    "workstream": "Go-Live",
-    "phase": "Client",
-    "ledBy": "",
+    "displaySr": "2.5",
+    "workstream": "BAU Services & Readiness",
+    "phase": "Go-Live",
+    "ledBy": "Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "Command Centre structure and setup",
@@ -2909,7 +2925,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 182
+    "sr": 183
   },
   {
     "displaySr": "BAU Services & Readiness",
@@ -2925,13 +2941,13 @@
     "status": "WIP",
     "remarks": "",
     "month": "Sep",
-    "sr": 183
+    "sr": 184
   },
   {
-    "displaySr": "BAU Services & Readiness",
-    "workstream": "Go-Live",
-    "phase": "Client",
-    "ledBy": "",
+    "displaySr": "3.1",
+    "workstream": "BAU Services & Readiness",
+    "phase": "Go-Live",
+    "ledBy": "Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "IVR flow",
@@ -2939,22 +2955,6 @@
     "department": "SQD",
     "deadline": "31-Jul",
     "status": "WIP",
-    "remarks": "",
-    "month": "Jul",
-    "sr": 184
-  },
-  {
-    "displaySr": "BAU Services & Readiness",
-    "workstream": "Go-Live",
-    "phase": "Client",
-    "ledBy": "Joint",
-    "jointFlag": "",
-    "milestone": "",
-    "activity": "Headcount assessment",
-    "owner": "Libu",
-    "department": "Business",
-    "deadline": "31-Jul",
-    "status": "Not Started",
     "remarks": "",
     "month": "Jul",
     "sr": 185
