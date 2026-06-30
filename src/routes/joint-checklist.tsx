@@ -90,7 +90,7 @@ const seed: ChecklistItem[] = [
   { sn: 57, workstream: "IT", task: "Migration dry runbook (cutover time, freeze period, downtime/uptime)", finish: "TBD", by: "Reema, Dinu", owner: "Jointly", status: "NS" },
 ];
 
-const STORAGE_KEY = "joint-checklist-v1";
+const STORAGE_KEY = "joint-checklist-v2";
 
 const statusMeta: Record<Status, { label: string; cls: string }> = {
   NS: { label: "Not Started", cls: "bg-slate-200 text-slate-700" },
