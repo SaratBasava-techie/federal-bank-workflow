@@ -72,7 +72,7 @@ function ProgramPage() {
             <ResponsiveContainer>
               <PieChart>
                 <Pie
-                  data={completionStatus}
+                  data={completionStatus.filter((d) => d.name !== "At Risk")}
                   dataKey="value"
                   nameKey="name"
                   innerRadius={50}
@@ -80,7 +80,7 @@ function ProgramPage() {
                   paddingAngle={2}
                   stroke="var(--color-card)"
                 >
-                  {completionStatus.map((d) => (
+                  {completionStatus.filter((d) => d.name !== "At Risk").map((d) => (
                     <Cell key={d.name} fill={d.color} />
                   ))}
                 </Pie>
@@ -140,12 +140,20 @@ function ProgramPage() {
           </div>
         </Panel>
 
-        <Panel title="Activities Due per Week">
+        <Panel title="Activities by Department & Status">
           <div className="h-72">
             <ResponsiveContainer>
-              <LineChart data={activitiesPerWeek} margin={{ left: 0, right: 16, top: 8, bottom: 8 }}>
+              <BarChart data={departmentStatusData} margin={{ left: 0, right: 16, top: 8, bottom: 30 }}>
                 <CartesianGrid stroke="var(--color-border)" strokeDasharray="3 3" />
-                <XAxis dataKey="week" stroke="var(--color-muted-foreground)" fontSize={11} />
+                <XAxis
+                  dataKey="dept"
+                  stroke="var(--color-muted-foreground)"
+                  fontSize={10}
+                  interval={0}
+                  angle={-25}
+                  textAnchor="end"
+                  height={60}
+                />
                 <YAxis stroke="var(--color-muted-foreground)" fontSize={11} allowDecimals={false} />
                 <Tooltip
                   contentStyle={{
@@ -156,23 +164,11 @@ function ProgramPage() {
                   }}
                 />
                 <Legend wrapperStyle={{ fontSize: 12 }} />
-                <Line
-                  type="monotone"
-                  dataKey="due"
-                  name="Due (pending)"
-                  stroke="var(--rag-critical)"
-                  strokeWidth={2}
-                  dot={{ r: 3 }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="completed"
-                  name="Completed"
-                  stroke="var(--rag-ontrack)"
-                  strokeWidth={2}
-                  dot={{ r: 3 }}
-                />
-              </LineChart>
+                <Bar dataKey="Completed" stackId="a" fill="#16a34a" />
+                <Bar dataKey="WIP" stackId="a" fill="#f59e0b" />
+                <Bar dataKey="In Progress" stackId="a" fill="#0ea5e9" />
+                <Bar dataKey="Not Started" stackId="a" fill="#94a3b8" />
+              </BarChart>
             </ResponsiveContainer>
           </div>
         </Panel>
@@ -201,6 +197,41 @@ const ALL_ACTIVITIES = (activitiesData as RawActivity[]).map((a) => ({
   ...a,
   status: normalizeStatus(a.status),
 }));
+
+// Build hierarchical Sr (1, 1.1, 1.2, 2, 2.1 …) per workstream order.
+const DISPLAY_SR = new Map<number, string>();
+(() => {
+  const seen: Record<string, number> = {};
+  const order: string[] = [];
+  ALL_ACTIVITIES.forEach((a) => {
+    if (!(a.workstream in seen)) {
+      seen[a.workstream] = 0;
+      order.push(a.workstream);
+    }
+  });
+  ALL_ACTIVITIES.forEach((a) => {
+    const wsIdx = order.indexOf(a.workstream) + 1;
+    const sub = seen[a.workstream]++;
+    DISPLAY_SR.set(a.sr, sub === 0 ? `${wsIdx}` : `${wsIdx}.${sub}`);
+  });
+})();
+
+// Department × Status data for the new chart.
+const departmentStatusData = (() => {
+  const map = new Map<string, Record<string, number | string>>();
+  ALL_ACTIVITIES.forEach((a) => {
+    const row = map.get(a.workstream) || {
+      dept: a.workstream,
+      Completed: 0,
+      WIP: 0,
+      "In Progress": 0,
+      "Not Started": 0,
+    };
+    row[a.status] = (row[a.status] as number) + 1;
+    map.set(a.workstream, row);
+  });
+  return Array.from(map.values());
+})();
 
 function normalizeStatus(s: string): "Completed" | "WIP" | "In Progress" | "Not Started" {
   const v = (s || "").trim().toLowerCase();
