@@ -6,8 +6,6 @@ import {
   CartesianGrid,
   Cell,
   Legend,
-  Line,
-  LineChart,
   Pie,
   PieChart,
   ResponsiveContainer,
@@ -17,7 +15,6 @@ import {
 } from "recharts";
 import { DashboardShell } from "@/components/DashboardShell";
 import {
-  activitiesPerWeek,
   completionByPhase,
   completionStatus,
   programKpis,
@@ -72,7 +69,7 @@ function ProgramPage() {
             <ResponsiveContainer>
               <PieChart>
                 <Pie
-                  data={completionStatus}
+                  data={completionStatus.filter((d) => d.name !== "At Risk")}
                   dataKey="value"
                   nameKey="name"
                   innerRadius={50}
@@ -80,7 +77,7 @@ function ProgramPage() {
                   paddingAngle={2}
                   stroke="var(--color-card)"
                 >
-                  {completionStatus.map((d) => (
+                  {completionStatus.filter((d) => d.name !== "At Risk").map((d) => (
                     <Cell key={d.name} fill={d.color} />
                   ))}
                 </Pie>
@@ -140,12 +137,20 @@ function ProgramPage() {
           </div>
         </Panel>
 
-        <Panel title="Activities Due per Week">
+        <Panel title="Activities by Department & Status">
           <div className="h-72">
             <ResponsiveContainer>
-              <LineChart data={activitiesPerWeek} margin={{ left: 0, right: 16, top: 8, bottom: 8 }}>
+              <BarChart data={departmentStatusData} margin={{ left: 0, right: 16, top: 8, bottom: 30 }}>
                 <CartesianGrid stroke="var(--color-border)" strokeDasharray="3 3" />
-                <XAxis dataKey="week" stroke="var(--color-muted-foreground)" fontSize={11} />
+                <XAxis
+                  dataKey="dept"
+                  stroke="var(--color-muted-foreground)"
+                  fontSize={10}
+                  interval={0}
+                  angle={-25}
+                  textAnchor="end"
+                  height={60}
+                />
                 <YAxis stroke="var(--color-muted-foreground)" fontSize={11} allowDecimals={false} />
                 <Tooltip
                   contentStyle={{
@@ -156,23 +161,11 @@ function ProgramPage() {
                   }}
                 />
                 <Legend wrapperStyle={{ fontSize: 12 }} />
-                <Line
-                  type="monotone"
-                  dataKey="due"
-                  name="Due (pending)"
-                  stroke="var(--rag-critical)"
-                  strokeWidth={2}
-                  dot={{ r: 3 }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="completed"
-                  name="Completed"
-                  stroke="var(--rag-ontrack)"
-                  strokeWidth={2}
-                  dot={{ r: 3 }}
-                />
-              </LineChart>
+                <Bar dataKey="Completed" stackId="a" fill="#16a34a" />
+                <Bar dataKey="WIP" stackId="a" fill="#f59e0b" />
+                <Bar dataKey="In Progress" stackId="a" fill="#0ea5e9" />
+                <Bar dataKey="Not Started" stackId="a" fill="#94a3b8" />
+              </BarChart>
             </ResponsiveContainer>
           </div>
         </Panel>
@@ -202,6 +195,41 @@ const ALL_ACTIVITIES = (activitiesData as RawActivity[]).map((a) => ({
   status: normalizeStatus(a.status),
 }));
 
+// Build hierarchical Sr (1, 1.1, 1.2, 2, 2.1 …) per workstream order.
+const DISPLAY_SR = new Map<number, string>();
+(() => {
+  const seen: Record<string, number> = {};
+  const order: string[] = [];
+  ALL_ACTIVITIES.forEach((a) => {
+    if (!(a.workstream in seen)) {
+      seen[a.workstream] = 0;
+      order.push(a.workstream);
+    }
+  });
+  ALL_ACTIVITIES.forEach((a) => {
+    const wsIdx = order.indexOf(a.workstream) + 1;
+    const sub = seen[a.workstream]++;
+    DISPLAY_SR.set(a.sr, sub === 0 ? `${wsIdx}` : `${wsIdx}.${sub}`);
+  });
+})();
+
+// Department × Status data for the new chart.
+const departmentStatusData = (() => {
+  const map = new Map<string, Record<string, number | string>>();
+  ALL_ACTIVITIES.forEach((a) => {
+    const row = map.get(a.workstream) || {
+      dept: a.workstream,
+      Completed: 0,
+      WIP: 0,
+      "In Progress": 0,
+      "Not Started": 0,
+    };
+    row[a.status] = (row[a.status] as number) + 1;
+    map.set(a.workstream, row);
+  });
+  return Array.from(map.values());
+})();
+
 function normalizeStatus(s: string): "Completed" | "WIP" | "In Progress" | "Not Started" {
   const v = (s || "").trim().toLowerCase();
   if (v === "completed" || v === "complete") return "Completed";
@@ -224,7 +252,6 @@ const WORKSTREAM_ORDER = Array.from(
 function ActivityList() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "Completed" | "WIP" | "In Progress" | "Not Started">("all");
-  const [urgencyFilter, setUrgencyFilter] = useState<"all" | "overdue" | "soon" | "later">("all");
   const [openStreams, setOpenStreams] = useState<Record<string, boolean>>(() => {
     const init: Record<string, boolean> = {};
     WORKSTREAM_ORDER.forEach((w) => (init[w] = true));
@@ -251,7 +278,6 @@ function ActivityList() {
     const filteredList = list.filter(
       (a) => {
         if (statusFilter !== "all" && a.status !== statusFilter) return false;
-        if (urgencyFilter !== "all" && urgencyOf(a.endDate) !== urgencyFilter) return false;
         if (!q) return true;
         return (
           a.activity.toLowerCase().includes(q) ||
@@ -289,17 +315,6 @@ function ActivityList() {
               { v: "Not Started", label: "Not Started", swatch: STATUS_META["Not Started"].color },
             ]}
           />
-          <FilterChips
-            label="Deadline"
-            value={urgencyFilter}
-            onChange={(v) => setUrgencyFilter(v as typeof urgencyFilter)}
-            options={[
-              { v: "all", label: "All" },
-              { v: "overdue", label: "Overdue", swatch: "#dc2626" },
-              { v: "soon", label: "Due soon", swatch: "#2563eb" },
-              { v: "later", label: "On track", swatch: "#16a34a" },
-            ]}
-          />
           <button
             onClick={() =>
               setOpenStreams((s) => {
@@ -318,8 +333,6 @@ function ActivityList() {
         <div className="space-y-3">
           {filtered.map(([ws, list]) => {
             const isOpen = openStreams[ws] !== false;
-            const overdue = list.filter((a) => urgencyOf(a.endDate) === "overdue").length;
-            const soon = list.filter((a) => urgencyOf(a.endDate) === "soon").length;
             return (
               <div
                 key={ws}
@@ -338,22 +351,6 @@ function ActivityList() {
                     <span className="rounded-full bg-background/80 px-2 py-0.5 text-[11px] font-normal text-muted-foreground">
                       {list.length}
                     </span>
-                    {overdue > 0 && (
-                      <span
-                        className="rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
-                        style={{ background: "var(--rag-critical)" }}
-                      >
-                        {overdue} overdue
-                      </span>
-                    )}
-                    {soon > 0 && (
-                      <span
-                        className="rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
-                        style={{ background: "var(--rag-watch, #d97706)" }}
-                      >
-                        {soon} due soon
-                      </span>
-                    )}
                   </span>
                   <span
                     className="flex h-6 w-6 items-center justify-center rounded-full bg-background/80 text-muted-foreground transition-transform duration-200"
@@ -383,7 +380,7 @@ function ActivityList() {
                             className="border-t border-border transition-colors hover:bg-muted/40"
                           >
                             <td className="px-3 py-2 text-xs text-muted-foreground">
-                              {a.sr}
+                              {DISPLAY_SR.get(a.sr) ?? a.sr}
                             </td>
                             <td className="px-3 py-2 text-foreground/90">{a.activity}</td>
                             <td className="px-3 py-2 text-xs">{a.phase || "—"}</td>
@@ -525,13 +522,8 @@ function DeadlinePill({ date }: { date: string }) {
           ? "#16a34a"
           : "var(--color-muted-foreground)";
   return (
-    <span className="inline-flex items-center gap-1.5 font-medium text-foreground/80">
-      <span
-        className="inline-block h-2.5 w-2.5 rounded-full ring-2"
-        style={{ background: color, boxShadow: `0 0 0 2px color-mix(in oklab, ${color} 25%, transparent)` }}
-        title={u}
-      />
-      <span className="tabular-nums">{date || "—"}</span>
+    <span className="font-medium tabular-nums" style={{ color }}>
+      {date || "—"}
     </span>
   );
 }

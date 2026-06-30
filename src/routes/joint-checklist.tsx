@@ -223,16 +223,11 @@ function JointChecklistPage() {
                         </select>
                       </td>
                       <td className="px-3 py-2">
-                        <select
-                          value={r.status}
-                          onChange={(e) => update(r.sn, { status: e.target.value as Status })}
-                          className={`rounded-full px-2 py-0.5 text-xs font-medium ${statusMeta[r.status].cls}`}
+                        <span
+                          className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${statusMeta[r.status].cls}`}
                         >
-                          <option value="NS">Not Started</option>
-                          <option value="IP">In Progress</option>
-                          <option value="D">Done</option>
-                          <option value="B">Blocked</option>
-                        </select>
+                          {statusMeta[r.status].label}
+                        </span>
                       </td>
                     </tr>
                   ))}
