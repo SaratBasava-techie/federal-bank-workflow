@@ -14,11 +14,6 @@ import {
   YAxis,
 } from "recharts";
 import { DashboardShell } from "@/components/DashboardShell";
-import {
-  completionByPhase,
-  completionStatus,
-  programKpis,
-} from "@/lib/dashboard-data";
 import activitiesData from "@/lib/workflow-activities.json";
 
 export const Route = createFileRoute("/program")({
@@ -57,9 +52,9 @@ function ProgramPage() {
       <div className="mb-6 grid grid-cols-2 gap-0 overflow-hidden rounded-lg border border-border md:grid-cols-6">
         <Kpi label="Total Activities" value={k.total} sub="Project activities" tone="navy" />
         <Kpi label="Completed" value={k.completed} sub={`${pct(k.completed, k.total)}% of total`} tone="ontrack" />
-        <Kpi label="In Progress" value={k.inProgress} sub="Activities active" tone="info" />
+        <Kpi label="WIP" value={k.wip} sub="Work in progress" tone="info" />
         <Kpi label="Not Started" value={k.notStarted} sub="Pending start" tone="muted" />
-        <Kpi label="Overdue / At Risk" value={k.atRisk} sub="Requires immediate action" tone="critical" />
+        <Kpi label="Overdue" value={k.overdue} sub="Past deadline" tone="critical" />
         <Kpi label="Overall Progress" value={`${k.overall}%`} sub="Completion rate" tone="accent" />
       </div>
 
@@ -69,7 +64,7 @@ function ProgramPage() {
             <ResponsiveContainer>
               <PieChart>
                 <Pie
-                  data={completionStatus.filter((d) => d.name !== "At Risk")}
+                  data={completionStatus}
                   dataKey="value"
                   nameKey="name"
                   innerRadius={50}
@@ -77,7 +72,7 @@ function ProgramPage() {
                   paddingAngle={2}
                   stroke="var(--color-card)"
                 >
-                  {completionStatus.filter((d) => d.name !== "At Risk").map((d) => (
+                  {completionStatus.map((d) => (
                     <Cell key={d.name} fill={d.color} />
                   ))}
                 </Pie>
