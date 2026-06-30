@@ -180,13 +180,15 @@ function ProgramPage() {
 
 interface RawActivity {
   sr: number;
+  displaySr: string;
   workstream: string;
   phase: string;
   ledBy: string;
   activity: string;
   owner: string;
+  department: string;
   status: string;
-  endDate: string;
+  deadline: string;
   month: string;
 }
 
@@ -195,39 +197,26 @@ const ALL_ACTIVITIES = (activitiesData as RawActivity[]).map((a) => ({
   status: normalizeStatus(a.status),
 }));
 
-// Build hierarchical Sr (1, 1.1, 1.2, 2, 2.1 …) per workstream order.
-const DISPLAY_SR = new Map<number, string>();
-(() => {
-  const seen: Record<string, number> = {};
-  const order: string[] = [];
-  ALL_ACTIVITIES.forEach((a) => {
-    if (!(a.workstream in seen)) {
-      seen[a.workstream] = 0;
-      order.push(a.workstream);
-    }
-  });
-  ALL_ACTIVITIES.forEach((a) => {
-    const wsIdx = order.indexOf(a.workstream) + 1;
-    const sub = seen[a.workstream]++;
-    DISPLAY_SR.set(a.sr, sub === 0 ? `${wsIdx}` : `${wsIdx}.${sub}`);
-  });
-})();
-
-// Department × Status data for the new chart.
+// Department × Status data for the chart (real Department column).
 const departmentStatusData = (() => {
   const map = new Map<string, Record<string, number | string>>();
   ALL_ACTIVITIES.forEach((a) => {
-    const row = map.get(a.workstream) || {
-      dept: a.workstream,
+    const dept = a.department?.trim() || "Unassigned";
+    const row = map.get(dept) || {
+      dept,
       Completed: 0,
       WIP: 0,
       "In Progress": 0,
       "Not Started": 0,
     };
     row[a.status] = (row[a.status] as number) + 1;
-    map.set(a.workstream, row);
+    map.set(dept, row);
   });
-  return Array.from(map.values());
+  return Array.from(map.values()).sort(
+    (a, b) =>
+      (Number(b.Completed) + Number(b.WIP) + Number(b["In Progress"]) + Number(b["Not Started"])) -
+      (Number(a.Completed) + Number(a.WIP) + Number(a["In Progress"]) + Number(a["Not Started"])),
+  );
 })();
 
 function normalizeStatus(s: string): "Completed" | "WIP" | "In Progress" | "Not Started" {
