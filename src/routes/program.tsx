@@ -374,7 +374,6 @@ function ActivityList() {
               { v: "all", label: "All" },
               { v: "Completed", label: "Completed", swatch: STATUS_META.Completed.color },
               { v: "WIP", label: "WIP", swatch: STATUS_META.WIP.color },
-              { v: "In Progress", label: "In Progress", swatch: STATUS_META["In Progress"].color },
               { v: "Not Started", label: "Not Started", swatch: STATUS_META["Not Started"].color },
             ]}
           />
