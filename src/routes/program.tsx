@@ -20,7 +20,6 @@ import {
   activitiesPerWeek,
   completionByPhase,
   completionStatus,
-  immediateAttention,
   programKpis,
 } from "@/lib/dashboard-data";
 import activitiesData from "@/lib/workflow-activities.json";
