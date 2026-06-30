@@ -202,7 +202,6 @@ function JointChecklistPage() {
                     <th className="px-3 py-2">By Who</th>
                     <th className="px-3 py-2">Owner</th>
                     <th className="px-3 py-2">Status</th>
-                    <th className="px-3 py-2">Comments</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -234,14 +233,6 @@ function JointChecklistPage() {
                           <option value="D">Done</option>
                           <option value="B">Blocked</option>
                         </select>
-                      </td>
-                      <td className="px-3 py-2">
-                        <input
-                          value={r.comments || ""}
-                          onChange={(e) => update(r.sn, { comments: e.target.value })}
-                          placeholder="Add note…"
-                          className="w-full rounded border border-transparent bg-transparent px-1 py-0.5 text-xs hover:border-border focus:border-border focus:outline-none"
-                        />
                       </td>
                     </tr>
                   ))}
