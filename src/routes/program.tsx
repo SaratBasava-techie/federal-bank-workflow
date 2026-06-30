@@ -272,7 +272,8 @@ function ActivityList() {
           a.activity.toLowerCase().includes(q) ||
           (a.owner || "").toLowerCase().includes(q) ||
           a.phase.toLowerCase().includes(q) ||
-          a.endDate.toLowerCase().includes(q)
+          (a.deadline || "").toLowerCase().includes(q) ||
+          (a.department || "").toLowerCase().includes(q)
         );
       },
     );
@@ -358,6 +359,7 @@ function ActivityList() {
                           <th className="px-3 py-2">Activity</th>
                           <th className="px-3 py-2">Phase</th>
                           <th className="px-3 py-2">Owner</th>
+                          <th className="px-3 py-2">Department</th>
                           <th className="px-3 py-2">Deadline</th>
                           <th className="px-3 py-2">Status</th>
                         </tr>
@@ -368,16 +370,19 @@ function ActivityList() {
                             key={a.sr}
                             className="border-t border-border transition-colors hover:bg-muted/40"
                           >
-                            <td className="px-3 py-2 text-xs text-muted-foreground">
-                              {DISPLAY_SR.get(a.sr) ?? a.sr}
+                            <td className="px-3 py-2 text-xs text-muted-foreground tabular-nums">
+                              {a.displaySr || a.sr}
                             </td>
                             <td className="px-3 py-2 text-foreground/90">{a.activity}</td>
                             <td className="px-3 py-2 text-xs">{a.phase || "—"}</td>
                             <td className="px-3 py-2 text-xs">
                               <OwnerBadge owner={a.owner} />
                             </td>
+                            <td className="px-3 py-2 text-xs text-muted-foreground">
+                              {a.department || "—"}
+                            </td>
                             <td className="px-3 py-2 whitespace-nowrap text-xs">
-                              <DeadlinePill date={a.endDate} />
+                              <DeadlinePill date={a.deadline} />
                             </td>
                             <td className="px-3 py-2 whitespace-nowrap text-xs">
                               <StatusPill status={a.status} />
@@ -387,7 +392,7 @@ function ActivityList() {
                         {list.length === 0 && (
                           <tr>
                             <td
-                              colSpan={6}
+                              colSpan={7}
                               className="px-3 py-6 text-center text-sm text-muted-foreground"
                             >
                               No activities match your search.
