@@ -525,13 +525,8 @@ function DeadlinePill({ date }: { date: string }) {
           ? "#16a34a"
           : "var(--color-muted-foreground)";
   return (
-    <span className="inline-flex items-center gap-1.5 font-medium text-foreground/80">
-      <span
-        className="inline-block h-2.5 w-2.5 rounded-full ring-2"
-        style={{ background: color, boxShadow: `0 0 0 2px color-mix(in oklab, ${color} 25%, transparent)` }}
-        title={u}
-      />
-      <span className="tabular-nums">{date || "—"}</span>
+    <span className="font-medium tabular-nums" style={{ color }}>
+      {date || "—"}
     </span>
   );
 }
