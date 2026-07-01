@@ -70,16 +70,15 @@ export function DashboardShell({ children }: { children: ReactNode }) {
 
 function KpmgMark() {
   return (
-    <div className="flex items-center rounded-md bg-white px-3 py-2 shadow-md ring-1 ring-white/10">
+    <div className="inline-flex items-center rounded-sm bg-white p-1 shadow-sm">
       <img
         src="/kpmg-logo.png"
         alt="KPMG"
-        className="h-8 w-auto"
+        className="h-9 w-auto object-contain"
       />
     </div>
   );
 }
-
 function PoweredByKpmg() {
   return (
     <div className="flex items-center gap-2 rounded-md border border-white/15 bg-white/5 px-3 py-1.5">
