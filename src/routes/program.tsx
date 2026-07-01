@@ -299,9 +299,9 @@ function normalizeStatus(s: string): "Completed" | "WIP" | "In Progress" | "Not 
 
 const STATUS_META: Record<string, { color: string; label: string }> = {
   Completed: { color: "#16a34a", label: "Completed" },
-  WIP: { color: "#f59e0b", label: "WIP" },
+  WIP: { color: "#38bdf8", label: "WIP" },
   "In Progress": { color: "#0ea5e9", label: "In Progress" },
-  "Not Started": { color: "#94a3b8", label: "Not Started" },
+  "Not Started": { color: "#94a3b8", label: "Yet to Start" },
 };
 
 const WORKSTREAM_ORDER = Array.from(
