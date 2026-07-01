@@ -233,8 +233,8 @@ function ProgramPage() {
                 />
                 <Legend wrapperStyle={{ fontSize: 12 }} />
                 <Bar dataKey="Completed" stackId="a" fill="#16a34a" />
-                <Bar dataKey="WIP" stackId="a" fill="#f59e0b" />
-                <Bar dataKey="Not Started" stackId="a" fill="#94a3b8" />
+                <Bar dataKey="WIP" stackId="a" fill="#38bdf8" />
+                <Bar dataKey="Not Started" stackId="a" fill="#94a3b8" name="Yet to Start" />
               </BarChart>
             </ResponsiveContainer>
           </div>
