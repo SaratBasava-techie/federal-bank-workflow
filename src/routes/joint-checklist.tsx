@@ -212,15 +212,9 @@ function JointChecklistPage() {
                       <td className="px-3 py-2 whitespace-nowrap text-xs">{r.finish || "—"}</td>
                       <td className="px-3 py-2 whitespace-nowrap text-xs">{r.by}</td>
                       <td className="px-3 py-2">
-                        <select
-                          value={r.owner}
-                          onChange={(e) => update(r.sn, { owner: e.target.value as Owner })}
-                          className={`rounded-full px-2 py-0.5 text-xs font-medium ${ownerMeta[r.owner]}`}
-                        >
-                          <option value="SCB">SCB</option>
-                          <option value="FB">FB</option>
-                          <option value="Jointly">Jointly</option>
-                        </select>
+                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${ownerMeta[r.owner]}`}>
+                          {r.owner}
+                        </span>
                       </td>
                       <td className="px-3 py-2">
                         <span
