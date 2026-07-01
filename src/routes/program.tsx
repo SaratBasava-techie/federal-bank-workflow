@@ -128,7 +128,7 @@ function ProgramPage() {
 
       <div className="mb-6 grid grid-cols-2 gap-0 overflow-hidden rounded-lg border border-border md:grid-cols-4">
         <Kpi label="Total Activities" value={k.total} sub="Project activities" tone="navy" />
-        <Kpi label="Completed" value={k.completed} sub={`${pct(k.completed, k.total)}% of total`} tone="ontrack" />
+        <Kpi label="Completed" value={k.completed} sub="" tone="ontrack" />
         <Kpi label="WIP" value={k.wip} sub="Work in progress" tone="info" />
         <Kpi label="Yet to Start" value={k.notStarted} sub="Proposed for Jul/Aug/Sep/Oct" tone="muted" />
       </div>
