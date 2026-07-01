@@ -1,5 +1,6 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import type { ReactNode } from "react";
+import { useDashboardData } from "../hooks/useDashboardData";
 
 const tabs = [
   { to: "/", label: "RAG Summary" },
@@ -15,6 +16,7 @@ export function DashboardShell({
   children: ReactNode;
 }) {
   const { pathname } = useLocation();
+  const { data: response } = useDashboardData();
 
   return (
     <div className="min-h-screen bg-background">
@@ -77,6 +79,21 @@ export function DashboardShell({
           </div>
         </div>
       </header>
+
+      {response?.isConnected === false && (
+        <div className="bg-destructive/15 border-b border-destructive/30 px-6 py-2.5 text-sm text-destructive-foreground">
+          <div className="mx-auto max-w-[1400px] flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <span className="flex h-2 w-2 rounded-full bg-destructive animate-pulse" />
+              <span className="font-semibold">Data Disconnected:</span>
+              <span>{response?.error || "Unable to sync live data. Using offline fallback data."}</span>
+            </div>
+            <span className="text-xs opacity-75 bg-destructive/10 rounded px-2 py-0.5 font-medium select-none">
+              OFFLINE FALLBACK
+            </span>
+          </div>
+        </div>
+      )}
 
       <main className="mx-auto max-w-[1400px] px-6 py-8">
         {children}

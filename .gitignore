@@ -15,6 +15,12 @@ dist-ssr
 .tanstack/**
 .nitro
 *.local
+.env
+.env.*
+.dev.vars
+
+# Uploaded Excel data files
+data/
 
 # Wrangler / Cloudflare
 .wrangler/

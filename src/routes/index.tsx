@@ -1,13 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { DashboardShell } from "@/components/DashboardShell";
+import { useDashboardData, type RagItem } from "@/hooks/useDashboardData";
 import {
-  ragSummary,
-  pendingFromTsys,
+  ragSummary as staticRag,
+  pendingFromTsys as staticPending,
   type RagStatus,
 } from "@/lib/dashboard-data";
 
-export const Route = createFileRoute("/")({
-  head: () => ({
+export const Route = createFileRoute("/")({"head": () => ({
     meta: [
       { title: "RAG Summary · Federal Bank Programme" },
       { name: "description", content: "RAG status summary for the Standard Chartered to Federal Bank credit card portfolio migration." },
@@ -19,6 +19,12 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const { data: response } = useDashboardData();
+  const dashboardData = response?.data;
+
+  const ragSummary = dashboardData?.ragSummary ?? staticRag;
+  const pendingFromTsys = dashboardData?.pendingFromTsys ?? staticPending;
+
   const counts = ragSummary.reduce(
     (acc, r) => ((acc[r.rag] = (acc[r.rag] ?? 0) + 1), acc),
     {} as Record<RagStatus, number>,
@@ -38,10 +44,11 @@ function Index() {
         <Legend />
       </section>
 
-      <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+      <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <StatTile label="Open items" value={ragSummary.length} tone="info" />
-        <StatTile label="Critical" value={counts.critical ?? 0} tone="critical" />
-        <StatTile label="Possible delay" value={counts.warning ?? 0} tone="warning" />
+        <StatTile label="High" value={counts.critical ?? 0} tone="critical" />
+        <StatTile label="Medium" value={counts.warning ?? 0} tone="warning" />
+        <StatTile label="Low" value={counts.ontrack ?? 0} tone="ontrack" />
       </div>
 
       <Card>
@@ -55,7 +62,7 @@ function Index() {
               <Td className="font-medium text-foreground">{r.workstream}</Td>
               <Td className="max-w-[420px] text-foreground/80">{r.activity}</Td>
               <Td>{r.owner}</Td>
-              <Td>{r.leads}</Td>
+              <Td className="text-center whitespace-nowrap">{r.leads}</Td>
               <Td className="tabular-nums">{r.targetDate}</Td>
               <Td><RagPill status={r.rag} /></Td>
             </tr>
@@ -72,7 +79,7 @@ function Index() {
                 <Td>{r.sn}</Td>
                 <Td className="font-medium text-foreground">{r.workstream}</Td>
                 <Td className="max-w-[520px] text-foreground/80">{r.activity}</Td>
-                <Td>{r.leads}</Td>
+                <Td className="text-center whitespace-nowrap">{r.leads}</Td>
                 <Td className="tabular-nums">{r.dateRaised}</Td>
               </tr>
             ))}
@@ -85,8 +92,9 @@ function Index() {
 
 function Legend() {
   const items: { label: string; status: RagStatus }[] = [
-    { label: "Critical", status: "critical" },
-    { label: "Possible delay", status: "warning" },
+    { label: "High", status: "critical" },
+    { label: "Medium", status: "warning" },
+    { label: "Low", status: "ontrack" },
   ];
   return (
     <div className="flex items-center gap-2 rounded-md border border-dashed border-border bg-card px-3 py-2 text-xs">
@@ -113,7 +121,7 @@ function ragColor(s: RagStatus) {
 }
 
 function RagPill({ status }: { status: RagStatus }) {
-  const label = status === "critical" ? "Critical" : status === "warning" ? "Delay" : "On track";
+  const label = status === "critical" ? "High" : status === "warning" ? "Medium" : "On track";
   return (
     <span
       className="inline-flex min-w-[88px] items-center justify-center rounded-sm px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white"
@@ -186,7 +194,7 @@ function Table({ headers, children }: { headers: string[]; children: React.React
         <thead>
           <tr className="bg-muted/60 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
             {headers.map((h) => (
-              <th key={h} className="px-4 py-2.5">
+              <th key={h} className={`px-4 py-2.5 ${h === "Leads" ? "text-center whitespace-nowrap" : ""}`}>
                 {h}
               </th>
             ))}

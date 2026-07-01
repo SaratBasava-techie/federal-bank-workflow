@@ -5,7 +5,7 @@
     "phase": "Discovery",
     "ledBy": "Client",
     "jointFlag": "",
-    "milestone": "",
+    "milestone": "Y",
     "activity": "Approach & Key Business Decisions",
     "owner": "Kishore",
     "department": "Business",
@@ -27,7 +27,7 @@
     "department": "Business",
     "deadline": "15-Jul",
     "status": "WIP",
-    "remarks": "PAD doc to be prepared by Kishore. Common customer handling",
+    "remarks": "PAD doc to be prepared by  Kishore. Common customer handling",
     "month": "Jul",
     "sr": 2
   },
@@ -196,10 +196,10 @@
     "workstream": "Approach & Key Decisions",
     "phase": "Discovery",
     "ledBy": "Client",
-    "jointFlag": "Y",
-    "milestone": "",
+    "jointFlag": "",
+    "milestone": "Y",
     "activity": "FIS Due Diligence",
-    "owner": "Kishore, Libu",
+    "owner": "Kishore,Libu",
     "department": "Business",
     "deadline": "31-Aug",
     "status": "WIP",
@@ -292,8 +292,8 @@
     "workstream": "Platform/ Infrastructure",
     "phase": "Env Setup",
     "ledBy": "FIS & Client",
-    "jointFlag": "Y",
-    "milestone": "",
+    "jointFlag": "",
+    "milestone": "Y",
     "activity": "Platform Setup Completed",
     "owner": "Dinu",
     "department": "IT",
@@ -499,7 +499,7 @@
     "displaySr": "2",
     "workstream": "Application Build & Support",
     "phase": "Build & Integration",
-    "ledBy": "FIS",
+    "ledBy": "FIS & Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "Build schedule alignment",
@@ -648,7 +648,7 @@
     "milestone": "",
     "activity": "QA Testing",
     "owner": "Dinu, Dinesh",
-    "department": "DCE",
+    "department": "IT",
     "deadline": "31-Jul",
     "status": "Not Started",
     "remarks": "",
@@ -666,8 +666,8 @@
     "owner": "Dinesh",
     "department": "DCE",
     "deadline": "31-Jul",
-    "status": "WIP",
-    "remarks": "BRD sent.",
+    "status": "Not Started",
+    "remarks": "",
     "month": "Jul",
     "sr": 42
   },
@@ -683,7 +683,7 @@
     "department": "Business",
     "deadline": "31-Jul",
     "status": "WIP",
-    "remarks": "",
+    "remarks": "BRD sent.",
     "month": "Jul",
     "sr": 43
   },
@@ -731,7 +731,7 @@
     "department": "Business",
     "deadline": "31-Jul",
     "status": "WIP",
-    "remarks": "BRD shared with Dinesh",
+    "remarks": "",
     "month": "Jul",
     "sr": 46
   },
@@ -746,8 +746,8 @@
     "owner": "Prasad",
     "department": "Business",
     "deadline": "31-Jul",
-    "status": "Not Started",
-    "remarks": "",
+    "status": "WIP",
+    "remarks": "BRD shared with Dinesh",
     "month": "Jul",
     "sr": 47
   },
@@ -793,10 +793,10 @@
     "activity": "Alternate channels (IVR and WhatsApp)",
     "owner": "Dinesh",
     "department": "DCE",
-    "deadline": "31-Jul",
-    "status": "Not Started",
+    "deadline": "",
+    "status": "",
     "remarks": "",
-    "month": "Jul",
+    "month": "",
     "sr": 50
   },
   {
@@ -875,7 +875,7 @@
     "department": "MIS",
     "deadline": "31-Jul",
     "status": "WIP",
-    "remarks": "",
+    "remarks": "Shared the assessment template",
     "month": "Jul",
     "sr": 55
   },
@@ -915,7 +915,7 @@
     "displaySr": "9.3",
     "workstream": "Application Build & Support",
     "phase": "Build & Integration",
-    "ledBy": "Client",
+    "ledBy": "FIS & Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "QA Testing",
@@ -954,7 +954,7 @@
     "owner": "Dinu",
     "department": "IT",
     "deadline": "31-Jul",
-    "status": "Not Started",
+    "status": "WIP",
     "remarks": "",
     "month": "Jul",
     "sr": 60
@@ -1003,7 +1003,7 @@
     "department": "IT",
     "deadline": "31-Jul",
     "status": "Not Started",
-    "remarks": "Rewards inputs from SCB",
+    "remarks": "",
     "month": "Jul",
     "sr": 63
   },
@@ -1019,7 +1019,7 @@
     "department": "Business",
     "deadline": "31-Jul",
     "status": "Not Started",
-    "remarks": "",
+    "remarks": "Rewards inputs from SCB",
     "month": "Jul",
     "sr": 64
   },
@@ -1065,10 +1065,10 @@
     "activity": "Fraudgaurd",
     "owner": "Aravinth",
     "department": "TMFP",
-    "deadline": "19-Jun",
+    "deadline": "31-Jul",
     "status": "WIP",
     "remarks": "",
-    "month": "Jun",
+    "month": "Jul",
     "sr": 67
   },
   {
@@ -1139,7 +1139,7 @@
     "displaySr": "13.1",
     "workstream": "Application Build & Support",
     "phase": "Build & Integration",
-    "ledBy": "FIS & Cli",
+    "ledBy": "FIS & Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "PRIME GL structure analysis",
@@ -1178,7 +1178,7 @@
     "owner": "Dinu",
     "department": "IT",
     "deadline": "31-Jul",
-    "status": "WIP",
+    "status": "Not Started",
     "remarks": "",
     "month": "Jul",
     "sr": 74
@@ -1208,9 +1208,9 @@
     "milestone": "",
     "activity": "Block codes alignment",
     "owner": "Krishna",
-    "department": "Credit Risk",
+    "department": "Credit RIsk",
     "deadline": "31-Jul",
-    "status": "Not Started",
+    "status": "WIP",
     "remarks": "",
     "month": "Jul",
     "sr": 76
@@ -1283,7 +1283,7 @@
     "displaySr": "15.3",
     "workstream": "Application Build & Support",
     "phase": "Build & Integration",
-    "ledBy": "Client",
+    "ledBy": "FIS & Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "QA Testing",
@@ -1466,7 +1466,7 @@
     "owner": "Dinu, Sreejith",
     "department": "IT",
     "deadline": "31-Jul",
-    "status": "Not Started",
+    "status": "WIP",
     "remarks": "",
     "month": "Jul",
     "sr": 92
@@ -1563,7 +1563,7 @@
     "department": "Business",
     "deadline": "31-Jul",
     "status": "WIP",
-    "remarks": "team.",
+    "remarks": "24 Jun- Scoping discussion done with KPMG team.",
     "month": "Jul",
     "sr": 98
   },
@@ -1673,10 +1673,10 @@
     "activity": "Data Migration Scope",
     "owner": "Nitin, Libu",
     "department": "Business",
-    "deadline": "19-Jun",
-    "status": "Completed",
+    "deadline": "3-Jul",
+    "status": "WIP",
     "remarks": "All queries resolved in tri-party call.",
-    "month": "Jun",
+    "month": "Jul",
     "sr": 105
   },
   {
@@ -1872,11 +1872,11 @@
     "sr": 117
   },
   {
-    "displaySr": "Data Migration",
+    "displaySr": "2",
     "workstream": "Data Migration",
-    "phase": "Client",
-    "ledBy": "",
-    "jointFlag": "",
+    "phase": "Data Migration",
+    "ledBy": "Client",
+    "jointFlag": "Joint",
     "milestone": "",
     "activity": "Unstructure Data",
     "owner": "Libu",
@@ -1945,10 +1945,10 @@
     "activity": "Transfer of unstructure data",
     "owner": "Nitin, Libu",
     "department": "Business",
-    "deadline": "31-Jul",
+    "deadline": "31-Aug",
     "status": "Not Started",
     "remarks": "",
-    "month": "Jul",
+    "month": "Aug",
     "sr": 122
   },
   {
@@ -1958,7 +1958,7 @@
     "ledBy": "Client",
     "jointFlag": "",
     "milestone": "",
-    "activity": "Archival and retrieval of unstructured data",
+    "activity": "Archival and retreival of unstructured data",
     "owner": "Nitin, Libu",
     "department": "Business",
     "deadline": "30-Sep",
@@ -1968,11 +1968,11 @@
     "sr": 123
   },
   {
-    "displaySr": "Data Migration",
+    "displaySr": "3",
     "workstream": "Data Migration",
-    "phase": "Client",
-    "ledBy": "Joint",
-    "jointFlag": "",
+    "phase": "Data Migration",
+    "ledBy": "Client",
+    "jointFlag": "Joint",
     "milestone": "",
     "activity": "Physical Data",
     "owner": "Dinu",
@@ -2038,7 +2038,7 @@
     "ledBy": "Client",
     "jointFlag": "",
     "milestone": "",
-    "activity": "Archival and retrieval of physical data",
+    "activity": "Archival and retreival of physical data",
     "owner": "Dinu",
     "department": "IT",
     "deadline": "30-Sep",
@@ -2064,10 +2064,10 @@
     "sr": 129
   },
   {
-    "displaySr": "Testing",
+    "displaySr": "1",
     "workstream": "Testing",
-    "phase": "FIS",
-    "ledBy": "",
+    "phase": "Testing",
+    "ledBy": "FIS",
     "jointFlag": "",
     "milestone": "",
     "activity": "Training for UAT",
@@ -2080,10 +2080,10 @@
     "sr": 130
   },
   {
-    "displaySr": "Testing",
+    "displaySr": "2",
     "workstream": "Testing",
-    "phase": "FIS & Client",
-    "ledBy": "",
+    "phase": "Testing",
+    "ledBy": "FIS & Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "Testing Scope & Plans Agreed",
@@ -2096,10 +2096,10 @@
     "sr": 131
   },
   {
-    "displaySr": "Testing",
+    "displaySr": "3",
     "workstream": "Testing",
-    "phase": "Client",
-    "ledBy": "",
+    "phase": "Testing",
+    "ledBy": "Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "High-Level Integration Testing",
@@ -2112,10 +2112,10 @@
     "sr": 132
   },
   {
-    "displaySr": "Testing",
+    "displaySr": "4",
     "workstream": "Testing",
-    "phase": "Client",
-    "ledBy": "",
+    "phase": "Testing",
+    "ledBy": "Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "Detailed UAT Execution",
@@ -2128,10 +2128,10 @@
     "sr": 133
   },
   {
-    "displaySr": "Testing",
+    "displaySr": "5",
     "workstream": "Testing",
-    "phase": "Client",
-    "ledBy": "",
+    "phase": "Testing",
+    "ledBy": "Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "Regression testing completed",
@@ -2144,12 +2144,12 @@
     "sr": 134
   },
   {
-    "displaySr": "Testing",
+    "displaySr": "6",
     "workstream": "Testing",
-    "phase": "FIS & Client",
-    "ledBy": "",
-    "jointFlag": "Y",
-    "milestone": "",
+    "phase": "Testing",
+    "ledBy": "FIS & Client",
+    "jointFlag": "",
+    "milestone": "Y",
     "activity": "UAT sign-off",
     "owner": "Dinu",
     "department": "IT",
@@ -2167,7 +2167,7 @@
     "jointFlag": "",
     "milestone": "",
     "activity": "Production Scheme Readiness (V&MC)",
-    "owner": "Jason, Sreejith",
+    "owner": "Jason,Sreejith",
     "department": "Business",
     "deadline": "20-Oct",
     "status": "Not Started",
@@ -2183,7 +2183,7 @@
     "jointFlag": "",
     "milestone": "",
     "activity": "Scheme host certification",
-    "owner": "Jason, Sreejith",
+    "owner": "Jason,Sreejith",
     "department": "Business",
     "deadline": "15-Jun",
     "status": "Completed",
@@ -2199,7 +2199,7 @@
     "jointFlag": "",
     "milestone": "",
     "activity": "Bin procurement",
-    "owner": "Jason, Sreejith",
+    "owner": "Jason,Sreejith",
     "department": "Business",
     "deadline": "15-Jun",
     "status": "Completed",
@@ -2215,7 +2215,7 @@
     "jointFlag": "",
     "milestone": "",
     "activity": "Bin launch plan alignment",
-    "owner": "Jason, Sreejith",
+    "owner": "Jason,Sreejith",
     "department": "Business",
     "deadline": "15-Jul",
     "status": "WIP",
@@ -2231,29 +2231,13 @@
     "jointFlag": "",
     "milestone": "",
     "activity": "Scheme form submission",
-    "owner": "Jason, Sreejith",
-    "department": "Business",
-    "deadline": "15-Jul",
-    "status": "WIP",
-    "remarks": "",
-    "month": "Jul",
-    "sr": 140
-  },
-  {
-    "displaySr": "1",
-    "workstream": "Scheme & Compliance",
-    "phase": "Scheme Readiness",
-    "ledBy": "FIS & Client",
-    "jointFlag": "",
-    "milestone": "",
-    "activity": "Scheme form submission",
     "owner": "Jason,Sreejith",
     "department": "Business",
     "deadline": "15-Jul",
     "status": "WIP",
     "remarks": "",
     "month": "Jul",
-    "sr": 141
+    "sr": 140
   },
   {
     "displaySr": "4.1",
@@ -2269,7 +2253,7 @@
     "status": "WIP",
     "remarks": "",
     "month": "Jul",
-    "sr": 142
+    "sr": 141
   },
   {
     "displaySr": "4.2",
@@ -2285,7 +2269,7 @@
     "status": "WIP",
     "remarks": "",
     "month": "Jul",
-    "sr": 143
+    "sr": 142
   },
   {
     "displaySr": "5",
@@ -2301,7 +2285,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Aug",
-    "sr": 144
+    "sr": 143
   },
   {
     "displaySr": "5.1",
@@ -2317,7 +2301,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Aug",
-    "sr": 145
+    "sr": 144
   },
   {
     "displaySr": "5.2",
@@ -2333,15 +2317,15 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Aug",
-    "sr": 146
+    "sr": 145
   },
   {
     "displaySr": "6",
     "workstream": "Scheme & Compliance",
     "phase": "Scheme Readiness",
     "ledBy": "FIS & Client",
-    "jointFlag": "Y",
-    "milestone": "",
+    "jointFlag": "",
+    "milestone": "Y",
     "activity": "Scheme confirmation for Auth Clearing",
     "owner": "Jason,Sreejith",
     "department": "Business",
@@ -2349,39 +2333,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 147
-  },
-  {
-    "displaySr": "",
-    "workstream": "Scheme & Compliance",
-    "phase": "Scheme Readiness",
-    "ledBy": "FIS & Client",
-    "jointFlag": "",
-    "milestone": "",
-    "activity": "Launch and emboss Cards for",
-    "owner": "Jason,Sreejith",
-    "department": "Business",
-    "deadline": "1-Sep",
-    "status": "Not Started",
-    "remarks": "",
-    "month": "Sep",
-    "sr": 148
-  },
-  {
-    "displaySr": "7",
-    "workstream": "Scheme & Compliance",
-    "phase": "Scheme Readiness",
-    "ledBy": "FIS & Client",
-    "jointFlag": "",
-    "milestone": "",
-    "activity": "Scheme Keys Validation (KMS)",
-    "owner": "Jason,Sreejith",
-    "department": "Business",
-    "deadline": "20-Oct",
-    "status": "Not Started",
-    "remarks": "",
-    "month": "Oct",
-    "sr": 149
+    "sr": 146
   },
   {
     "displaySr": "8",
@@ -2397,7 +2349,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 150
+    "sr": 147
   },
   {
     "displaySr": "9",
@@ -2413,7 +2365,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 151
+    "sr": 148
   },
   {
     "displaySr": "G",
@@ -2429,7 +2381,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Aug",
-    "sr": 152
+    "sr": 149
   },
   {
     "displaySr": "1",
@@ -2445,7 +2397,7 @@
     "status": "Completed",
     "remarks": "",
     "month": "Jun",
-    "sr": 153
+    "sr": 150
   },
   {
     "displaySr": "2",
@@ -2461,7 +2413,7 @@
     "status": "Completed",
     "remarks": "Key workbook required as input",
     "month": "Jun",
-    "sr": 154
+    "sr": 151
   },
   {
     "displaySr": "3",
@@ -2474,10 +2426,10 @@
     "owner": "Jason,Sreejith",
     "department": "Business",
     "deadline": "30-Jun",
-    "status": "WIP",
-    "remarks": "",
+    "status": "Completed",
+    "remarks": "Both UAT and poduction BAR forms shared with TSYS",
     "month": "Jun",
-    "sr": 155
+    "sr": 152
   },
   {
     "displaySr": "4",
@@ -2490,10 +2442,10 @@
     "owner": "Jason,Sreejith",
     "department": "Business",
     "deadline": "30-Jun",
-    "status": "Not Started",
+    "status": "WIP",
     "remarks": "",
     "month": "Jun",
-    "sr": 156
+    "sr": 153
   },
   {
     "displaySr": "5",
@@ -2506,10 +2458,10 @@
     "owner": "Jason,Sreejith",
     "department": "Business",
     "deadline": "30-Jun",
-    "status": "Not Started",
+    "status": "Completed",
     "remarks": "",
     "month": "Jun",
-    "sr": 157
+    "sr": 154
   },
   {
     "displaySr": "6",
@@ -2525,23 +2477,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Aug",
-    "sr": 158
-  },
-  {
-    "displaySr": "",
-    "workstream": "Encryption Keys",
-    "phase": "Scheme Readiness",
-    "ledBy": "FIS",
-    "jointFlag": "Y",
-    "milestone": "",
-    "activity": "Keys Applied to Production Environment",
-    "owner": "Jason,Sreejith",
-    "department": "Business",
-    "deadline": "31-Aug",
-    "status": "Not Started",
-    "remarks": "",
-    "month": "Aug",
-    "sr": 159
+    "sr": 155
   },
   {
     "displaySr": "H",
@@ -2557,7 +2493,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 160
+    "sr": 156
   },
   {
     "displaySr": "1",
@@ -2573,7 +2509,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 161
+    "sr": 157
   },
   {
     "displaySr": "2",
@@ -2589,7 +2525,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 162
+    "sr": 158
   },
   {
     "displaySr": "3",
@@ -2605,7 +2541,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 163
+    "sr": 159
   },
   {
     "displaySr": "4",
@@ -2621,15 +2557,15 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 164
+    "sr": 160
   },
   {
     "displaySr": "5",
     "workstream": "Recarding",
     "phase": "Recarding",
     "ledBy": "Client",
-    "jointFlag": "Y",
-    "milestone": "",
+    "jointFlag": "",
+    "milestone": "Y",
     "activity": "Complete card embossing",
     "owner": "Brijesh",
     "department": "Operations",
@@ -2637,7 +2573,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 165
+    "sr": 161
   },
   {
     "displaySr": "6",
@@ -2653,7 +2589,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 166
+    "sr": 162
   },
   {
     "displaySr": "7",
@@ -2669,15 +2605,15 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 167
+    "sr": 163
   },
   {
     "displaySr": "8",
     "workstream": "Recarding",
     "phase": "Recarding",
     "ledBy": "Client",
-    "jointFlag": "Y",
-    "milestone": "",
+    "jointFlag": "",
+    "milestone": "Y",
     "activity": "Complete card delivery",
     "owner": "Anubhav",
     "department": "Business",
@@ -2685,30 +2621,14 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 168
+    "sr": 164
   },
   {
-    "displaySr": "Recarding",
+    "displaySr": "9",
     "workstream": "Recarding",
-    "phase": "Client",
-    "ledBy": "Y",
-    "jointFlag": "",
-    "milestone": "",
-    "activity": "Complete card delivery",
-    "owner": "Anubhav",
-    "department": "Business",
-    "deadline": "15-Oct",
-    "status": "Not Started",
-    "remarks": "",
-    "month": "Oct",
-    "sr": 169
-  },
-  {
-    "displaySr": "Recarding",
-    "workstream": "Recarding",
-    "phase": "Client",
-    "ledBy": "Joint",
-    "jointFlag": "",
+    "phase": "Recarding",
+    "ledBy": "Client",
+    "jointFlag": "Joint",
     "milestone": "",
     "activity": "Monitoring KPIs",
     "owner": "Sreejith",
@@ -2717,7 +2637,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 170
+    "sr": 165
   },
   {
     "displaySr": "9.1",
@@ -2733,7 +2653,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 171
+    "sr": 166
   },
   {
     "displaySr": "9.2",
@@ -2749,7 +2669,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 172
+    "sr": 167
   },
   {
     "displaySr": "9.3",
@@ -2765,7 +2685,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 173
+    "sr": 168
   },
   {
     "displaySr": "9.4",
@@ -2781,7 +2701,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 174
+    "sr": 169
   },
   {
     "displaySr": "I",
@@ -2797,13 +2717,13 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 175
+    "sr": 170
   },
   {
-    "displaySr": "Production Readiness & Go-Live",
-    "workstream": "Data Migration",
-    "phase": "FIS & Client",
-    "ledBy": "",
+    "displaySr": "1",
+    "workstream": "Production Readiness & Go-Live",
+    "phase": "Data Migration",
+    "ledBy": "FIS & Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "Flight check for DR",
@@ -2813,13 +2733,13 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 176
+    "sr": 171
   },
   {
-    "displaySr": "Production Readiness & Go-Live",
-    "workstream": "Data Migration",
-    "phase": "FIS & Client",
-    "ledBy": "",
+    "displaySr": "2",
+    "workstream": "Production Readiness & Go-Live",
+    "phase": "Data Migration",
+    "ledBy": "FIS & Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "Cutover checklist finalization",
@@ -2829,13 +2749,13 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 177
+    "sr": 172
   },
   {
-    "displaySr": "Production Readiness & Go-Live",
-    "workstream": "Data Migration",
-    "phase": "FIS & Client",
-    "ledBy": "",
+    "displaySr": "3",
+    "workstream": "Production Readiness & Go-Live",
+    "phase": "Data Migration",
+    "ledBy": "FIS & Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "DR execution and monitoring for adjustments",
@@ -2845,15 +2765,15 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 178
+    "sr": 173
   },
   {
-    "displaySr": "Production Readiness & Go-Live",
-    "workstream": "Data Migration",
-    "phase": "FIS & Client",
-    "ledBy": "Y",
+    "displaySr": "4",
+    "workstream": "Production Readiness & Go-Live",
+    "phase": "Data Migration",
+    "ledBy": "FIS & Client",
     "jointFlag": "",
-    "milestone": "",
+    "milestone": "Y",
     "activity": "Go-No Go decision for cutover/bin launch",
     "owner": "Dinu",
     "department": "IT",
@@ -2861,14 +2781,14 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 179
+    "sr": 174
   },
   {
-    "displaySr": "Production Readiness & Go-Live",
-    "workstream": "Data Migration",
-    "phase": "FIS & Client",
-    "ledBy": "Joint",
-    "jointFlag": "",
+    "displaySr": "5",
+    "workstream": "Production Readiness & Go-Live",
+    "phase": "Data Migration",
+    "ledBy": "FIS & Client",
+    "jointFlag": "Joint",
     "milestone": "",
     "activity": "Go-live plans to be shared with regulator and customers",
     "owner": "Dinu",
@@ -2877,7 +2797,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 180
+    "sr": 175
   },
   {
     "displaySr": "J",
@@ -2893,13 +2813,13 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 181
+    "sr": 176
   },
   {
-    "displaySr": "BAU Services & Readiness",
-    "workstream": "Go-Live",
-    "phase": "FIS",
-    "ledBy": "",
+    "displaySr": "1",
+    "workstream": "BAU Services & Readiness",
+    "phase": "Go-Live",
+    "ledBy": "FIS",
     "jointFlag": "",
     "milestone": "",
     "activity": "ATO approved for full launch",
@@ -2909,13 +2829,13 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Aug",
-    "sr": 182
+    "sr": 177
   },
   {
-    "displaySr": "BAU Services & Readiness",
-    "workstream": "Go-Live",
-    "phase": "Client",
-    "ledBy": "",
+    "displaySr": "2",
+    "workstream": "BAU Services & Readiness",
+    "phase": "Go-Live",
+    "ledBy": "Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "Client BAU setup completed",
@@ -2925,7 +2845,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Aug",
-    "sr": 183
+    "sr": 178
   },
   {
     "displaySr": "2.1",
@@ -2941,7 +2861,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Aug",
-    "sr": 184
+    "sr": 179
   },
   {
     "displaySr": "2.2",
@@ -2957,7 +2877,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 185
+    "sr": 180
   },
   {
     "displaySr": "2.3",
@@ -2973,7 +2893,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 186
+    "sr": 181
   },
   {
     "displaySr": "2.4",
@@ -2989,7 +2909,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 187
+    "sr": 182
   },
   {
     "displaySr": "2.5",
@@ -3005,13 +2925,13 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 188
+    "sr": 183
   },
   {
-    "displaySr": "BAU Services & Readiness",
-    "workstream": "Go-Live",
-    "phase": "Client",
-    "ledBy": "",
+    "displaySr": "3",
+    "workstream": "BAU Services & Readiness",
+    "phase": "Go-Live",
+    "ledBy": "Client",
     "jointFlag": "",
     "milestone": "",
     "activity": "Contact Centre Readiness",
@@ -3021,7 +2941,7 @@
     "status": "WIP",
     "remarks": "",
     "month": "Sep",
-    "sr": 189
+    "sr": 184
   },
   {
     "displaySr": "3.1",
@@ -3037,7 +2957,7 @@
     "status": "WIP",
     "remarks": "",
     "month": "Jul",
-    "sr": 190
+    "sr": 185
   },
   {
     "displaySr": "3.2",
@@ -3053,7 +2973,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Jul",
-    "sr": 191
+    "sr": 186
   },
   {
     "displaySr": "3.3",
@@ -3069,7 +2989,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Jul",
-    "sr": 192
+    "sr": 187
   },
   {
     "displaySr": "3.4",
@@ -3085,43 +3005,27 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 193
+    "sr": 188
   },
   {
     "displaySr": "3.5",
     "workstream": "BAU Services & Readiness",
     "phase": "Go-Live",
     "ledBy": "Client",
-    "jointFlag": "Y",
-    "milestone": "",
+    "jointFlag": "",
+    "milestone": "Y",
     "activity": "Internal Verification process",
     "owner": "Sreejith",
     "department": "Business",
     "deadline": "30-Sep",
     "status": "Not Started",
     "remarks": "",
-    "month": "Sep",
-    "sr": 194
-  },
-  {
-    "displaySr": "4",
-    "workstream": "BAU Services & Readiness",
-    "phase": "Go-Live",
-    "ledBy": "FIS & Client",
-    "jointFlag": "Y",
-    "milestone": "",
-    "activity": "Readiness Confirmed",
-    "owner": "Dinu",
-    "department": "IT",
-    "deadline": "30-Sep",
-    "status": "Not Started",
-    "remarks": "",
-    "month": "Sep",
-    "sr": 195
+    "month": "",
+    "sr": 189
   },
   {
     "displaySr": "K",
-    "workstream": "Go-Live",
+    "workstream": "Production Readiness & Go-Live",
     "phase": "Go-Live",
     "ledBy": "FIS & Client",
     "jointFlag": "",
@@ -3133,7 +3037,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 196
+    "sr": 190
   },
   {
     "displaySr": "1",
@@ -3149,7 +3053,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 197
+    "sr": 191
   },
   {
     "displaySr": "2",
@@ -3165,23 +3069,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 198
-  },
-  {
-    "displaySr": "3",
-    "workstream": "Production Readiness & Go-Live",
-    "phase": "Go-Live",
-    "ledBy": "FIS & Client",
-    "jointFlag": "",
-    "milestone": "",
-    "activity": "Go-Decision Provided to Payment Scheme (Keys loaded and setups confirmed by scheme)",
-    "owner": "Sreejith",
-    "department": "Business",
-    "deadline": "15-Oct",
-    "status": "Not Started",
-    "remarks": "",
-    "month": "Oct",
-    "sr": 199
+    "sr": 192
   },
   {
     "displaySr": "4",
@@ -3197,7 +3085,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 200
+    "sr": 193
   },
   {
     "displaySr": "5",
@@ -3213,15 +3101,15 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 201
+    "sr": 194
   },
   {
     "displaySr": "6",
     "workstream": "Production Readiness & Go-Live",
     "phase": "Go-Live",
     "ledBy": "FIS & Client",
-    "jointFlag": "Y",
-    "milestone": "",
+    "jointFlag": "",
+    "milestone": "Y",
     "activity": "Go-Live Completed",
     "owner": "Libu,Dinu",
     "department": "Business",
@@ -3229,7 +3117,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 202
+    "sr": 195
   },
   {
     "displaySr": "7",
@@ -3245,23 +3133,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 203
-  },
-  {
-    "displaySr": "8",
-    "workstream": "Production Readiness & Go-Live",
-    "phase": "Go-Live",
-    "ledBy": "Client",
-    "jointFlag": "",
-    "milestone": "",
-    "activity": "Client Declares BAU for Operation Teams",
-    "owner": "Dinu",
-    "department": "IT",
-    "deadline": "24-Oct",
-    "status": "Not Started",
-    "remarks": "",
-    "month": "Oct",
-    "sr": 204
+    "sr": 196
   },
   {
     "displaySr": "9",
@@ -3277,23 +3149,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 205
-  },
-  {
-    "displaySr": "10",
-    "workstream": "Production Readiness & Go-Live",
-    "phase": "Go-Live",
-    "ledBy": "Client",
-    "jointFlag": "Joint",
-    "milestone": "",
-    "activity": "Bureau change executed",
-    "owner": "Sreejith",
-    "department": "Business",
-    "deadline": "25-Oct",
-    "status": "Not Started",
-    "remarks": "",
-    "month": "Oct",
-    "sr": 206
+    "sr": 197
   },
   {
     "displaySr": "10",
@@ -3309,7 +3165,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 207
+    "sr": 198
   },
   {
     "displaySr": "L",
@@ -3325,7 +3181,7 @@
     "status": "WIP",
     "remarks": "",
     "month": "Oct",
-    "sr": 208
+    "sr": 199
   },
   {
     "displaySr": "1",
@@ -3341,7 +3197,7 @@
     "status": "WIP",
     "remarks": "Discussion on TMS Prime initated on 19 Jun",
     "month": "Jul",
-    "sr": 209
+    "sr": 200
   },
   {
     "displaySr": "2",
@@ -3357,7 +3213,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 210
+    "sr": 201
   },
   {
     "displaySr": "3",
@@ -3373,7 +3229,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 211
+    "sr": 202
   },
   {
     "displaySr": "M",
@@ -3389,7 +3245,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Nov",
-    "sr": 212
+    "sr": 203
   },
   {
     "displaySr": "1",
@@ -3405,7 +3261,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 213
+    "sr": 204
   },
   {
     "displaySr": "2",
@@ -3421,7 +3277,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 214
+    "sr": 205
   },
   {
     "displaySr": "3",
@@ -3437,7 +3293,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 215
+    "sr": 206
   },
   {
     "displaySr": "4",
@@ -3453,7 +3309,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 216
+    "sr": 207
   },
   {
     "displaySr": "5",
@@ -3469,7 +3325,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Nov",
-    "sr": 217
+    "sr": 208
   },
   {
     "displaySr": "6",
@@ -3485,7 +3341,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Nov",
-    "sr": 218
+    "sr": 209
   },
   {
     "displaySr": "7",
@@ -3501,6 +3357,6 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Nov",
-    "sr": 219
+    "sr": 210
   }
 ]

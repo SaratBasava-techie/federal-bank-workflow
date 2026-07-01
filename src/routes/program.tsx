@@ -15,6 +15,7 @@ import {
 } from "recharts";
 import { DashboardShell } from "@/components/DashboardShell";
 import activitiesData from "@/lib/workflow-activities.json";
+import { useDashboardData } from "@/hooks/useDashboardData";
 
 interface RawActivity {
   sr: number;
@@ -48,52 +49,6 @@ function isOverdue(date: string): boolean {
   return t < Date.now();
 }
 
-const _ACTS = (activitiesData as RawActivity[]).map((a) => ({
-  ...a,
-  status: normalizeStatusEarly(a.status),
-}));
-
-const _total = _ACTS.length;
-const _completed = _ACTS.filter((a) => a.status === "Completed").length;
-const _wip = _ACTS.filter((a) => a.status === "WIP").length;
-const _inProgress = _ACTS.filter((a) => a.status === "In Progress").length;
-const _notStarted = _ACTS.filter((a) => a.status === "Not Started").length;
-const _overdue = _ACTS.filter((a) => a.status !== "Completed" && isOverdue(a.deadline)).length;
-
-const programKpis = {
-  total: _total,
-  completed: _completed,
-  wip: _wip,
-  inProgress: _inProgress,
-  notStarted: _notStarted,
-  overdue: _overdue,
-  overall: _total === 0 ? 0 : Math.round((_completed / _total) * 100),
-};
-
-const completionStatus: { name: string; value: number; color: string }[] = [
-  { name: "Completed", value: _completed, color: "#16a34a" },
-  { name: "WIP", value: _wip, color: "#38bdf8" },
-  { name: "Not Started", value: _notStarted, color: "#94a3b8" },
-].filter((d) => d.value > 0);
-
-const completionByPhase = (() => {
-  const map = new Map<string, { total: number; completed: number }>();
-  _ACTS.forEach((a) => {
-    const p = a.phase || "Unassigned";
-    const row = map.get(p) || { total: 0, completed: 0 };
-    row.total += 1;
-    if (a.status === "Completed") row.completed += 1;
-    map.set(p, row);
-  });
-  return Array.from(map.entries())
-    .map(([phase, { total, completed }]) => ({
-      phase,
-      pct: total === 0 ? 0 : Math.round((completed / total) * 100),
-    }))
-    .filter((d) => d.phase !== "FIS" && d.phase !== "FIS & Client" && d.phase !== "Client")
-    .sort((a, b) => b.pct - a.pct);
-})();
-
 export const Route = createFileRoute("/program")({
   head: () => ({
     meta: [
@@ -115,7 +70,84 @@ export const Route = createFileRoute("/program")({
 });
 
 function ProgramPage() {
-  const k = programKpis;
+  const { data: response } = useDashboardData();
+  const liveActivities = response?.data?.activities ?? [];
+
+  const ALL_ACTIVITIES = useMemo(() => {
+    const raw = liveActivities.length > 0 ? liveActivities : (activitiesData as RawActivity[]);
+    return raw.map((a) => ({
+      ...a,
+      status: normalizeStatus(a.status),
+    }));
+  }, [liveActivities]);
+
+  const k = useMemo(() => {
+    const total = ALL_ACTIVITIES.length;
+    const completed = ALL_ACTIVITIES.filter((a) => a.status === "Completed").length;
+    const wip = ALL_ACTIVITIES.filter((a) => a.status === "WIP").length;
+    const inProgress = ALL_ACTIVITIES.filter((a) => a.status === "In Progress").length;
+    const notStarted = ALL_ACTIVITIES.filter((a) => a.status === "Not Started").length;
+    const overdue = ALL_ACTIVITIES.filter((a) => a.status !== "Completed" && isOverdue(a.deadline)).length;
+
+    return {
+      total,
+      completed,
+      wip,
+      inProgress,
+      notStarted,
+      overdue,
+      overall: total === 0 ? 0 : Math.round((completed / total) * 100),
+    };
+  }, [ALL_ACTIVITIES]);
+
+  const completionStatus = useMemo(() => {
+    return [
+      { name: "Completed", value: k.completed, color: "#16a34a" },
+      { name: "WIP", value: k.wip, color: "#38bdf8" },
+      { name: "Not Started", value: k.notStarted, color: "#94a3b8" },
+    ].filter((d) => d.value > 0);
+  }, [k]);
+
+  const completionByPhase = useMemo(() => {
+    const map = new Map<string, { total: number; completed: number }>();
+    ALL_ACTIVITIES.forEach((a) => {
+      const p = a.phase || "Unassigned";
+      const row = map.get(p) || { total: 0, completed: 0 };
+      row.total += 1;
+      if (a.status === "Completed") row.completed += 1;
+      map.set(p, row);
+    });
+    return Array.from(map.entries())
+      .map(([phase, { total, completed }]) => ({
+        phase,
+        pct: total === 0 ? 0 : Math.round((completed / total) * 100),
+      }))
+      .filter((d) => d.phase !== "FIS" && d.phase !== "FIS & Client" && d.phase !== "Client")
+      .sort((a, b) => b.pct - a.pct);
+  }, [ALL_ACTIVITIES]);
+
+  const departmentStatusData = useMemo(() => {
+    const map = new Map<string, Record<string, number | string>>();
+    ALL_ACTIVITIES.forEach((a) => {
+      const dept = a.department?.trim();
+      if (!dept) return;
+      const row = map.get(dept) || {
+        dept,
+        Completed: 0,
+        WIP: 0,
+        "In Progress": 0,
+        "Not Started": 0,
+      };
+      row[a.status] = (row[a.status] as number) + 1;
+      map.set(dept, row);
+    });
+    return Array.from(map.values()).sort(
+      (a, b) =>
+        (Number(b.Completed) + Number(b.WIP) + Number(b["In Progress"]) + Number(b["Not Started"])) -
+        (Number(a.Completed) + Number(a.WIP) + Number(a["In Progress"]) + Number(a["Not Started"])),
+    );
+  }, [ALL_ACTIVITIES]);
+
   return (
     <DashboardShell>
       <section className="mb-6">
@@ -147,6 +179,10 @@ function ProgramPage() {
                   outerRadius={90}
                   paddingAngle={2}
                   stroke="var(--color-card)"
+                  labelLine={false}
+                  label={({ percent }) =>
+                    percent > 0 ? `${(percent * 100).toFixed(0)}%` : ""
+                  }
                 >
                   {completionStatus.map((d) => (
                     <Cell key={d.name} fill={d.color} />
@@ -243,53 +279,11 @@ function ProgramPage() {
       </div>
 
       <div className="mt-6">
-        <ActivityList />
+        <ActivityList activities={ALL_ACTIVITIES} />
       </div>
     </DashboardShell>
   );
 }
-
-interface RawActivity {
-  sr: number;
-  displaySr: string;
-  workstream: string;
-  phase: string;
-  ledBy: string;
-  activity: string;
-  owner: string;
-  department: string;
-  status: string;
-  deadline: string;
-  month: string;
-}
-
-const ALL_ACTIVITIES = (activitiesData as RawActivity[]).map((a) => ({
-  ...a,
-  status: normalizeStatus(a.status),
-}));
-
-// Department × Status data for the chart (real Department column).
-const departmentStatusData = (() => {
-  const map = new Map<string, Record<string, number | string>>();
-  ALL_ACTIVITIES.forEach((a) => {
-    const dept = a.department?.trim();
-    if (!dept) return;
-    const row = map.get(dept) || {
-      dept,
-      Completed: 0,
-      WIP: 0,
-      "In Progress": 0,
-      "Not Started": 0,
-    };
-    row[a.status] = (row[a.status] as number) + 1;
-    map.set(dept, row);
-  });
-  return Array.from(map.values()).sort(
-    (a, b) =>
-      (Number(b.Completed) + Number(b.WIP) + Number(b["In Progress"]) + Number(b["Not Started"])) -
-      (Number(a.Completed) + Number(a.WIP) + Number(a["In Progress"]) + Number(a["Not Started"])),
-  );
-})();
 
 function normalizeStatus(s: string): "Completed" | "WIP" | "In Progress" | "Not Started" {
   const v = (s || "").trim().toLowerCase();
@@ -310,7 +304,7 @@ const WORKSTREAM_ORDER = Array.from(
   new Set((activitiesData as RawActivity[]).map((a) => a.workstream)),
 );
 
-function ActivityList() {
+function ActivityList({ activities }: { activities: any[] }) {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "Completed" | "WIP" | "In Progress" | "Not Started">("all");
   const [openStreams, setOpenStreams] = useState<Record<string, boolean>>(() => {
@@ -320,8 +314,8 @@ function ActivityList() {
   });
 
   const grouped = useMemo(() => {
-    const map = new Map<string, RawActivity[]>();
-    ALL_ACTIVITIES.forEach((a) => {
+    const map = new Map<string, any[]>();
+    activities.forEach((a) => {
       const list = map.get(a.workstream) || [];
       list.push(a);
       map.set(a.workstream, list);
@@ -330,7 +324,7 @@ function ActivityList() {
       if (!map.has(w)) map.set(w, []);
     });
     return Array.from(map.entries()).filter(([, list]) => list.length > 0);
-  }, []);
+  }, [activities]);
 
   const toggle = (w: string) => setOpenStreams((s) => ({ ...s, [w]: !s[w] }));
 
@@ -353,7 +347,7 @@ function ActivityList() {
   });
 
   const totalShown = filtered.reduce((sum, [, list]) => sum + list.length, 0);
-  const totalAll = ALL_ACTIVITIES.length;
+  const totalAll = activities.length;
 
   return (
     <div className="mt-6">

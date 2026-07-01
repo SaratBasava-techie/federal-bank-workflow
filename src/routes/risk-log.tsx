@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { DashboardShell } from "@/components/DashboardShell";
-import { riskLogs, type LogStatus } from "@/lib/dashboard-data";
+import { riskLogs as staticRiskLogs, type LogStatus } from "@/lib/dashboard-data";
+import { useDashboardData } from "@/hooks/useDashboardData";
 
 export const Route = createFileRoute("/risk-log")({
   head: () => ({
@@ -14,6 +15,8 @@ export const Route = createFileRoute("/risk-log")({
 });
 
 function RiskLogPage() {
+  const { data: response } = useDashboardData();
+  const riskLogs = (response?.data?.riskLogs ?? staticRiskLogs) as { sn: number; workstream: string; detail: string; mitigation: string; raised: string; level: string; status: LogStatus }[];
   const [filter, setFilter] = useState<LogStatus | "All">("All");
   const rows = filter === "All" ? riskLogs : riskLogs.filter((r) => r.status === filter);
   const counts = riskLogs.reduce(

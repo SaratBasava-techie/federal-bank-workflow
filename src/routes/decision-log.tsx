@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { DashboardShell } from "@/components/DashboardShell";
-import { decisionLogs, type LogStatus } from "@/lib/dashboard-data";
+import { decisionLogs as staticDecisionLogs, type LogStatus } from "@/lib/dashboard-data";
+import { useDashboardData } from "@/hooks/useDashboardData";
 
 export const Route = createFileRoute("/decision-log")({
   head: () => ({
@@ -14,6 +15,8 @@ export const Route = createFileRoute("/decision-log")({
 });
 
 function DecisionLogPage() {
+  const { data: response } = useDashboardData();
+  const decisionLogs = (response?.data?.decisionLogs ?? staticDecisionLogs) as { sn: number; workstream: string; area: string; details: string; owner: string; status: LogStatus }[];
   const [filter, setFilter] = useState<LogStatus | "All">("All");
   const rows = filter === "All" ? decisionLogs : decisionLogs.filter((r) => r.status === filter);
   const counts = decisionLogs.reduce(
