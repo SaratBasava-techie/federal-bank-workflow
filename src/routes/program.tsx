@@ -72,7 +72,7 @@ const programKpis = {
 
 const completionStatus: { name: string; value: number; color: string }[] = [
   { name: "Completed", value: _completed, color: "#16a34a" },
-  { name: "WIP", value: _wip, color: "#f59e0b" },
+  { name: "WIP", value: _wip, color: "#38bdf8" },
   { name: "Not Started", value: _notStarted, color: "#94a3b8" },
 ].filter((d) => d.value > 0);
 
@@ -126,13 +126,11 @@ function ProgramPage() {
         </p>
       </section>
 
-      <div className="mb-6 grid grid-cols-2 gap-0 overflow-hidden rounded-lg border border-border md:grid-cols-6">
+      <div className="mb-6 grid grid-cols-2 gap-0 overflow-hidden rounded-lg border border-border md:grid-cols-4">
         <Kpi label="Total Activities" value={k.total} sub="Project activities" tone="navy" />
         <Kpi label="Completed" value={k.completed} sub={`${pct(k.completed, k.total)}% of total`} tone="ontrack" />
         <Kpi label="WIP" value={k.wip} sub="Work in progress" tone="info" />
-        <Kpi label="Not Started" value={k.notStarted} sub="Pending start" tone="muted" />
-        <Kpi label="Overdue" value={k.overdue} sub="Past deadline" tone="critical" />
-        <Kpi label="Overall Progress" value={`${k.overall}%`} sub="Completion rate" tone="accent" />
+        <Kpi label="Yet to Start" value={k.notStarted} sub="Proposed for Jul/Aug/Sep/Oct" tone="muted" />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
