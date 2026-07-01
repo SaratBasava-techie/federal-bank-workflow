@@ -1,5 +1,6 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import type { ReactNode } from "react";
+import kpmgLogo from "@/assets/kpmg-logo.png.asset.json";
 
 const tabs = [
   { to: "/", label: "RAG Summary" },
@@ -20,7 +21,13 @@ export function DashboardShell({ children }: { children: ReactNode }) {
         <div className="mx-auto max-w-[1400px] px-6 py-5">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <KpmgMark />
+              <div className="flex flex-col items-center gap-1.5">
+                <KpmgMark />
+                <div className="rounded-md border border-white/15 bg-white/5 px-2.5 py-1 text-[10px] text-white/80">
+                  Reporting period:{" "}
+                  <span className="font-semibold text-white">June 2026</span>
+                </div>
+              </div>
               <div className="hidden h-10 w-px bg-white/20 sm:block" />
               <div>
                 <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/60">
@@ -31,12 +38,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                 </h1>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="rounded-md border border-white/15 bg-white/5 px-3 py-1.5 text-xs text-white/80">
-                Reporting period: <span className="font-semibold text-white">June 2026</span>
-              </div>
-              <PoweredByKpmg />
-            </div>
+            <PoweredByKpmg />
           </div>
           <nav className="mt-5 flex gap-1">
             {tabs.map((t) => {
@@ -69,24 +71,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
 function KpmgMark() {
   return (
     <div className="flex items-center rounded-md bg-white px-3 py-2 shadow-md ring-1 ring-white/10">
-      <svg
-        viewBox="0 0 120 32"
-        className="h-7 w-auto"
-        aria-label="KPMG"
-        role="img"
-      >
-        <text
-          x="0"
-          y="24"
-          fontFamily="Arial, Helvetica, sans-serif"
-          fontWeight="900"
-          fontSize="28"
-          letterSpacing="-1"
-          fill="#00338D"
-        >
-          KPMG
-        </text>
-      </svg>
+      <img src={kpmgLogo.url} alt="KPMG" className="h-8 w-auto" />
     </div>
   );
 }
