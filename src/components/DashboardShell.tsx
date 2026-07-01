@@ -85,12 +85,14 @@ function PoweredByKpmg() {
       <span className="text-[10px] font-medium uppercase tracking-[0.14em] text-white/60">
         Powered by
       </span>
-      <span
-        className="rounded-sm bg-white px-1.5 py-0.5 text-[13px] font-black leading-none tracking-tight"
-        style={{ color: "#00338D", letterSpacing: "-0.02em" }}
-      >
-        KPMG
-      </span>
+
+      <div className="rounded-sm bg-white p-1">
+        <img
+          src="/kpmg-logo.png"
+          alt="KPMG"
+          className="h-5 w-auto object-contain"
+        />
+      </div>
     </div>
   );
 }
