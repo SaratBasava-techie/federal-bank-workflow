@@ -72,7 +72,7 @@ const programKpis = {
 
 const completionStatus: { name: string; value: number; color: string }[] = [
   { name: "Completed", value: _completed, color: "#16a34a" },
-  { name: "WIP", value: _wip, color: "#f59e0b" },
+  { name: "WIP", value: _wip, color: "#38bdf8" },
   { name: "Not Started", value: _notStarted, color: "#94a3b8" },
 ].filter((d) => d.value > 0);
 
@@ -126,13 +126,11 @@ function ProgramPage() {
         </p>
       </section>
 
-      <div className="mb-6 grid grid-cols-2 gap-0 overflow-hidden rounded-lg border border-border md:grid-cols-6">
+      <div className="mb-6 grid grid-cols-2 gap-0 overflow-hidden rounded-lg border border-border md:grid-cols-4">
         <Kpi label="Total Activities" value={k.total} sub="Project activities" tone="navy" />
         <Kpi label="Completed" value={k.completed} sub={`${pct(k.completed, k.total)}% of total`} tone="ontrack" />
         <Kpi label="WIP" value={k.wip} sub="Work in progress" tone="info" />
-        <Kpi label="Not Started" value={k.notStarted} sub="Pending start" tone="muted" />
-        <Kpi label="Overdue" value={k.overdue} sub="Past deadline" tone="critical" />
-        <Kpi label="Overall Progress" value={`${k.overall}%`} sub="Completion rate" tone="accent" />
+        <Kpi label="Yet to Start" value={k.notStarted} sub="Proposed for Jul/Aug/Sep/Oct" tone="muted" />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
@@ -235,8 +233,8 @@ function ProgramPage() {
                 />
                 <Legend wrapperStyle={{ fontSize: 12 }} />
                 <Bar dataKey="Completed" stackId="a" fill="#16a34a" />
-                <Bar dataKey="WIP" stackId="a" fill="#f59e0b" />
-                <Bar dataKey="Not Started" stackId="a" fill="#94a3b8" />
+                <Bar dataKey="WIP" stackId="a" fill="#38bdf8" />
+                <Bar dataKey="Not Started" stackId="a" fill="#94a3b8" name="Yet to Start" />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -301,9 +299,9 @@ function normalizeStatus(s: string): "Completed" | "WIP" | "In Progress" | "Not 
 
 const STATUS_META: Record<string, { color: string; label: string }> = {
   Completed: { color: "#16a34a", label: "Completed" },
-  WIP: { color: "#f59e0b", label: "WIP" },
+  WIP: { color: "#38bdf8", label: "WIP" },
   "In Progress": { color: "#0ea5e9", label: "In Progress" },
-  "Not Started": { color: "#94a3b8", label: "Not Started" },
+  "Not Started": { color: "#94a3b8", label: "Yet to Start" },
 };
 
 const WORKSTREAM_ORDER = Array.from(
@@ -426,13 +424,13 @@ function ActivityList() {
                     <table className="w-full min-w-[700px] text-sm">
                       <thead className="bg-muted/30 text-left text-xs uppercase tracking-wide text-muted-foreground">
                         <tr>
-                          <th className="px-3 py-2">#</th>
+                          <th className="w-16 px-3 py-2">#</th>
                           <th className="px-3 py-2">Activity</th>
-                          <th className="px-3 py-2">Phase</th>
-                          <th className="px-3 py-2">Owner</th>
-                          <th className="px-3 py-2">Department</th>
-                          <th className="px-3 py-2">Deadline</th>
-                          <th className="px-3 py-2">Status</th>
+                          <th className="w-40 px-3 py-2">Phase</th>
+                          <th className="w-40 px-3 py-2">Owner</th>
+                          <th className="w-32 px-3 py-2">Department</th>
+                          <th className="w-24 px-3 py-2">Deadline</th>
+                          <th className="w-28 px-3 py-2">Status</th>
                         </tr>
                       </thead>
                       <tbody>
