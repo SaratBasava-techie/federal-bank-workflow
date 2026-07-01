@@ -424,13 +424,13 @@ function ActivityList() {
                     <table className="w-full min-w-[700px] text-sm">
                       <thead className="bg-muted/30 text-left text-xs uppercase tracking-wide text-muted-foreground">
                         <tr>
-                          <th className="px-3 py-2">#</th>
+                          <th className="w-16 px-3 py-2">#</th>
                           <th className="px-3 py-2">Activity</th>
-                          <th className="px-3 py-2">Phase</th>
-                          <th className="px-3 py-2">Owner</th>
-                          <th className="px-3 py-2">Department</th>
-                          <th className="px-3 py-2">Deadline</th>
-                          <th className="px-3 py-2">Status</th>
+                          <th className="w-40 px-3 py-2">Phase</th>
+                          <th className="w-40 px-3 py-2">Owner</th>
+                          <th className="w-32 px-3 py-2">Department</th>
+                          <th className="w-24 px-3 py-2">Deadline</th>
+                          <th className="w-28 px-3 py-2">Status</th>
                         </tr>
                       </thead>
                       <tbody>
