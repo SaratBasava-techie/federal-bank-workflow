@@ -47,7 +47,7 @@ function Index() {
       <Card>
         <CardHeader title="Open RAG items" />
         <Table
-          headers={["SN", "Workstream", "Activity", "Owner", "Leads", "Date Raised", "Target Date", "RAG"]}
+          headers={["SN", "Workstream", "Activity", "Owner", "Leads", "Target Date", "RAG"]}
         >
           {ragSummary.map((r) => (
             <tr key={r.sn} className="border-t border-border/70 hover:bg-muted/40">
@@ -56,7 +56,6 @@ function Index() {
               <Td className="max-w-[420px] text-foreground/80">{r.activity}</Td>
               <Td>{r.owner}</Td>
               <Td>{r.leads}</Td>
-              <Td className="tabular-nums">{r.dateRaised}</Td>
               <Td className="tabular-nums">{r.targetDate}</Td>
               <Td><RagPill status={r.rag} /></Td>
             </tr>

@@ -90,6 +90,7 @@ const completionByPhase = (() => {
       phase,
       pct: total === 0 ? 0 : Math.round((completed / total) * 100),
     }))
+    .filter((d) => d.phase !== "FIS" && d.phase !== "FIS & Client" && d.phase !== "Client")
     .sort((a, b) => b.pct - a.pct);
 })();
 

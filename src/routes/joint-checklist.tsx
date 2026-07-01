@@ -194,31 +194,31 @@ function JointChecklistPage() {
             <div className="border-b bg-muted/50 px-4 py-2 text-sm font-semibold">{ws}</div>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead className="bg-muted/30 text-left text-xs uppercase tracking-wide text-muted-foreground">
+                <thead className="bg-muted/30 text-xs uppercase tracking-wide text-muted-foreground">
                   <tr>
-                    <th className="px-3 py-2 w-10">#</th>
-                    <th className="px-3 py-2">Task</th>
-                    <th className="px-3 py-2">Finish</th>
-                    <th className="px-3 py-2">By Who</th>
-                    <th className="px-3 py-2">Owner</th>
-                    <th className="px-3 py-2">Status</th>
+                    <th className="px-3 py-2.5 text-left w-12">#</th>
+                    <th className="px-3 py-2.5 text-left">Task</th>
+                    <th className="px-3 py-2.5 text-left w-32">Finish</th>
+                    <th className="px-3 py-2.5 text-left w-44">By Who</th>
+                    <th className="px-3 py-2.5 text-left w-24">Owner</th>
+                    <th className="px-3 py-2.5 text-left w-28">Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {rows.map((r, idx) => (
-                    <tr key={r.sn} className="border-t hover:bg-muted/20">
-                      <td className="px-3 py-2 text-muted-foreground">{idx + 1}</td>
-                      <td className="px-3 py-2 max-w-md">{r.task}</td>
-                      <td className="px-3 py-2 whitespace-nowrap text-xs">{r.finish || "—"}</td>
-                      <td className="px-3 py-2 whitespace-nowrap text-xs">{r.by}</td>
-                      <td className="px-3 py-2">
-                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${ownerMeta[r.owner]}`}>
+                    <tr key={r.sn} className="border-t hover:bg-muted/20 align-top">
+                      <td className="px-3 py-3 text-muted-foreground tabular-nums text-left">{idx + 1}</td>
+                      <td className="px-3 py-3 text-foreground break-words whitespace-normal text-left">{r.task}</td>
+                      <td className="px-3 py-3 text-xs break-words whitespace-normal text-left">{r.finish || "—"}</td>
+                      <td className="px-3 py-3 text-xs break-words whitespace-normal text-left">{r.by}</td>
+                      <td className="px-3 py-3 text-left">
+                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap ${ownerMeta[r.owner]}`}>
                           {r.owner}
                         </span>
                       </td>
-                      <td className="px-3 py-2">
+                      <td className="px-3 py-3 text-left">
                         <span
-                          className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${statusMeta[r.status].cls}`}
+                          className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap ${statusMeta[r.status].cls}`}
                         >
                           {statusMeta[r.status].label}
                         </span>
