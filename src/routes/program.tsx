@@ -271,7 +271,8 @@ const ALL_ACTIVITIES = (activitiesData as RawActivity[]).map((a) => ({
 const departmentStatusData = (() => {
   const map = new Map<string, Record<string, number | string>>();
   ALL_ACTIVITIES.forEach((a) => {
-    const dept = a.department?.trim() || "Unassigned";
+    const dept = a.department?.trim();
+    if (!dept) return;
     const row = map.get(dept) || {
       dept,
       Completed: 0,
