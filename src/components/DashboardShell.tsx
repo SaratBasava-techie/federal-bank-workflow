@@ -1,6 +1,6 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import kpmgLogo from "@/assets/kpmg-logo.png.asset.json";
+
 
 const tabs = [
   { to: "/", label: "RAG Summary" },
@@ -71,7 +71,11 @@ export function DashboardShell({ children }: { children: ReactNode }) {
 function KpmgMark() {
   return (
     <div className="flex items-center rounded-md bg-white px-3 py-2 shadow-md ring-1 ring-white/10">
-      <img src={kpmgLogo.url} alt="KPMG" className="h-8 w-auto" />
+      <img
+        src="/kpmg-logo.png"
+        alt="KPMG"
+        className="h-8 w-auto"
+      />
     </div>
   );
 }
