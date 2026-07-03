@@ -201,6 +201,77 @@ function LandingPage() {
         transition: "opacity 0.6s ease",
       }} />
 
+      {/* ── KPMG Logo Watermarks in empty spaces ── */}
+      {/* Top-left corner */}
+      <img src="/kpmg-logo.png" alt="" aria-hidden="true" style={{
+        position: "absolute", top: 80, left: 40,
+        height: 90, width: "auto",
+        filter: "brightness(0) invert(1)",
+        opacity: 0.04,
+        pointerEvents: "none",
+        userSelect: "none",
+        transition: "opacity 0.6s ease",
+      }} />
+      {/* Top-right corner */}
+      <img src="/kpmg-logo.png" alt="" aria-hidden="true" style={{
+        position: "absolute", top: 80, right: 40,
+        height: 90, width: "auto",
+        filter: "brightness(0) invert(1)",
+        opacity: 0.04,
+        pointerEvents: "none",
+        userSelect: "none",
+      }} />
+      {/* Left flank — middle */}
+      <img src="/kpmg-logo.png" alt="" aria-hidden="true" style={{
+        position: "absolute", top: "50%", left: "2vw",
+        transform: "translateY(-50%)",
+        height: 130, width: "auto",
+        filter: "brightness(0) invert(1)",
+        opacity: isHovered ? 0.09 : 0.05,
+        pointerEvents: "none",
+        userSelect: "none",
+        transition: "opacity 0.6s ease",
+      }} />
+      {/* Right flank — middle */}
+      <img src="/kpmg-logo.png" alt="" aria-hidden="true" style={{
+        position: "absolute", top: "50%", right: "2vw",
+        transform: "translateY(-50%)",
+        height: 130, width: "auto",
+        filter: "brightness(0) invert(1)",
+        opacity: isHovered ? 0.09 : 0.05,
+        pointerEvents: "none",
+        userSelect: "none",
+        transition: "opacity 0.6s ease",
+      }} />
+      {/* Bottom-left corner */}
+      <img src="/kpmg-logo.png" alt="" aria-hidden="true" style={{
+        position: "absolute", bottom: 40, left: 40,
+        height: 70, width: "auto",
+        filter: "brightness(0) invert(1)",
+        opacity: 0.04,
+        pointerEvents: "none",
+        userSelect: "none",
+      }} />
+      {/* Bottom-right corner */}
+      <img src="/kpmg-logo.png" alt="" aria-hidden="true" style={{
+        position: "absolute", bottom: 40, right: 40,
+        height: 70, width: "auto",
+        filter: "brightness(0) invert(1)",
+        opacity: 0.04,
+        pointerEvents: "none",
+        userSelect: "none",
+      }} />
+      {/* Large centered background watermark */}
+      <img src="/kpmg-logo.png" alt="" aria-hidden="true" style={{
+        position: "absolute", top: "50%", left: "50%",
+        transform: "translate(-50%, -50%)",
+        height: 320, width: "auto",
+        filter: "brightness(0) invert(1)",
+        opacity: 0.018,
+        pointerEvents: "none",
+        userSelect: "none",
+      }} />
+
       {/* ── Particle canvas ── */}
       <div style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }}>
         {particles.map(p => (
