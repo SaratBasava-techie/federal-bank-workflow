@@ -152,7 +152,7 @@ function ProgramPage() {
     <DashboardShell>
       <section className="mb-6">
         <h2 className="text-xl font-semibold tracking-tight text-foreground">
-          Programme Overview — June&nbsp;2026
+          Programme Overview — July&nbsp;2026
         </h2>
         <p className="mt-1 text-sm text-muted-foreground">
           Snapshot of activity throughput, phase progress and weekly demand.
@@ -160,10 +160,10 @@ function ProgramPage() {
       </section>
 
       <div className="mb-6 grid grid-cols-2 gap-0 overflow-hidden rounded-lg border border-border md:grid-cols-4">
-        <Kpi label="Total Activities" value={k.total} sub="Project activities" tone="navy" />
-        <Kpi label="Completed" value={k.completed} sub="" tone="ontrack" />
+        <Kpi label="Total Activities" value={k.total} sub="Across 13 workstreams" tone="navy" />
+        <Kpi label="Completed" value={k.completed} sub="Activities done" tone="ontrack" />
         <Kpi label="WIP" value={k.wip} sub="Work in progress" tone="info" />
-        <Kpi label="Yet to Start" value={k.notStarted} sub="Proposed for Jul/Aug/Sep/Oct" tone="muted" />
+        <Kpi label="Yet to Start" value={k.notStarted} sub="Planned Jul – Nov" tone="muted" />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
@@ -589,11 +589,18 @@ function DeadlinePill({ date }: { date: string }) {
 
 const STREAM_COLORS: Record<string, string> = {
   "Approach & Key Decisions": "#6366f1",
-  "Platform/Infrastructure": "#0ea5e9",
+  "Platform/ Infrastructure": "#0ea5e9",
   "Application Build & Support": "#14b8a6",
   "Data Migration": "#f59e0b",
   "Scheme & Compliance": "#ef4444",
+  "Encryption Keys": "#a855f7",
   "Channel Connectivity": "#8b5cf6",
+  "Testing": "#06b6d4",
+  "Recarding": "#f97316",
+  "Production Readiness & Go-Live": "#dc2626",
+  "BAU Services & Readiness": "#10b981",
+  "TMS": "#64748b",
+  "Program": "#78716c",
   Business: "#22c55e",
   Contracting: "#ec4899",
 };

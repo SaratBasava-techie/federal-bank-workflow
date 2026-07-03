@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RiskLogRouteImport } from './routes/risk-log'
 import { Route as ProgramRouteImport } from './routes/program'
+import { Route as LandingRouteImport } from './routes/landing'
 import { Route as JointChecklistRouteImport } from './routes/joint-checklist'
 import { Route as DecisionLogRouteImport } from './routes/decision-log'
 import { Route as IndexRouteImport } from './routes/index'
@@ -23,6 +24,11 @@ const RiskLogRoute = RiskLogRouteImport.update({
 const ProgramRoute = ProgramRouteImport.update({
   id: '/program',
   path: '/program',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LandingRoute = LandingRouteImport.update({
+  id: '/landing',
+  path: '/landing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const JointChecklistRoute = JointChecklistRouteImport.update({
@@ -45,6 +51,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/decision-log': typeof DecisionLogRoute
   '/joint-checklist': typeof JointChecklistRoute
+  '/landing': typeof LandingRoute
   '/program': typeof ProgramRoute
   '/risk-log': typeof RiskLogRoute
 }
@@ -52,6 +59,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/decision-log': typeof DecisionLogRoute
   '/joint-checklist': typeof JointChecklistRoute
+  '/landing': typeof LandingRoute
   '/program': typeof ProgramRoute
   '/risk-log': typeof RiskLogRoute
 }
@@ -60,20 +68,33 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/decision-log': typeof DecisionLogRoute
   '/joint-checklist': typeof JointChecklistRoute
+  '/landing': typeof LandingRoute
   '/program': typeof ProgramRoute
   '/risk-log': typeof RiskLogRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/decision-log' | '/joint-checklist' | '/program' | '/risk-log'
+    | '/'
+    | '/decision-log'
+    | '/joint-checklist'
+    | '/landing'
+    | '/program'
+    | '/risk-log'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/decision-log' | '/joint-checklist' | '/program' | '/risk-log'
+  to:
+    | '/'
+    | '/decision-log'
+    | '/joint-checklist'
+    | '/landing'
+    | '/program'
+    | '/risk-log'
   id:
     | '__root__'
     | '/'
     | '/decision-log'
     | '/joint-checklist'
+    | '/landing'
     | '/program'
     | '/risk-log'
   fileRoutesById: FileRoutesById
@@ -82,6 +103,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DecisionLogRoute: typeof DecisionLogRoute
   JointChecklistRoute: typeof JointChecklistRoute
+  LandingRoute: typeof LandingRoute
   ProgramRoute: typeof ProgramRoute
   RiskLogRoute: typeof RiskLogRoute
 }
@@ -100,6 +122,13 @@ declare module '@tanstack/react-router' {
       path: '/program'
       fullPath: '/program'
       preLoaderRoute: typeof ProgramRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/landing': {
+      id: '/landing'
+      path: '/landing'
+      fullPath: '/landing'
+      preLoaderRoute: typeof LandingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/joint-checklist': {
@@ -130,6 +159,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DecisionLogRoute: DecisionLogRoute,
   JointChecklistRoute: JointChecklistRoute,
+  LandingRoute: LandingRoute,
   ProgramRoute: ProgramRoute,
   RiskLogRoute: RiskLogRoute,
 }

@@ -41,13 +41,13 @@ import seedData from "../lib/checklist-data.json";
 
 const seed: ChecklistItem[] = seedData as ChecklistItem[];
 
-const STORAGE_KEY = "joint-checklist-v2";
+const STORAGE_KEY = "joint-checklist-v3";
 
 const statusMeta: Record<Status, { label: string; cls: string }> = {
   NS: { label: "Not Started", cls: "bg-slate-200 text-slate-700" },
   IP: { label: "In Progress", cls: "bg-amber-100 text-amber-800" },
   D: { label: "Done", cls: "bg-emerald-100 text-emerald-800" },
-  B: { label: "Blocked", cls: "bg-rose-100 text-rose-800" },
+  B: { label: "Open", cls: "bg-rose-100 text-rose-800" },
 };
 
 const ownerMeta: Record<Owner, string> = {

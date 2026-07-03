@@ -16,7 +16,7 @@ export const Route = createFileRoute("/risk-log")({
 
 function RiskLogPage() {
   const { data: response } = useDashboardData();
-  const riskLogs = (response?.data?.riskLogs ?? staticRiskLogs) as { sn: number; workstream: string; detail: string; mitigation: string; raised: string; level: string; status: LogStatus }[];
+  const riskLogs = (response?.data?.riskLogs ?? staticRiskLogs) as { sn: number; workstream: string; detail: string; mitigation: string; raised: string; level: string; status: LogStatus; remarks: string }[];
   const [filter, setFilter] = useState<LogStatus | "All">("All");
   const rows = filter === "All" ? riskLogs : riskLogs.filter((r) => r.status === filter);
   const counts = riskLogs.reduce(
@@ -43,14 +43,17 @@ function RiskLogPage() {
       <Card>
         <CardHeader title="Risk Log" />
         <StatusFilterBar value={filter} onChange={setFilter} />
-        <Table headers={["SN", "Workstream", "Issue / Risk Detail", "Date Raised", "Status"]}>
+        <Table headers={["SN", "Workstream", "Issue / Risk Detail", "Mitigation Plan", "Date Raised", "Level", "Status", "Remarks"]}>
           {rows.map((r) => (
             <tr key={r.sn} className="border-t border-border/70 hover:bg-muted/40">
               <Td>{r.sn}</Td>
-              <Td className="font-medium text-foreground">{r.workstream}</Td>
-              <Td className="max-w-[520px] text-foreground/80">{r.detail}</Td>
+              <Td className="font-medium text-foreground whitespace-nowrap">{r.workstream}</Td>
+              <Td className="max-w-[300px] text-foreground/80">{r.detail}</Td>
+              <Td className="max-w-[240px] text-foreground/70 text-xs">{r.mitigation || "—"}</Td>
               <Td className="tabular-nums whitespace-nowrap">{r.raised}</Td>
+              <Td><LevelPill level={r.level} /></Td>
               <Td><LogStatusPill status={r.status} /></Td>
+              <Td className="max-w-[200px] text-xs text-muted-foreground">{r.remarks || "—"}</Td>
             </tr>
           ))}
         </Table>
@@ -95,6 +98,18 @@ function StatusFilterBar({ value, onChange }: { value: LogStatus | "All"; onChan
         );
       })}
     </div>
+  );
+}
+
+function LevelPill({ level }: { level: string }) {
+  const color = level === "High" ? "#dc2626" : level === "Medium" ? "#d97706" : "#16a34a";
+  return (
+    <span
+      className="inline-flex min-w-[64px] items-center justify-center rounded-sm px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-white"
+      style={{ background: color }}
+    >
+      {level}
+    </span>
   );
 }
 

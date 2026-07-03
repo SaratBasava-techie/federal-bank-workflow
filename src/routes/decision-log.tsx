@@ -16,7 +16,7 @@ export const Route = createFileRoute("/decision-log")({
 
 function DecisionLogPage() {
   const { data: response } = useDashboardData();
-  const decisionLogs = (response?.data?.decisionLogs ?? staticDecisionLogs) as { sn: number; workstream: string; area: string; details: string; owner: string; status: LogStatus }[];
+  const decisionLogs = (response?.data?.decisionLogs ?? staticDecisionLogs) as { sn: number; workstream: string; area: string; details: string; owner: string; status: LogStatus; remarks: string }[];
   const [filter, setFilter] = useState<LogStatus | "All">("All");
   const rows = filter === "All" ? decisionLogs : decisionLogs.filter((r) => r.status === filter);
   const counts = decisionLogs.reduce(
@@ -43,15 +43,16 @@ function DecisionLogPage() {
       <Card>
         <CardHeader title="Decision Log" />
         <StatusFilterBar value={filter} onChange={setFilter} />
-        <Table headers={["SN", "Workstream", "Decision Area", "Decision Details", "Owner", "Status"]}>
+        <Table headers={["SN", "Workstream", "Decision Area", "Decision Details", "Owner", "Status", "Remarks"]}>
           {rows.map((r) => (
             <tr key={r.sn} className="border-t border-border/70 hover:bg-muted/40">
               <Td>{r.sn}</Td>
-              <Td className="font-medium text-foreground">{r.workstream}</Td>
+              <Td className="font-medium text-foreground whitespace-nowrap">{r.workstream}</Td>
               <Td className="whitespace-nowrap">{r.area}</Td>
-              <Td className="max-w-[520px] text-foreground/80">{r.details}</Td>
+              <Td className="max-w-[420px] text-foreground/80">{r.details}</Td>
               <Td className="whitespace-nowrap">{r.owner}</Td>
               <Td><LogStatusPill status={r.status} /></Td>
+              <Td className="max-w-[220px] text-xs text-muted-foreground">{r.remarks || "—"}</Td>
             </tr>
           ))}
         </Table>

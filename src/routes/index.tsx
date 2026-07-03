@@ -1,4 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { DashboardShell } from "@/components/DashboardShell";
 import { useDashboardData, type RagItem } from "@/hooks/useDashboardData";
 import {
@@ -19,8 +20,18 @@ export const Route = createFileRoute("/")({"head": () => ({
 });
 
 function Index() {
+  const navigate = useNavigate();
   const { data: response } = useDashboardData();
   const dashboardData = response?.data;
+
+  // On very first visit this session, show the landing page
+  useEffect(() => {
+    const seen = sessionStorage.getItem("kpmg-entered");
+    if (!seen) {
+      sessionStorage.setItem("kpmg-entered", "1");
+      navigate({ to: "/landing" });
+    }
+  }, [navigate]);
 
   const ragSummary = dashboardData?.ragSummary ?? staticRag;
   const pendingFromTsys = dashboardData?.pendingFromTsys ?? staticPending;
@@ -35,7 +46,7 @@ function Index() {
       <section className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
           <h2 className="text-xl font-semibold tracking-tight text-foreground">
-            RAG Summary Dashboard — June&nbsp;2026
+            RAG Summary Dashboard — July&nbsp;2026
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
             Open risks, blockers and dependencies tracked across workstreams.

@@ -88,14 +88,14 @@ export const pendingFromTsys: PendingItem[] = [
 ];
 
 export const programKpis = {
-  total: 74,
-  completed: 22,
-  inProgress: 7,
-  notStarted: 36,
-  onHold: 8,
-  atRisk: 1,
+  total: 219,
+  completed: 17,
+  inProgress: 35,
+  notStarted: 167,
+  onHold: 0,
+  atRisk: 0,
   overdue: 0,
-  overall: 30,
+  overall: 8,
 };
 
 export const completionStatus = [
@@ -148,6 +148,7 @@ export interface RiskLog {
   raised: string;
   level: RiskLevel;
   status: LogStatus;
+  remarks: string;
 }
 
 export interface DecisionLog {
@@ -157,6 +158,7 @@ export interface DecisionLog {
   details: string;
   owner: string;
   status: LogStatus;
+  remarks: string;
 }
 
 export const riskLogs: RiskLog[] = [
@@ -170,16 +172,18 @@ export const riskLogs: RiskLog[] = [
     raised: "15-May-2026",
     level: "High",
     status: "WIP",
+    remarks: "TBD with Saugata",
   },
   {
     sn: 2,
     workstream: "IT",
     detail:
       "FB IT team to commence application build and QA activities, which may potentially impact the UAT timeline.",
-    mitigation: "Right resouce allocation for AWS, Infra, connectivity",
+    mitigation: "Right resource allocation for AWS, Infra, connectivity",
     raised: "25-May-2026",
     level: "Medium",
     status: "WIP",
+    remarks: "To be revalidate post Dinesh call",
   },
   {
     sn: 3,
@@ -191,25 +195,28 @@ export const riskLogs: RiskLog[] = [
     raised: "3-Jun-2026",
     level: "High",
     status: "Open",
+    remarks: "To be checked with Mohit/ Ananya. WIP stage",
   },
   {
     sn: 4,
     workstream: "IT",
     detail:
-      "FD IT to complete production and migration enviroment setup and testing",
+      "FB IT to complete production and migration environment setup and testing",
     mitigation: "",
     raised: "18-Jun-2026",
     level: "High",
     status: "Open",
+    remarks: "CISO approval has been received on 22 Jun.",
   },
   {
     sn: 5,
-    workstream: "Due Deligence",
+    workstream: "Due Diligence",
     detail: "It is mandatory Due Diligence to be completed by Deloitte (third party) for TSYS.",
-    mitigation: "Initate the pre-requisite clearance by TSYS",
+    mitigation: "Initiate the pre-requisite clearance by TSYS",
     raised: "25-Jun-2026",
     level: "Low",
     status: "Open",
+    remarks: "",
   },
   {
     sn: 6,
@@ -220,22 +227,23 @@ export const riskLogs: RiskLog[] = [
     raised: "29-Jun-2026",
     level: "Medium",
     status: "Open",
+    remarks: "",
   },
 ];
 
 export const decisionLogs: DecisionLog[] = [
-  { sn: 1, workstream: "Business", area: "Card features", details: "A key decision has been made to replicate all existing Soulfire card configurations, features, and pricing structures in the Federal environment without any modifications.", owner: "Libu", status: "Closed" },
-  { sn: 2, workstream: "Business", area: "Card Fee", details: "Annual fee services will be migrated and maintained under Federal Bank, with fees charged based on original migrated services and existing card charge dates (not re-carding dates).", owner: "Libu", status: "Closed" },
-  { sn: 3, workstream: "Business", area: "Card Account", details: "All customer accounts, including active and closed, will be migrated from Standard Chartered Bank to the Federal Bank portfolio. The migration scope will include all cards, irrespective of status (active, inactive, closed, expired, or replaced).", owner: "Libu", status: "Closed" },
-  { sn: 4, workstream: "Data Migration", area: "Scope", details: "The scope of data migration and its subsequent attributes will be discussed and agreed  between all three parties (FB, SCB, TSYS)", owner: "Joint", status: "WIP" },
-  { sn: 5, workstream: "Platform & Infrastructure", area: "Network Connectivity", details: "Network connectivity between FB and TSYS will be established via a private link. The IT team will provide the cost details for setting up the Project Soulfire infrastructure in due course.", owner: "Dinu", status: "Closed" },
-  { sn: 6, workstream: "Compliance", area: "KYC", details: "An approach note pertaining to KYC, customer risk categorization and delivery address update to be drafted to ensure regulatory alignment for new portfolio.", owner: "Kishore/Sreejith", status: "WIP" },
-  { sn: 7, workstream: "Business", area: "Rewards", details: "A decision has been made that all LR rewards accrual and redemption activities will be processed within the LR system. TSYS will continue to implement and maintain the required business logic updates within its platform and ensure seamless routing of all relevant transactions to LR.", owner: "Libu", status: "Closed" },
-  { sn: 8, workstream: "Marketing & Communication", area: "Consent & communication", details: "Consent mechanism, channels, frequency and calendar plan is awaited. This is proposed to be discussed in upcoming JIC on 08-06-2026", owner: "Shefali", status: "Closed" },
-  { sn: 9, workstream: "Business", area: "Product ", details: "A Joint decision between SCB and FB, needs to be made on usage of Manhattan card name post portfolio transfer.", owner: "Leadership (FB, SCB)", status: "Closed" },
-  { sn: 10, workstream: "Business", area: "Recarding", details: "The decision on 37 day timeline for card closure is agreed to commence from the BIG Bang date.", owner: "Saugata", status: "Closed" },
-  { sn: 11, workstream: "IT", area: "Authentication Protocol", details: "As a Authentication Protocol the Email Authentication, as MFA method will be enabled for integration/configurations.", owner: "Dinu", status: "Closed" },
-  { sn: 12, workstream: "Operations", area: "Dispute Management", details: "FB to work on BPO set up/dispute management for aquired portfolio. To elaborate the TSYS BPO setup is based out of the Philippines, while the data storage is maintained in India. Require the decision makking on the operating model with compliance & regulatory perspective in India", owner: "Saugata/Brijesh", status: "Closed" },
-  { sn: 13, workstream: "IT", area: "Enviroment set-up & testing", details: "IT to take-up CISO exception approval for Production enviroment creation and data migration enviroment creation", owner: "Sreejith", status: "Closed" },
-  { sn: 14, workstream: "Recarding", area: "Embossing File", details: "FIS has confirmed that the embossing file can be generated in a single-line format, in alignment with the specifications and expectations of the embossing team, eliminating the need for the earlier two-line format.", owner: "TSYS", status: "Closed" },
+  { sn: 1, workstream: "Business", area: "Card features", details: "A key decision has been made to replicate all existing Soulfire card configurations, features, and pricing structures in the Federal environment without any modifications.", owner: "Libu", status: "Closed", remarks: "Product Mapping is completed with SCB. Product code has been clarified to TSYS" },
+  { sn: 2, workstream: "Business", area: "Card Fee", details: "Annual fee services will be migrated and maintained under Federal Bank, with fees charged based on original migrated services and existing card charge dates (not re-carding dates).", owner: "Libu", status: "Closed", remarks: "Data migration scope document to be considered as evidence" },
+  { sn: 3, workstream: "Business", area: "Card Account", details: "All customer accounts, including active and closed, will be migrated from Standard Chartered Bank to the Federal Bank portfolio. The migration scope will include all cards, irrespective of status (active, inactive, closed, expired, or replaced).", owner: "Libu", status: "Closed", remarks: "Data migration scope document to be considered as evidence" },
+  { sn: 9, workstream: "Data Migration", area: "Scope", details: "The scope of data migration and its subsequent attributes will be discussed and agreed between all three parties (FB, SCB, TSYS)", owner: "Joint", status: "WIP", remarks: "" },
+  { sn: 5, workstream: "Platform & Infrastructure", area: "Network Connectivity", details: "Network connectivity between FB and TSYS will be established via a private link. The IT team will provide the cost details for setting up the Project Soulfire infrastructure in due course.", owner: "Dinu", status: "Closed", remarks: "" },
+  { sn: 7, workstream: "Compliance", area: "KYC", details: "An approach note pertaining to KYC, customer risk categorization and delivery address update to be drafted to ensure regulatory alignment for new portfolio.", owner: "Kishore/Sreejith", status: "WIP", remarks: "" },
+  { sn: 8, workstream: "Business", area: "Rewards", details: "A decision has been made that all LR rewards accrual and redemption activities will be processed within the LR system. TSYS will continue to implement and maintain the required business logic updates within its platform and ensure seamless routing of all relevant transactions to LR.", owner: "Libu", status: "Closed", remarks: "Data migration scope document to be considered as evidence" },
+  { sn: 10, workstream: "Marketing & Communication", area: "Consent & communication", details: "Consent mechanism, channels, frequency and calendar plan is awaited. This is proposed to be discussed in upcoming JIC on 08-06-2026", owner: "Shefali", status: "Closed", remarks: "Point discussed in 2nd JIC on 8 Jun." },
+  { sn: 11, workstream: "Business", area: "Product", details: "A Joint decision between SCB and FB, needs to be made on usage of Manhattan card name post portfolio transfer.", owner: "Leadership (FB, SCB)", status: "Closed", remarks: "Evidence considered as product code mapping confirmation to TSYS, where mentioned VISA Manhattan Platinum card mapping to FB Manhattan Platinum Primary card." },
+  { sn: 12, workstream: "Business", area: "Recarding", details: "The decision on 37 day timeline for card closure is agreed to commence from the BIG Bang date.", owner: "Saugata", status: "Closed", remarks: "This can be closed based on Recarding note" },
+  { sn: 13, workstream: "IT", area: "Authentication Protocol", details: "As a Authentication Protocol the Email Authentication, as MFA method will be enabled for integration/configurations.", owner: "Dinu", status: "Closed", remarks: "Dinu confirmed through email on 8 Jun." },
+  { sn: 14, workstream: "Operations", area: "Dispute Management", details: "FB to work on BPO set up/dispute management for acquired portfolio. To elaborate the TSYS BPO setup is based out of the Philippines, while the data storage is maintained in India. Require the decision making on the operating model with compliance & regulatory perspective in India", owner: "Saugata/Brijesh", status: "Closed", remarks: "" },
+  { sn: 15, workstream: "IT", area: "Environment set-up & testing", details: "IT to take-up CISO exception approval for Production environment creation and data migration environment creation", owner: "Sreejith", status: "Closed", remarks: "CISO approval received on 22 Jun" },
+  { sn: 16, workstream: "Recarding", area: "Embossing File", details: "FIS has confirmed that the embossing file can be generated in a single-line format, in alignment with the specifications and expectations of the embossing team, eliminating the need for the earlier two-line format.", owner: "TSYS", status: "Closed", remarks: "Mahendra confirmed on 25 Jun." },
 ];
