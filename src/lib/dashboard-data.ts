@@ -80,6 +80,16 @@ export const ragSummary: RagItem[] = [
     targetDate: "03-07-2026",
     rag: "critical",
   },
+  {
+    sn: 7,
+    workstream: "IT",
+    activity: "KAFKA Configuration and payload requirement from TSYS",
+    owner: "FB & TSYS",
+    leads: "Dinu, Eldho/Christos",
+    dateRaised: "—",
+    targetDate: "01-07-2026",
+    rag: "critical",
+  },
 ];
 
 export const pendingFromTsys: PendingItem[] = [
@@ -210,6 +220,16 @@ export const riskLogs: RiskLog[] = [
   },
   {
     sn: 5,
+    workstream: "IT",
+    detail: "DWH Files/data flow to FB, its mapping and development at FB's end",
+    mitigation: "",
+    raised: "22-Jun-2026",
+    level: "High",
+    status: "Open",
+    remarks: "",
+  },
+  {
+    sn: 6,
     workstream: "Due Diligence",
     detail: "It is mandatory Due Diligence to be completed by Deloitte (third party) for TSYS.",
     mitigation: "Initiate the pre-requisite clearance by TSYS",
@@ -219,13 +239,32 @@ export const riskLogs: RiskLog[] = [
     remarks: "",
   },
   {
-    sn: 6,
+    sn: 7,
     workstream: "Business",
-    detail:
-      "Onboard a dedicated testing partner at Federal Bank to support validation of systems, processes, and integrations",
+    detail: "Onboard a dedicated testing partner at Federal Bank to support validation of systems, processes, and integrations",
     mitigation: "",
     raised: "29-Jun-2026",
     level: "Medium",
+    status: "Open",
+    remarks: "",
+  },
+  {
+    sn: 8,
+    workstream: "IT",
+    detail: "A CIF unique identifier aligned with the existing TSYS reference number should be defined and confirmed by SCB.",
+    mitigation: "",
+    raised: "07-Jun-2026",
+    level: "High",
+    status: "Open",
+    remarks: "",
+  },
+  {
+    sn: 9,
+    workstream: "IT",
+    detail: "KAFKA Payload related development",
+    mitigation: "",
+    raised: "01-Jul-2026",
+    level: "High",
     status: "Open",
     remarks: "",
   },
@@ -246,4 +285,5 @@ export const decisionLogs: DecisionLog[] = [
   { sn: 14, workstream: "Operations", area: "Dispute Management", details: "FB to work on BPO set up/dispute management for acquired portfolio. To elaborate the TSYS BPO setup is based out of the Philippines, while the data storage is maintained in India. Require the decision making on the operating model with compliance & regulatory perspective in India", owner: "Saugata/Brijesh", status: "Closed", remarks: "" },
   { sn: 15, workstream: "IT", area: "Environment set-up & testing", details: "IT to take-up CISO exception approval for Production environment creation and data migration environment creation", owner: "Sreejith", status: "Closed", remarks: "CISO approval received on 22 Jun" },
   { sn: 16, workstream: "Recarding", area: "Embossing File", details: "FIS has confirmed that the embossing file can be generated in a single-line format, in alignment with the specifications and expectations of the embossing team, eliminating the need for the earlier two-line format.", owner: "TSYS", status: "Closed", remarks: "Mahendra confirmed on 25 Jun." },
+  { sn: 17, workstream: "Business", area: "Statement", details: "Decision on revision of the past 12 month's statement format in line with the Federal template, with finalization and approval from SCB, considering that existing statements contain card details and branding elements.", owner: "Libu", status: "WIP", remarks: "" },
 ];

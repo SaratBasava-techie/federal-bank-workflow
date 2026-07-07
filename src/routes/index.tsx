@@ -8,7 +8,11 @@ import {
   type RagStatus,
 } from "@/lib/dashboard-data";
 
-export const Route = createFileRoute("/")({"head": () => ({
+export const Route = createFileRoute("/")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    entered: search.entered === "1" || search.entered === true,
+  }),
+  "head": () => ({
     meta: [
       { title: "RAG Summary · Federal Bank Programme" },
       { name: "description", content: "RAG status summary for the Standard Chartered to Federal Bank credit card portfolio migration." },
@@ -24,14 +28,13 @@ function Index() {
   const { data: response } = useDashboardData();
   const dashboardData = response?.data;
 
-  // On very first visit this session, show the landing page
+  // Always show landing page first — unless we arrived via the "Enter Dashboard" click
+  const { entered } = Route.useSearch();
   useEffect(() => {
-    const seen = sessionStorage.getItem("kpmg-entered");
-    if (!seen) {
-      sessionStorage.setItem("kpmg-entered", "1");
+    if (!entered) {
       navigate({ to: "/landing" });
     }
-  }, [navigate]);
+  }, [entered, navigate]);
 
   const ragSummary = dashboardData?.ragSummary ?? staticRag;
   const pendingFromTsys = dashboardData?.pendingFromTsys ?? staticPending;
