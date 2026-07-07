@@ -2,13 +2,15 @@ import { Link, useLocation } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { useDashboardData } from "../hooks/useDashboardData";
 
+// Tabs for the dashboard navigation. RAG Summary uses the root "/" with
+// ?entered=true to distinguish it from the landing page.
 const tabs = [
-  { to: "/", label: "RAG Summary" },
-  { to: "/program", label: "Program Overview" },
-  { to: "/joint-checklist", label: "Joint Workstream Checklist" },
-  { to: "/risk-log", label: "Risk Log" },
-  { to: "/decision-log", label: "Decision Log" },
-];
+  { to: "/", search: { entered: true }, label: "RAG Summary" },
+  { to: "/program", search: undefined, label: "Program Overview" },
+  { to: "/joint-checklist", search: undefined, label: "Joint Workstream Checklist" },
+  { to: "/risk-log", search: undefined, label: "Risk Log" },
+  { to: "/decision-log", search: undefined, label: "Decision Log" },
+] as const;
 
 export function DashboardShell({
   children,
@@ -58,6 +60,7 @@ export function DashboardShell({
                   <Link
                     key={t.to}
                     to={t.to}
+                    search={t.search as any}
                     className={`rounded-t-md px-4 py-2 text-sm font-medium transition-colors ${
                       active
                         ? "bg-background text-foreground"
