@@ -77,7 +77,7 @@ export const ragSummary: RagItem[] = [
     owner: "SCB",
     leads: "Neha",
     dateRaised: "—",
-    targetDate: "03-07-2026",
+    targetDate: "3/7/2026",
     rag: "critical",
   },
   {
@@ -87,14 +87,16 @@ export const ragSummary: RagItem[] = [
     owner: "FB & TSYS",
     leads: "Dinu, Eldho/Christos",
     dateRaised: "—",
-    targetDate: "01-07-2026",
+    targetDate: "1/7/2026",
     rag: "critical",
   },
 ];
 
 export const pendingFromTsys: PendingItem[] = [
-  { sn: 1, workstream: "Program Plan", activity: "Detailed Project Plan to be shared by TSYS to FB including joint tripartite plan", leads: "Himanshu/Ananya", dateRaised: "01-06-2026" },
-  { sn: 2, workstream: "Data Migration", activity: "Final Data migration scope agreement", leads: "Nitin", dateRaised: "03-07-2026" },
+  { sn: 1, workstream: "Program Plan", activity: "Detailed Project Plan to be shared by TSYS to FB including joint tripartite plan", leads: "Himanshu/Ananya", dateRaised: "1/6/2026" },
+  { sn: 2, workstream: "DWH/data hosting", activity: "DWH File/data flow for FB consumption in defined templets", leads: "Vipin/Petros", dateRaised: "22/6/2026" },
+  { sn: 3, workstream: "Data Migration", activity: "Final Data migration scope agreement", leads: "Nitin", dateRaised: "3/7/2026" },
+  { sn: 4, workstream: "Embossing Files", activity: "TSYS to start development with changes shared by FB", leads: "Mahendra", dateRaised: "3/7/2026" },
 ];
 
 export const programKpis = {

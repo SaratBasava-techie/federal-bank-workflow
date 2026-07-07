@@ -742,7 +742,7 @@ function DashboardPage() {
       <section className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
           <h2 className="text-xl font-semibold tracking-tight text-foreground">
-            RAG Summary Dashboard — July&nbsp;2026
+            RAG Summary Dashboard for June’26
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
             Open risks, blockers and dependencies tracked across workstreams.
