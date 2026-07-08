@@ -85,9 +85,9 @@ export const getDashboardData = createServerFn({ method: "GET" }).handler(
 
       return {
         data: {
-          ragSummary: data.ragSummary.length > 0 ? data.ragSummary : staticData.ragSummary,
-          pendingFromTsys:
-            data.pendingFromTsys.length > 0 ? data.pendingFromTsys : staticData.pendingFromTsys,
+          // Force static data for RAG and TSYS to reflect recent manual updates
+          ragSummary: staticData.ragSummary,
+          pendingFromTsys: staticData.pendingFromTsys,
           activities:
             data.activities.length > 0 ? data.activities : staticData.activities,
           riskLogs: data.riskLogs.length > 0 ? data.riskLogs : staticData.riskLogs,

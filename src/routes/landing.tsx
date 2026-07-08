@@ -75,19 +75,6 @@ function useAmbientParticles() {
   return particles;
 }
 
-function useBurstParticles() {
-  const [bursts, setBursts] = useState<{ id: number; x: number; y: number }[]>([]);
-  const counter = useRef(0);
-
-  const trigger = useCallback((x: number, y: number) => {
-    const id = counter.current++;
-    setBursts(prev => [...prev, { id, x, y }]);
-    setTimeout(() => setBursts(prev => prev.filter(b => b.id !== id)), 900);
-  }, []);
-
-  return { bursts, trigger };
-}
-
 // ---------------------------------------------------------------------------
 // Data-flow line SVG overlay
 // ---------------------------------------------------------------------------
@@ -133,6 +120,108 @@ function DataFlowLines() {
 }
 
 // ---------------------------------------------------------------------------
+// Countdown ring constants
+// ---------------------------------------------------------------------------
+const COUNTDOWN_SECONDS = 5;
+const RING_RADIUS = 45;
+const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
+
+function CountdownRing({
+  total,
+  remaining,
+  onSkip,
+  visible,
+}: {
+  total: number;
+  remaining: number;
+  onSkip: () => void;
+  visible: boolean;
+}) {
+  const dashOffset = ((total - remaining) / total) * RING_CIRCUMFERENCE;
+  const [skipHover, setSkipHover] = useState(false);
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 10,
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(12px)",
+        transition: "opacity 0.6s ease 1s, transform 0.6s ease 1s",
+      }}
+    >
+      <div style={{ position: "relative", width: 108, height: 108 }}>
+        <svg
+          width="108"
+          height="108"
+          viewBox="0 0 108 108"
+          style={{ transform: "rotate(-90deg)" }}
+        >
+          <circle cx="54" cy="54" r={RING_RADIUS} fill="none" stroke="rgba(0,153,168,0.15)" strokeWidth="3" />
+          <circle
+            cx="54" cy="54" r={RING_RADIUS}
+            fill="none"
+            stroke="rgba(0,153,168,0.7)"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeDasharray={RING_CIRCUMFERENCE}
+            strokeDashoffset={dashOffset}
+            style={{ transition: "stroke-dashoffset 0.95s linear" }}
+          />
+        </svg>
+        <div style={{
+          position: "absolute", inset: 0,
+          display: "flex", flexDirection: "column",
+          alignItems: "center", justifyContent: "center",
+        }}>
+          <span
+            key={remaining}
+            style={{
+              fontSize: 26, fontWeight: 700,
+              color: "rgba(0,200,220,0.9)", lineHeight: 1,
+              animation: "soulfireDigitIn 0.3s cubic-bezier(0.16,1,0.3,1) both",
+            }}
+          >
+            {remaining}
+          </span>
+          <span style={{
+            fontSize: 9, fontWeight: 600,
+            letterSpacing: "0.12em", textTransform: "uppercase" as const,
+            color: "rgba(0,153,168,0.6)", marginTop: 2,
+          }}>
+            sec
+          </span>
+        </div>
+      </div>
+
+      <button
+        onMouseEnter={() => setSkipHover(true)}
+        onMouseLeave={() => setSkipHover(false)}
+        onClick={onSkip}
+        style={{
+          border: "1px solid rgba(0,153,168,0.35)",
+          background: skipHover ? "rgba(0,153,168,0.14)" : "rgba(0,153,168,0.06)",
+          color: skipHover ? "rgba(0,200,220,0.95)" : "rgba(0,153,168,0.7)",
+          borderRadius: 100, padding: "5px 16px",
+          fontSize: 11, fontWeight: 600, letterSpacing: "0.12em",
+          textTransform: "uppercase" as const, cursor: "pointer",
+          display: "flex", alignItems: "center", gap: 6,
+          transition: "all 0.22s cubic-bezier(0.16,1,0.3,1)",
+          transform: skipHover ? "scale(1.05)" : "scale(1)",
+        }}
+      >
+        Skip
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Main Landing Page
 // ---------------------------------------------------------------------------
 function LandingPage() {
@@ -141,20 +230,45 @@ function LandingPage() {
   const [phase, setPhase] = useState<"idle" | "hover" | "zooming" | "done">("idle");
   const [ctaHover, setCtaHover] = useState(false);
   const [logoHover, setLogoHover] = useState(false);
+  const [countdown, setCountdown] = useState(COUNTDOWN_SECONDS);
+  const [skipVisible, setSkipVisible] = useState(false);
   const particles = useAmbientParticles();
-  const { bursts, trigger } = useBurstParticles();
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     const t = setTimeout(() => setMounted(true), 80);
     return () => clearTimeout(t);
   }, []);
 
-  const handleEnter = useCallback((e: React.MouseEvent) => {
+  useEffect(() => {
+    if (!mounted) return;
+    const t = setTimeout(() => setSkipVisible(true), 1000);
+    return () => clearTimeout(t);
+  }, [mounted]);
+
+  const handleEnter = useCallback(() => {
     if (phase === "zooming") return;
-    trigger(e.clientX, e.clientY);
+    if (intervalRef.current) clearInterval(intervalRef.current);
     setPhase("zooming");
     setTimeout(() => navigate({ to: "/", search: { entered: true } }), 1100);
-  }, [phase, trigger, navigate]);
+  }, [phase, navigate]);
+
+  // Auto-countdown
+  useEffect(() => {
+    if (!mounted || phase === "zooming") return;
+    intervalRef.current = setInterval(() => {
+      setCountdown(prev => {
+        if (prev <= 1) {
+          if (intervalRef.current) clearInterval(intervalRef.current);
+          setTimeout(handleEnter, 200);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mounted]);
 
   const fadeIn = mounted && phase !== "zooming";
 
@@ -256,23 +370,6 @@ function LandingPage() {
             }} />
           );
         })}
-
-        {/* Click burst rings */}
-        {bursts.map(b => (
-          <div key={b.id} style={{ position: "absolute", left: b.x, top: b.y, pointerEvents: "none" }}>
-            {[0, 1, 2].map(i => (
-              <div key={i} style={{
-                position: "absolute",
-                borderRadius: "50%",
-                border: "1px solid rgba(0,153,168,0.6)",
-                transform: "translate(-50%,-50%)",
-                animation: `burstRing 0.9s ease-out forwards`,
-                animationDelay: `${i * 0.12}s`,
-                width: 10, height: 10,
-              }} />
-            ))}
-          </div>
-        ))}
       </div>
 
       {/* ══════════════════════════════════════════════════════════════
@@ -287,8 +384,8 @@ function LandingPage() {
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
         opacity: fadeIn ? 1 : 0,
-        transform: fadeIn ? "translateY(0)" : "translateY(-12px)",
-        transition: "opacity 0.8s ease, transform 0.8s ease",
+        transform: fadeIn ? "translateY(0)" : "translateY(-16px)",
+        transition: "opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)",
       }}>
         {/* Left: Logo + Divider + Label */}
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
@@ -319,7 +416,7 @@ function LandingPage() {
       </nav>
 
       {/* ══════════════════════════════════════════════════════════════
-          HERO CONTENT (centered vertically in remaining space)
+          HERO CONTENT
       ══════════════════════════════════════════════════════════════ */}
       <main style={{
         flex: 1,
@@ -343,7 +440,7 @@ function LandingPage() {
             transform: fadeIn
               ? (phase === "zooming" ? "scale(1.15) translateY(-20px)" : "translateY(0) scale(1)")
               : "translateY(32px) scale(0.9)",
-            transition: "opacity 1s ease, transform 1.1s cubic-bezier(0.16,1,0.3,1)",
+            transition: "opacity 1s cubic-bezier(0.16,1,0.3,1), transform 1.1s cubic-bezier(0.16,1,0.3,1)",
             marginBottom: "clamp(28px, 4vh, 48px)",
             cursor: "default",
           }}
@@ -356,7 +453,7 @@ function LandingPage() {
             background: "radial-gradient(circle, rgba(0,153,168,0.15) 0%, transparent 70%)",
             filter: "blur(20px)",
             transform: logoHover ? "scale(1.18)" : "scale(1)",
-            transition: "transform 0.6s ease",
+            transition: "transform 0.6s cubic-bezier(0.16,1,0.3,1)",
             pointerEvents: "none",
           }} />
 
@@ -369,7 +466,7 @@ function LandingPage() {
             boxShadow: logoHover
               ? "0 0 30px rgba(0,153,168,0.3), inset 0 0 30px rgba(0,48,135,0.1)"
               : "0 0 16px rgba(0,153,168,0.12)",
-            transition: "box-shadow 0.5s ease",
+            transition: "box-shadow 0.5s cubic-bezier(0.16,1,0.3,1)",
             animation: "spinRing 18s linear infinite",
             pointerEvents: "none",
           }} />
@@ -419,7 +516,7 @@ function LandingPage() {
         <div style={{
           opacity: fadeIn ? 1 : 0,
           transform: fadeIn ? "translateY(0)" : "translateY(20px)",
-          transition: "opacity 0.9s ease 0.15s, transform 0.9s ease 0.15s",
+          transition: "opacity 0.9s cubic-bezier(0.16,1,0.3,1) 0.15s, transform 0.9s cubic-bezier(0.16,1,0.3,1) 0.15s",
           display: "flex", alignItems: "center", gap: 14,
           marginBottom: "clamp(12px, 2vh, 20px)",
         }}>
@@ -446,8 +543,8 @@ function LandingPage() {
           lineHeight: 1,
           textAlign: "center",
           opacity: fadeIn ? 1 : 0,
-          transform: fadeIn ? "translateY(0)" : "translateY(24px)",
-          transition: "opacity 0.9s ease 0.25s, transform 0.9s ease 0.25s",
+          transform: fadeIn ? "translateY(0)" : "translateY(28px)",
+          transition: "opacity 0.9s cubic-bezier(0.16,1,0.3,1) 0.28s, transform 0.9s cubic-bezier(0.16,1,0.3,1) 0.28s",
           background: "linear-gradient(135deg, #ffffff 0%, #b0d0ff 50%, #7ebfff 100%)",
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
@@ -467,7 +564,7 @@ function LandingPage() {
           textAlign: "center",
           opacity: fadeIn ? 1 : 0,
           transform: fadeIn ? "translateY(0)" : "translateY(20px)",
-          transition: "opacity 0.9s ease 0.35s, transform 0.9s ease 0.35s",
+          transition: "opacity 0.9s cubic-bezier(0.16,1,0.3,1) 0.4s, transform 0.9s cubic-bezier(0.16,1,0.3,1) 0.4s",
         }}>
           Federal Bank&nbsp;&nbsp;·&nbsp;&nbsp;Credit Card Portfolio Migration
         </p>
@@ -501,19 +598,16 @@ function LandingPage() {
             transition: "all 0.35s cubic-bezier(0.16,1,0.3,1)",
             opacity: fadeIn ? 1 : 0,
             display: "flex", alignItems: "center", gap: 12,
+            overflow: "hidden",
           }}
         >
-          {/* Inner shimmer on hover */}
-          <div style={{
+          {/* Continuous shimmer */}
+          <div className="soulfire-shimmer" style={{
             position: "absolute", inset: 0, borderRadius: 100,
-            background: "linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.08) 50%, transparent 60%)",
-            backgroundSize: "200% 100%",
-            backgroundPosition: ctaHover ? "0% 0" : "200% 0",
-            transition: "background-position 0.6s ease",
             pointerEvents: "none",
           }} />
 
-          <span>Click to Enter Dashboard</span>
+          <span style={{ position: "relative", zIndex: 1 }}>Click to Enter Dashboard</span>
 
           {/* Arrow icon */}
           <svg
@@ -521,20 +615,31 @@ function LandingPage() {
             fill="none" stroke="currentColor" strokeWidth="2"
             strokeLinecap="round" strokeLinejoin="round"
             style={{
+              position: "relative", zIndex: 1,
               transform: ctaHover ? "translateX(4px)" : "translateX(0)",
-              transition: "transform 0.3s ease",
+              transition: "transform 0.3s cubic-bezier(0.16,1,0.3,1)",
             }}
           >
             <path d="M5 12h14M12 5l7 7-7 7" />
           </svg>
         </button>
 
-        {/* ── Subtle keyline below CTA ── */}
+        {/* ── Auto-redirect countdown ring ── */}
+        <div style={{ marginTop: "clamp(20px, 2.8vh, 36px)" }}>
+          <CountdownRing
+            total={COUNTDOWN_SECONDS}
+            remaining={countdown}
+            onSkip={handleEnter}
+            visible={skipVisible && fadeIn}
+          />
+        </div>
+
+        {/* ── Subtle keyline below ── */}
         <div style={{
-          marginTop: "clamp(24px, 3.5vh, 40px)",
+          marginTop: "clamp(16px, 2.5vh, 32px)",
           display: "flex", alignItems: "center", gap: 20,
           opacity: fadeIn ? 0.45 : 0,
-          transition: "opacity 1s ease 0.6s",
+          transition: "opacity 1s cubic-bezier(0.16,1,0.3,1) 0.7s",
         }}>
           <div style={{ width: 24, height: 1, background: "rgba(0,153,168,0.5)" }} />
           <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(0,153,168,0.7)" }}>
@@ -557,7 +662,7 @@ function LandingPage() {
         backdropFilter: "blur(10px)",
         WebkitBackdropFilter: "blur(10px)",
         opacity: fadeIn ? 1 : 0,
-        transition: "opacity 1s ease 0.5s",
+        transition: "opacity 1s cubic-bezier(0.16,1,0.3,1) 0.5s",
       }}>
         <span style={{ fontSize: 10, fontWeight: 500, letterSpacing: "0.15em", color: "rgba(255,255,255,0.22)", textTransform: "uppercase" }}>
           © 2026 KPMG. All rights reserved.
@@ -571,7 +676,7 @@ function LandingPage() {
       </footer>
 
       {/* ══════════════════════════════════════════════════════════════
-          TRANSITION OVERLAY (zoom-in wipe)
+          TRANSITION OVERLAY
       ══════════════════════════════════════════════════════════════ */}
       {phase === "zooming" && (
         <div style={{
@@ -610,15 +715,15 @@ function LandingPage() {
           50%       { opacity: 0.5; transform: scale(0.8); }
         }
 
-        @keyframes burstRing {
-          0%   { width: 10px; height: 10px; opacity: 0.8; }
-          100% { width: 120px; height: 120px; opacity: 0; }
-        }
-
         @keyframes pageWipe {
           0%   { opacity: 0; }
           20%  { opacity: 1; }
           100% { opacity: 1; }
+        }
+
+        @keyframes soulfireDigitIn {
+          from { opacity: 0; transform: translateY(12px) scale(0.8); }
+          to   { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         * { box-sizing: border-box; }

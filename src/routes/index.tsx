@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { DashboardShell } from "@/components/DashboardShell";
 import { useDashboardData, type RagItem } from "@/hooks/useDashboardData";
+import { useCountUp } from "@/hooks/useCountUp";
 import {
   ragSummary as staticRag,
   pendingFromTsys as staticPending,
@@ -42,13 +43,13 @@ function RootPage() {
   const search = Route.useSearch() as IndexSearch;
   const entered = search?.entered ?? false;
 
-  // When user navigates back (no ?entered=true), show landing
   if (!entered) return <LandingPage />;
   return <DashboardPage />;
 }
 
 // ============================================================
 //  LANDING PAGE — Clean, premium enterprise design
+//  + Auto-redirect countdown (5 s) with animated ring + Skip
 // ============================================================
 
 interface Particle {
@@ -114,27 +115,196 @@ function useParticles() {
   return particles;
 }
 
+// ---------------------------------------------------------------------------
+// Animated countdown ring (SVG)
+// ---------------------------------------------------------------------------
+const COUNTDOWN_SECONDS = 5;
+const RING_RADIUS = 45;
+const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS; // ≈ 283
+
+function CountdownRing({
+  total,
+  remaining,
+  onSkip,
+  visible,
+}: {
+  total: number;
+  remaining: number;
+  onSkip: () => void;
+  visible: boolean;
+}) {
+  const dashOffset = ((total - remaining) / total) * RING_CIRCUMFERENCE;
+  const [skipHover, setSkipHover] = useState(false);
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 10,
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(12px)",
+        transition: "opacity 0.6s ease 1s, transform 0.6s ease 1s",
+      }}
+    >
+      {/* SVG countdown ring */}
+      <div style={{ position: "relative", width: 108, height: 108 }}>
+        <svg
+          width="108"
+          height="108"
+          viewBox="0 0 108 108"
+          style={{ transform: "rotate(-90deg)" }}
+        >
+          {/* Track */}
+          <circle
+            cx="54"
+            cy="54"
+            r={RING_RADIUS}
+            fill="none"
+            stroke="rgba(0,153,168,0.15)"
+            strokeWidth="3"
+          />
+          {/* Progress arc */}
+          <circle
+            cx="54"
+            cy="54"
+            r={RING_RADIUS}
+            fill="none"
+            stroke="rgba(0,153,168,0.7)"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeDasharray={RING_CIRCUMFERENCE}
+            strokeDashoffset={dashOffset}
+            style={{ transition: "stroke-dashoffset 0.95s linear" }}
+          />
+        </svg>
+        {/* Countdown number */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <span
+            key={remaining}
+            style={{
+              fontSize: 26,
+              fontWeight: 700,
+              color: "rgba(0,200,220,0.9)",
+              lineHeight: 1,
+              animation: "soulfireDigitIn 0.3s cubic-bezier(0.16,1,0.3,1) both",
+            }}
+          >
+            {remaining}
+          </span>
+          <span
+            style={{
+              fontSize: 9,
+              fontWeight: 600,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: "rgba(0,153,168,0.6)",
+              marginTop: 2,
+            }}
+          >
+            sec
+          </span>
+        </div>
+      </div>
+
+      {/* Skip button */}
+      <button
+        onMouseEnter={() => setSkipHover(true)}
+        onMouseLeave={() => setSkipHover(false)}
+        onClick={onSkip}
+        style={{
+          border: "1px solid rgba(0,153,168,0.35)",
+          background: skipHover
+            ? "rgba(0,153,168,0.14)"
+            : "rgba(0,153,168,0.06)",
+          color: skipHover ? "rgba(0,200,220,0.95)" : "rgba(0,153,168,0.7)",
+          borderRadius: 100,
+          padding: "5px 16px",
+          fontSize: 11,
+          fontWeight: 600,
+          letterSpacing: "0.12em",
+          textTransform: "uppercase",
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          gap: 6,
+          transition: "all 0.22s cubic-bezier(0.16,1,0.3,1)",
+          transform: skipHover ? "scale(1.05)" : "scale(1)",
+        }}
+      >
+        Skip
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Landing Page component
+// ---------------------------------------------------------------------------
 function LandingPage() {
   const navigate = useNavigate();
   const [mounted, setMounted] = useState(false);
   const [ctaHover, setCtaHover] = useState(false);
   const [zooming, setZooming] = useState(false);
+  const [countdown, setCountdown] = useState(COUNTDOWN_SECONDS);
+  const [skipVisible, setSkipVisible] = useState(false);
   const particles = useParticles();
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     const t = setTimeout(() => setMounted(true), 60);
     return () => clearTimeout(t);
   }, []);
 
-  const handleEnter = useCallback(() => {
+  // Show the skip/countdown UI after a 1-second delay
+  useEffect(() => {
+    if (!mounted) return;
+    const t = setTimeout(() => setSkipVisible(true), 1000);
+    return () => clearTimeout(t);
+  }, [mounted]);
+
+  const doEnter = useCallback(() => {
     if (zooming) return;
+    if (intervalRef.current) clearInterval(intervalRef.current);
     setZooming(true);
-    // Navigate to /?entered=true to show the dashboard
     setTimeout(
       () => navigate({ to: "/", search: { entered: true } }),
       950,
     );
   }, [zooming, navigate]);
+
+  // Auto-countdown interval
+  useEffect(() => {
+    if (!mounted || zooming) return;
+    intervalRef.current = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          if (intervalRef.current) clearInterval(intervalRef.current);
+          // Small delay so user sees "0" before the wipe
+          setTimeout(doEnter, 200);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mounted]);
 
   const show = mounted && !zooming;
 
@@ -326,8 +496,8 @@ function LandingPage() {
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
           opacity: show ? 1 : 0,
-          transform: show ? "translateY(0)" : "translateY(-12px)",
-          transition: "opacity 0.7s ease, transform 0.7s ease",
+          transform: show ? "translateY(0)" : "translateY(-16px)",
+          transition: "opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1)",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
@@ -400,9 +570,10 @@ function LandingPage() {
           position: "relative",
           zIndex: 5,
           padding: "0 24px",
+          gap: 0,
         }}
       >
-        {/* KPMG Logo — NO circle, NO border, NO outline. Clean logo with subtle ambient glow only */}
+        {/* KPMG Logo — clean, no border, subtle glow */}
         <div
           style={{
             position: "relative",
@@ -413,11 +584,11 @@ function LandingPage() {
                 : "scale(1) translateY(0)"
               : "scale(0.88) translateY(36px)",
             transition:
-              "opacity 1s ease, transform 1.1s cubic-bezier(0.16,1,0.3,1)",
+              "opacity 1s cubic-bezier(0.16,1,0.3,1), transform 1.1s cubic-bezier(0.16,1,0.3,1)",
             marginBottom: "clamp(24px, 3.5vh, 44px)",
           }}
         >
-          {/* Very subtle soft ambient glow behind logo — NO circle, NO border */}
+          {/* Ambient glow — no circle, no border */}
           <div
             style={{
               position: "absolute",
@@ -433,7 +604,6 @@ function LandingPage() {
               zIndex: 0,
             }}
           />
-          {/* The logo itself — clean, no container, no circle, no border */}
           <img
             src="/kpmg-logo-transparent.png"
             alt="KPMG"
@@ -450,13 +620,13 @@ function LandingPage() {
           />
         </div>
 
-        {/* Eyebrow */}
+        {/* Eyebrow — stagger delay 1 */}
         <div
           style={{
             opacity: show ? 1 : 0,
             transform: show ? "translateY(0)" : "translateY(20px)",
             transition:
-              "opacity 0.9s ease 0.15s, transform 0.9s ease 0.15s",
+              "opacity 0.9s cubic-bezier(0.16,1,0.3,1) 0.15s, transform 0.9s cubic-bezier(0.16,1,0.3,1) 0.15s",
             display: "flex",
             alignItems: "center",
             gap: 13,
@@ -492,7 +662,7 @@ function LandingPage() {
           />
         </div>
 
-        {/* Title */}
+        {/* Title — stagger delay 2 */}
         <h1
           style={{
             margin: 0,
@@ -503,9 +673,9 @@ function LandingPage() {
             lineHeight: 1,
             textAlign: "center",
             opacity: show ? 1 : 0,
-            transform: show ? "translateY(0)" : "translateY(24px)",
+            transform: show ? "translateY(0)" : "translateY(28px)",
             transition:
-              "opacity 0.9s ease 0.25s, transform 0.9s ease 0.25s",
+              "opacity 0.9s cubic-bezier(0.16,1,0.3,1) 0.28s, transform 0.9s cubic-bezier(0.16,1,0.3,1) 0.28s",
             background:
               "linear-gradient(135deg,#ffffff 0%,#a8d0ff 48%,#76bcff 100%)",
             WebkitBackgroundClip: "text",
@@ -516,7 +686,7 @@ function LandingPage() {
           Project Soulfire
         </h1>
 
-        {/* Subtitle */}
+        {/* Subtitle — stagger delay 3 */}
         <p
           style={{
             margin: 0,
@@ -529,19 +699,18 @@ function LandingPage() {
             opacity: show ? 1 : 0,
             transform: show ? "translateY(0)" : "translateY(20px)",
             transition:
-              "opacity 0.9s ease 0.35s, transform 0.9s ease 0.35s",
+              "opacity 0.9s cubic-bezier(0.16,1,0.3,1) 0.4s, transform 0.9s cubic-bezier(0.16,1,0.3,1) 0.4s",
           }}
         >
-          Federal Bank&nbsp;&nbsp;·&nbsp;&nbsp;Credit Card Portfolio
-          Migration
+          Federal Bank&nbsp;&nbsp;·&nbsp;&nbsp;Credit Card Portfolio Migration
         </p>
 
-        {/* CTA Button */}
+        {/* CTA Button — stagger delay 4 */}
         <button
           id="enter-dashboard-btn"
           onMouseEnter={() => setCtaHover(true)}
           onMouseLeave={() => setCtaHover(false)}
-          onClick={handleEnter}
+          onClick={doEnter}
           style={{
             position: "relative",
             cursor: zooming ? "default" : "pointer",
@@ -569,23 +738,17 @@ function LandingPage() {
             display: "flex",
             alignItems: "center",
             gap: 11,
+            overflow: "hidden",
           }}
         >
-          {/* Shimmer on hover */}
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              borderRadius: 100,
-              background:
-                "linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.08) 50%, transparent 60%)",
-              backgroundSize: "200% 100%",
-              backgroundPosition: ctaHover ? "0% 0" : "200% 0",
-              transition: "background-position 0.6s ease",
-              pointerEvents: "none",
-            }}
-          />
-          <span>Click to Enter Dashboard</span>
+          {/* Continuous shimmer on button */}
+          <div className="soulfire-shimmer" style={{
+            position: "absolute",
+            inset: 0,
+            borderRadius: 100,
+            pointerEvents: "none",
+          }} />
+          <span style={{ position: "relative", zIndex: 1 }}>Click to Enter Dashboard</span>
           <svg
             width="17"
             height="17"
@@ -596,23 +759,35 @@ function LandingPage() {
             strokeLinecap="round"
             strokeLinejoin="round"
             style={{
+              position: "relative",
+              zIndex: 1,
               transform: ctaHover ? "translateX(4px)" : "translateX(0)",
-              transition: "transform 0.28s ease",
+              transition: "transform 0.28s cubic-bezier(0.16,1,0.3,1)",
             }}
           >
             <path d="M5 12h14M12 5l7 7-7 7" />
           </svg>
         </button>
 
+        {/* Auto-redirect countdown ring — stagger delay 5 */}
+        <div style={{ marginTop: "clamp(20px,2.8vh,36px)" }}>
+          <CountdownRing
+            total={COUNTDOWN_SECONDS}
+            remaining={countdown}
+            onSkip={doEnter}
+            visible={skipVisible && show}
+          />
+        </div>
+
         {/* Powered by line */}
         <div
           style={{
-            marginTop: "clamp(22px,3vh,38px)",
+            marginTop: "clamp(16px,2vh,28px)",
             display: "flex",
             alignItems: "center",
             gap: 18,
             opacity: show ? 0.42 : 0,
-            transition: "opacity 1s ease 0.6s",
+            transition: "opacity 1s cubic-bezier(0.16,1,0.3,1) 0.7s",
           }}
         >
           <div
@@ -657,7 +832,7 @@ function LandingPage() {
           backdropFilter: "blur(10px)",
           WebkitBackdropFilter: "blur(10px)",
           opacity: show ? 1 : 0,
-          transition: "opacity 1s ease 0.5s",
+          transition: "opacity 1s cubic-bezier(0.16,1,0.3,1) 0.5s",
         }}
       >
         <span
@@ -715,6 +890,7 @@ function LandingPage() {
         @keyframes flowLine { 0%{stroke-dashoffset:1200;opacity:0}10%{opacity:1}90%{opacity:1}100%{stroke-dashoffset:0;opacity:0} }
         @keyframes pulseDot { 0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.45;transform:scale(0.78)} }
         @keyframes pageWipe { 0%{opacity:0}18%{opacity:1}100%{opacity:1} }
+        @keyframes soulfireDigitIn { from{opacity:0;transform:translateY(12px) scale(0.8)} to{opacity:1;transform:translateY(0) scale(1)} }
         *{box-sizing:border-box} body{margin:0}
         #enter-dashboard-btn:focus-visible{outline:2px solid rgba(0,153,168,0.7);outline-offset:4px}
       `}</style>
@@ -739,10 +915,10 @@ function DashboardPage() {
 
   return (
     <DashboardShell>
-      <section className="mb-6 flex flex-wrap items-end justify-between gap-3">
+      <section className="mb-6 flex flex-wrap items-end justify-between gap-3 soulfire-entrance soulfire-delay-0">
         <div>
           <h2 className="text-xl font-semibold tracking-tight text-foreground">
-            RAG Summary Dashboard for June’26
+            RAG Summary Dashboard for June&apos;26
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
             Open risks, blockers and dependencies tracked across workstreams.
@@ -751,62 +927,57 @@ function DashboardPage() {
         <Legend />
       </section>
 
+      {/* Stat tiles — staggered card entrance */}
       <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <StatTile label="Open items" value={ragSummary.length} tone="info" />
-        <StatTile
-          label="High"
-          value={counts.critical ?? 0}
-          tone="critical"
-        />
-        <StatTile
-          label="Medium"
-          value={counts.warning ?? 0}
-          tone="warning"
-        />
-        <StatTile
-          label="Low"
-          value={counts.ontrack ?? 0}
-          tone="ontrack"
-        />
+        <StatTile label="Open items" value={ragSummary.length} tone="info" delay={0} />
+        <StatTile label="High"    value={counts.critical ?? 0} tone="critical" delay={1} />
+        <StatTile label="Medium"  value={counts.warning ?? 0}  tone="warning"  delay={2} />
+        <StatTile label="Low"     value={counts.ontrack ?? 0}  tone="ontrack"  delay={3} />
       </div>
 
-      <Card>
-        <CardHeader title="Open RAG items" />
-        <Table
-          headers={[
-            "SN",
-            "Workstream",
-            "Activity",
-            "Owner",
-            "Leads",
-            "Target Date",
-            "RAG",
-          ]}
-        >
-          {ragSummary.map((r) => (
-            <tr
-              key={r.sn}
-              className="border-t border-border/70 hover:bg-muted/40"
-            >
-              <Td>{r.sn}</Td>
-              <Td className="font-medium text-foreground">
-                {r.workstream}
-              </Td>
-              <Td className="max-w-[420px] text-foreground/80">
-                {r.activity}
-              </Td>
-              <Td>{r.owner}</Td>
-              <Td className="text-center whitespace-nowrap">{r.leads}</Td>
-              <Td className="tabular-nums">{r.targetDate}</Td>
-              <Td>
-                <RagPill status={r.rag} />
-              </Td>
-            </tr>
-          ))}
-        </Table>
-      </Card>
+      <div className="soulfire-entrance soulfire-delay-4">
+        <Card>
+          <CardHeader title="Open RAG items" />
+          <Table
+            headers={[
+              "SN",
+              "Workstream",
+              "Activity",
+              "Owner",
+              "Leads",
+              "Target Date",
+              "RAG",
+            ]}
+          >
+            {ragSummary.map((r, idx) => (
+              <tr
+                key={r.sn}
+                className="border-t border-border/70 hover:bg-muted/40"
+                style={{
+                  animation: `soulfireRowIn 420ms cubic-bezier(0.16,1,0.3,1) both`,
+                  animationDelay: `${200 + idx * 28}ms`,
+                }}
+              >
+                <Td>{r.sn}</Td>
+                <Td className="font-medium text-foreground">
+                  {r.workstream}
+                </Td>
+                <Td className="max-w-[420px] text-foreground/80">
+                  {r.activity}
+                </Td>
+                <Td>{r.owner}</Td>
+                <Td className="text-center whitespace-nowrap">{r.leads}</Td>
+                <Td className="tabular-nums">{r.targetDate}</Td>
+                <Td>
+                  <RagPill status={r.rag} />
+                </Td>
+              </tr>
+            ))}
+          </Table>
+        </Card>
+      </div>
 
-      <div className="mt-6">
+      <div className="mt-6 soulfire-entrance soulfire-delay-5">
         <Card>
           <CardHeader title="Activities pending from TSYS" accent />
           <Table
@@ -818,10 +989,14 @@ function DashboardPage() {
               "Date Raised",
             ]}
           >
-            {pendingFromTsys.map((r) => (
+            {pendingFromTsys.map((r, idx) => (
               <tr
                 key={r.sn}
                 className="border-t border-border/70 hover:bg-muted/40"
+                style={{
+                  animation: `soulfireRowIn 420ms cubic-bezier(0.16,1,0.3,1) both`,
+                  animationDelay: `${300 + idx * 28}ms`,
+                }}
               >
                 <Td>{r.sn}</Td>
                 <Td className="font-medium text-foreground">
@@ -839,6 +1014,14 @@ function DashboardPage() {
           </Table>
         </Card>
       </div>
+
+      {/* Keyframe for row animation — referenced inline */}
+      <style>{`
+        @keyframes soulfireRowIn {
+          from { opacity: 0; transform: translateX(-8px); }
+          to   { opacity: 1; transform: translateX(0); }
+        }
+      `}</style>
     </DashboardShell>
   );
 }
@@ -887,7 +1070,10 @@ function RagPill({ status }: { status: RagStatus }) {
   return (
     <span
       className="inline-flex min-w-[88px] items-center justify-center rounded-sm px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white"
-      style={{ background: ragColor(status) }}
+      style={{
+        background: ragColor(status),
+        animation: "soulfireScaleIn 0.35s cubic-bezier(0.16,1,0.3,1) both",
+      }}
     >
       {label}
     </span>
@@ -898,10 +1084,12 @@ function StatTile({
   label,
   value,
   tone,
+  delay = 0,
 }: {
   label: string;
   value: number;
   tone: "info" | "critical" | "warning" | "ontrack";
+  delay?: number;
 }) {
   const bar =
     tone === "info"
@@ -911,21 +1099,34 @@ function StatTile({
         : tone === "warning"
           ? "var(--rag-warning)"
           : "var(--rag-ontrack)";
+
+  // Animated count-up with stagger delay
+  const displayValue = useCountUp(value, 900, 150 + delay * 120);
+
   return (
     <div
-      className="relative overflow-hidden rounded-lg border border-border bg-card p-4"
-      style={{ boxShadow: "var(--shadow-card)" }}
+      className="relative overflow-hidden rounded-lg border border-border bg-card p-4 soulfire-hover-lift"
+      style={{
+        boxShadow: "var(--shadow-card)",
+        animation: `soulfireCardIn 680ms cubic-bezier(0.16,1,0.3,1) both`,
+        animationDelay: `${delay * 90}ms`,
+      }}
     >
+      {/* Animated accent bar */}
       <div
         className="absolute inset-y-0 left-0 w-1"
-        style={{ background: bar }}
+        style={{
+          background: bar,
+          animation: "soulfireFadeIn 0.6s ease both",
+          animationDelay: `${150 + delay * 90}ms`,
+        }}
       />
       <div className="pl-2">
         <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
           {label}
         </div>
         <div className="mt-1 text-2xl font-semibold tabular-nums text-foreground">
-          {value}
+          {displayValue}
         </div>
       </div>
     </div>
@@ -935,7 +1136,7 @@ function StatTile({
 function Card({ children }: { children: React.ReactNode }) {
   return (
     <div
-      className="overflow-hidden rounded-lg border border-border bg-card"
+      className="soulfire-hover-lift overflow-hidden rounded-lg border border-border bg-card"
       style={{ boxShadow: "var(--shadow-card)" }}
     >
       {children}

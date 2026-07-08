@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
+import { useCountUp } from "@/hooks/useCountUp";
 import {
   Bar,
   BarChart,
@@ -160,13 +161,14 @@ function ProgramPage() {
       </section>
 
       <div className="mb-6 grid grid-cols-2 gap-0 overflow-hidden rounded-lg border border-border md:grid-cols-4">
-        <Kpi label="Total Activities" value={k.total} sub="Across 13 workstreams" tone="navy" />
-        <Kpi label="Completed" value={k.completed} sub="Activities done" tone="ontrack" />
-        <Kpi label="WIP" value={k.wip} sub="Work in progress" tone="info" />
-        <Kpi label="Yet to Start" value={k.notStarted} sub="Planned Jul – Nov" tone="muted" />
+        <Kpi label="Total Activities" value={k.total} sub="Across 13 workstreams" tone="navy" delay={0} />
+        <Kpi label="Completed" value={k.completed} sub="Activities done" tone="ontrack" delay={1} />
+        <Kpi label="WIP" value={k.wip} sub="Work in progress" tone="info" delay={2} />
+        <Kpi label="Yet to Start" value={k.notStarted} sub="Planned Jul – Nov" tone="muted" delay={3} />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
+        <div className="soulfire-entrance soulfire-delay-4">
         <Panel title="Activity Completion Status">
           <div className="h-72">
             <ResponsiveContainer>
@@ -205,7 +207,9 @@ function ProgramPage() {
             </ResponsiveContainer>
           </div>
         </Panel>
+        </div>
 
+        <div className="soulfire-entrance soulfire-delay-5">
         <Panel title="% Completion by Phase">
           <div className="h-72">
             <ResponsiveContainer>
@@ -244,7 +248,9 @@ function ProgramPage() {
             </ResponsiveContainer>
           </div>
         </Panel>
+        </div>
 
+        <div className="soulfire-entrance soulfire-delay-6">
         <Panel title="Activities by Department & Status">
           <div className="h-72">
             <ResponsiveContainer>
@@ -276,6 +282,7 @@ function ProgramPage() {
             </ResponsiveContainer>
           </div>
         </Panel>
+        </div>
       </div>
 
       <div className="mt-6">
@@ -357,7 +364,8 @@ function ActivityList({ activities }: { activities: any[] }) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search activity, lead, phase or deadline…"
-            className="min-w-[200px] flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm transition focus:border-[var(--fed-gold)] focus:outline-none focus:ring-2 focus:ring-[var(--fed-gold)]/30"
+            className="min-w-[200px] flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm soulfire-focus-ring transition"
+            style={{ transition: "border-color 0.22s ease, box-shadow 0.22s ease" }}
           />
           <FilterChips
             label="Status"
@@ -386,12 +394,17 @@ function ActivityList({ activities }: { activities: any[] }) {
         </div>
 
         <div className="space-y-3">
-          {filtered.map(([ws, list]) => {
+          {filtered.map(([ws, list], wsIdx) => {
             const isOpen = openStreams[ws] !== false;
             return (
               <div
                 key={ws}
-                className="overflow-hidden rounded-lg border border-border bg-card transition hover:border-[var(--fed-gold)]/60 hover:shadow-md"
+                className="overflow-hidden rounded-lg border border-border bg-card hover:border-[var(--fed-gold)]/60 hover:shadow-md"
+                style={{
+                  transition: "border-color 0.22s ease, box-shadow 0.22s ease",
+                  animation: "soulfireCardIn 680ms cubic-bezier(0.16,1,0.3,1) both",
+                  animationDelay: `${wsIdx * 40}ms`,
+                }}
               >
                 <button
                   onClick={() => toggle(ws)}
@@ -408,8 +421,11 @@ function ActivityList({ activities }: { activities: any[] }) {
                     </span>
                   </span>
                   <span
-                    className="flex h-6 w-6 items-center justify-center rounded-full bg-background/80 text-muted-foreground transition-transform duration-200"
-                    style={{ transform: isOpen ? "rotate(180deg)" : "rotate(0deg)" }}
+                    className="flex h-6 w-6 items-center justify-center rounded-full bg-background/80 text-muted-foreground"
+                    style={{
+                      transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                      transition: "transform 0.3s cubic-bezier(0.16,1,0.3,1)",
+                    }}
                     aria-hidden
                   >
                     ▾
@@ -617,11 +633,13 @@ function Kpi({
   value,
   sub,
   tone,
+  delay = 0,
 }: {
   label: string;
   value: number | string;
   sub: string;
   tone: "navy" | "ontrack" | "info" | "muted" | "critical" | "accent";
+  delay?: number;
 }) {
   const bg =
     tone === "navy"
@@ -637,8 +655,21 @@ function Kpi({
               : "oklch(0.22 0.07 230)";
   const accentText =
     tone === "accent" ? "oklch(0.78 0.13 195)" : tone === "ontrack" ? "oklch(0.85 0.18 150)" : "white";
+
+  // Animate numeric values only
+  const numericValue = typeof value === "number" ? value : 0;
+  const isNumeric = typeof value === "number";
+  const animated = useCountUp(numericValue, 900, 100 + delay * 100);
+
   return (
-    <div className="border-r border-white/10 px-4 py-3 text-white last:border-r-0" style={{ background: bg }}>
+    <div
+      className="border-r border-white/10 px-4 py-3 text-white last:border-r-0"
+      style={{
+        background: bg,
+        animation: "soulfireCardIn 680ms cubic-bezier(0.16,1,0.3,1) both",
+        animationDelay: `${delay * 80}ms`,
+      }}
+    >
       <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/70">
         {label}
       </div>
@@ -646,7 +677,7 @@ function Kpi({
         className="mt-1 text-3xl font-semibold tabular-nums"
         style={{ color: accentText }}
       >
-        {value}
+        {isNumeric ? animated : value}
       </div>
       <div className="mt-0.5 text-[11px] text-white/60">{sub}</div>
     </div>

@@ -164,3 +164,240 @@
     color: var(--color-foreground);
   }
 }
+
+/* ============================================================
+   SOULFIRE ANIMATION SYSTEM
+   Premium micro-interactions — colors never altered here
+   ============================================================ */
+
+/* ── Custom easing tokens ── */
+:root {
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --anim-duration-fast: 220ms;
+  --anim-duration-base: 420ms;
+  --anim-duration-slow: 680ms;
+}
+
+/* ── Keyframes ── */
+
+/* Fade + slide up — main entrance animation */
+@keyframes soulfireFadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fade + slide down — for top bars */
+@keyframes soulfireFadeSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Simple fade in */
+@keyframes soulfireFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Scale in from slightly smaller */
+@keyframes soulfireScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Shimmer sweep — left to right */
+@keyframes soulfireShimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* Pulsing glow for KPI accent bars */
+@keyframes soulfirePulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 currentColor; opacity: 1; }
+  50%       { box-shadow: 0 0 8px 2px currentColor; opacity: 0.85; }
+}
+
+/* Animated progress bar fill */
+@keyframes soulfireProgressFill {
+  from { width: 0%; }
+  to   { width: var(--progress-target, 100%); }
+}
+
+/* Countdown ring — stroke-dashoffset sweep */
+@keyframes soulfireCountdownRing {
+  from { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: 283; } /* 2π × 45 ≈ 283 */
+}
+
+/* Slide in from left for active nav indicator */
+@keyframes soulfireTabSlide {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* Row stagger — used on table rows */
+@keyframes soulfireRowIn {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Card entrance for stat tiles */
+@keyframes soulfireCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Floating number swap for countdown digits */
+@keyframes soulfireDigitOut {
+  to { opacity: 0; transform: translateY(-12px) scale(0.8); }
+}
+@keyframes soulfireDigitIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.8); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Soft pulse for the skip button */
+@keyframes soulfireSkipPulse {
+  0%, 100% { opacity: 0.7; }
+  50%       { opacity: 1; }
+}
+
+/* Page wipe in (already exists in inline styles, kept for reference) */
+@keyframes soulfirePageWipe {
+  0%   { opacity: 0; }
+  20%  { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+/* ── Utility classes ── */
+
+/* Entrance: fade + slide up */
+.soulfire-entrance {
+  animation: soulfireFadeSlideUp var(--anim-duration-slow) var(--ease-spring) both;
+}
+
+/* Header: fade + slide down */
+.soulfire-entrance-down {
+  animation: soulfireFadeSlideDown var(--anim-duration-slow) var(--ease-spring) both;
+}
+
+/* Generic fade in */
+.soulfire-fade-in {
+  animation: soulfireFadeIn var(--anim-duration-base) var(--ease-smooth) both;
+}
+
+/* Card scale in */
+.soulfire-card-in {
+  animation: soulfireCardIn var(--anim-duration-slow) var(--ease-spring) both;
+}
+
+/* Stagger delay helpers */
+.soulfire-delay-0  { animation-delay: 0ms; }
+.soulfire-delay-1  { animation-delay: 80ms; }
+.soulfire-delay-2  { animation-delay: 160ms; }
+.soulfire-delay-3  { animation-delay: 240ms; }
+.soulfire-delay-4  { animation-delay: 320ms; }
+.soulfire-delay-5  { animation-delay: 400ms; }
+.soulfire-delay-6  { animation-delay: 480ms; }
+.soulfire-delay-7  { animation-delay: 560ms; }
+.soulfire-delay-8  { animation-delay: 640ms; }
+.soulfire-delay-9  { animation-delay: 720ms; }
+
+/* Hover lift — micro-interaction on cards */
+.soulfire-hover-lift {
+  transition: transform var(--anim-duration-fast) var(--ease-spring),
+              box-shadow var(--anim-duration-fast) var(--ease-smooth);
+}
+.soulfire-hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px oklch(0.2 0.05 260 / 0.12),
+              0 2px 8px oklch(0.2 0.05 260 / 0.08);
+}
+
+/* Shimmer button overlay */
+.soulfire-shimmer {
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.07) 50%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  animation: soulfireShimmer 2.4s linear infinite;
+}
+
+/* Row stagger animation for table rows — apply via inline style for nth-delay */
+.soulfire-row-in {
+  animation: soulfireRowIn var(--anim-duration-base) var(--ease-spring) both;
+}
+
+/* Page section entrance wrapper */
+.soulfire-page-enter {
+  animation: soulfireFadeSlideUp 0.5s var(--ease-spring) both;
+}
+
+/* Nav tab hover underline */
+.soulfire-tab-underline::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transition: transform var(--anim-duration-fast) var(--ease-spring);
+  transform-origin: left center;
+}
+.soulfire-tab-underline:hover::after,
+.soulfire-tab-underline[data-active]::after {
+  transform: scaleX(1);
+}
+
+/* Focus ring for inputs */
+.soulfire-focus-ring:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px oklch(0.6 0.13 195 / 0.25);
+  border-color: oklch(0.6 0.13 195 / 0.6);
+  transition: box-shadow var(--anim-duration-fast) var(--ease-smooth),
+              border-color var(--anim-duration-fast) var(--ease-smooth);
+}
+
+/* Animated left accent bar on stat tiles */
+.soulfire-accent-bar {
+  animation: soulfireFadeIn 0.4s ease both,
+             soulfireProgressFill 0.8s var(--ease-spring) both;
+  transform-origin: top;
+}
