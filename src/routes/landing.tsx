@@ -271,6 +271,10 @@ function LandingPage() {
   }, [mounted]);
 
   const fadeIn = mounted && phase !== "zooming";
+  // Cast to string so TS control-flow narrowing doesn't eliminate "zooming"
+  // inside the transform ternary (which is evaluated even when fadeIn is true
+  // during the transition animation).
+  const currentPhase: string = phase;
 
   return (
     <div style={{
@@ -438,7 +442,7 @@ function LandingPage() {
             position: "relative",
             opacity: fadeIn ? 1 : 0,
             transform: fadeIn
-              ? (phase === "zooming" ? "scale(1.15) translateY(-20px)" : "translateY(0) scale(1)")
+              ? (currentPhase === "zooming" ? "scale(1.15) translateY(-20px)" : "translateY(0) scale(1)")
               : "translateY(32px) scale(0.9)",
             transition: "opacity 1s cubic-bezier(0.16,1,0.3,1), transform 1.1s cubic-bezier(0.16,1,0.3,1)",
             marginBottom: "clamp(28px, 4vh, 48px)",
@@ -577,7 +581,7 @@ function LandingPage() {
           onClick={handleEnter}
           style={{
             position: "relative",
-            cursor: phase === "zooming" ? "default" : "pointer",
+            cursor: currentPhase === "zooming" ? "default" : "pointer",
             border: "none",
             outline: "none",
             borderRadius: 100,

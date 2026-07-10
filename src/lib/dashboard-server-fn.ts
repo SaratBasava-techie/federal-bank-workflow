@@ -58,7 +58,7 @@ export const getDashboardData = createServerFn({ method: "GET" }).handler(
       activities: (staticActivities as unknown as ActivityItem[]),
       riskLogs: staticRisks as RiskLogItem[],
       decisionLogs: staticDecisions as DecisionLogItem[],
-      checklist: staticChecklist,
+      checklist: (staticChecklist as unknown as ChecklistItem[]),
     };
 
     if (!hasAnyUrl && !useLocalFiles) {
