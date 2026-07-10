@@ -85,7 +85,7 @@ function JointChecklistPage() {
 
   const counts = useMemo(() => {
     const c = { NS: 0, IP: 0, D: 0, B: 0 } as Record<Status, number>;
-    items.forEach((i) => c[i.status]++);
+    items.forEach((i) => { if (i.status in c) c[i.status]++; });
     return c;
   }, [items]);
 
@@ -171,15 +171,15 @@ function JointChecklistPage() {
                       <td className="px-3 py-3 text-xs break-words whitespace-normal text-left tabular-nums">{formatDate(r.finish)}</td>
                       <td className="px-3 py-3 text-xs break-words whitespace-normal text-left">{r.by}</td>
                       <td className="px-3 py-3 text-left">
-                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap ${ownerMeta[r.owner]}`}>
-                          {r.owner}
+                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap ${ownerMeta[r.owner] ?? "bg-gray-100 text-gray-800"}`}>
+                          {r.owner ?? "—"}
                         </span>
                       </td>
                       <td className="px-3 py-3 text-left">
                         <span
-                          className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap ${statusMeta[r.status].cls}`}
+                          className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap ${(statusMeta[r.status] ?? statusMeta.NS).cls}`}
                         >
-                          {statusMeta[r.status].label}
+                          {(statusMeta[r.status] ?? statusMeta.NS).label}
                         </span>
                       </td>
                     </tr>

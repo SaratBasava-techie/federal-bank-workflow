@@ -571,7 +571,8 @@ function StatusPill({ status }: { status: string }) {
   );
 }
 
-function urgencyOf(date: string): "overdue" | "soon" | "later" | "unknown" {
+function urgencyOf(date: string | undefined | null): "overdue" | "soon" | "later" | "unknown" {
+  if (!date) return "unknown";
   // Source format e.g. "30-Jun" or "5-Oct" — assume programme year 2026.
   let t = Date.parse(date);
   if (Number.isNaN(t)) {
