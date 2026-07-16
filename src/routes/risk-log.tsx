@@ -8,7 +8,10 @@ export const Route = createFileRoute("/risk-log")({
   head: () => ({
     meta: [
       { title: "Risk Log · Project Soulfire" },
-      { name: "description", content: "Programme-level risk log for the Federal Bank credit card portfolio migration." },
+      {
+        name: "description",
+        content: "Programme-level risk log for the Federal Bank credit card portfolio migration.",
+      },
     ],
   }),
   component: RiskLogPage,
@@ -16,7 +19,16 @@ export const Route = createFileRoute("/risk-log")({
 
 function RiskLogPage() {
   const { data: response } = useDashboardData();
-  const riskLogs = (response?.data?.riskLogs ?? staticRiskLogs) as { sn: number; workstream: string; detail: string; mitigation: string; raised: string; level: string; status: LogStatus; remarks: string }[];
+  const riskLogs = (response?.data?.riskLogs ?? staticRiskLogs) as {
+    sn: number;
+    workstream: string;
+    detail: string;
+    mitigation: string;
+    raised: string;
+    level: string;
+    status: LogStatus;
+    remarks: string;
+  }[];
   const [filter, setFilter] = useState<LogStatus | "All">("All");
   const rows = filter === "All" ? riskLogs : riskLogs.filter((r) => r.status === filter);
   const counts = riskLogs.reduce(
@@ -43,7 +55,18 @@ function RiskLogPage() {
       <Card>
         <CardHeader title="Risk Log" />
         <StatusFilterBar value={filter} onChange={setFilter} />
-        <Table headers={["SN", "Workstream", "Issue / Risk Detail", "Mitigation Plan", "Date Raised", "Level", "Status", "Remarks"]}>
+        <Table
+          headers={[
+            "SN",
+            "Workstream",
+            "Issue / Risk Detail",
+            "Mitigation Plan",
+            "Date Raised",
+            "Level",
+            "Status",
+            "Remarks",
+          ]}
+        >
           {rows.map((r) => (
             <tr key={r.sn} className="border-t border-border/70 hover:bg-muted/40">
               <Td>{r.sn}</Td>
@@ -51,8 +74,12 @@ function RiskLogPage() {
               <Td className="max-w-[300px] text-foreground/80">{r.detail}</Td>
               <Td className="max-w-[240px] text-foreground/70 text-xs">{r.mitigation || "—"}</Td>
               <Td className="tabular-nums whitespace-nowrap">{r.raised}</Td>
-              <Td><LevelPill level={r.level} /></Td>
-              <Td><LogStatusPill status={r.status} /></Td>
+              <Td>
+                <LevelPill level={r.level} />
+              </Td>
+              <Td>
+                <LogStatusPill status={r.status} />
+              </Td>
               <Td className="max-w-[200px] text-xs text-muted-foreground">{r.remarks || "—"}</Td>
             </tr>
           ))}
@@ -64,23 +91,36 @@ function RiskLogPage() {
 
 function StatTile({ label, value, color }: { label: string; value: number; color: string }) {
   return (
-    <div className="relative overflow-hidden rounded-lg border border-border bg-card p-4" style={{ boxShadow: "var(--shadow-card)" }}>
+    <div
+      className="relative overflow-hidden rounded-lg border border-border bg-card p-4"
+      style={{ boxShadow: "var(--shadow-card)" }}
+    >
       <div className="absolute inset-y-0 left-0 w-1" style={{ background: color }} />
       <div className="pl-2">
-        <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{label}</div>
+        <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+          {label}
+        </div>
         <div className="mt-1 text-2xl font-semibold tabular-nums text-foreground">{value}</div>
       </div>
     </div>
   );
 }
 
-function StatusFilterBar({ value, onChange }: { value: LogStatus | "All"; onChange: (v: LogStatus | "All") => void }) {
+function StatusFilterBar({
+  value,
+  onChange,
+}: {
+  value: LogStatus | "All";
+  onChange: (v: LogStatus | "All") => void;
+}) {
   const opts: (LogStatus | "All")[] = ["All", "Open", "WIP", "Closed"];
   const colorFor = (o: LogStatus | "All") =>
     o === "Open" ? "#dc2626" : o === "WIP" ? "#d97706" : o === "Closed" ? "#16a34a" : "#475569";
   return (
     <div className="flex flex-wrap items-center gap-2 border-b border-border bg-muted/30 px-4 py-2">
-      <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Filter</span>
+      <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+        Filter
+      </span>
       {opts.map((o) => {
         const active = value === o;
         const c = colorFor(o);
@@ -90,9 +130,16 @@ function StatusFilterBar({ value, onChange }: { value: LogStatus | "All"; onChan
             type="button"
             onClick={() => onChange(o)}
             className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide transition"
-            style={{ background: active ? c : "transparent", color: active ? "white" : c, borderColor: c }}
+            style={{
+              background: active ? c : "transparent",
+              color: active ? "white" : c,
+              borderColor: c,
+            }}
           >
-            <span className="inline-block h-2 w-2 rounded-full" style={{ background: active ? "white" : c }} />
+            <span
+              className="inline-block h-2 w-2 rounded-full"
+              style={{ background: active ? "white" : c }}
+            />
             {o}
           </button>
         );
@@ -127,7 +174,10 @@ function LogStatusPill({ status }: { status: LogStatus }) {
 
 function Card({ children }: { children: React.ReactNode }) {
   return (
-    <div className="overflow-hidden rounded-lg border border-border bg-card" style={{ boxShadow: "var(--shadow-card)" }}>
+    <div
+      className="overflow-hidden rounded-lg border border-border bg-card"
+      style={{ boxShadow: "var(--shadow-card)" }}
+    >
       {children}
     </div>
   );
@@ -135,7 +185,10 @@ function Card({ children }: { children: React.ReactNode }) {
 
 function CardHeader({ title }: { title: string }) {
   return (
-    <div className="px-4 py-2.5 text-sm font-semibold text-white" style={{ background: "var(--fed-navy-deep)" }}>
+    <div
+      className="px-4 py-2.5 text-sm font-semibold text-white"
+      style={{ background: "var(--fed-navy-deep)" }}
+    >
       {title}
     </div>
   );
@@ -147,7 +200,11 @@ function Table({ headers, children }: { headers: string[]; children: React.React
       <table className="w-full text-sm">
         <thead>
           <tr className="bg-muted/60 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-            {headers.map((h) => (<th key={h} className="px-4 py-2.5">{h}</th>))}
+            {headers.map((h) => (
+              <th key={h} className="px-4 py-2.5">
+                {h}
+              </th>
+            ))}
           </tr>
         </thead>
         <tbody>{children}</tbody>

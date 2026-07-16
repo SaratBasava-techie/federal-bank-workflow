@@ -9,12 +9,7 @@ import { useState, useEffect, useRef } from "react";
  * @param delay    - Delay before animation starts in ms (default 0)
  * @param enabled  - Whether animation should run (default true)
  */
-export function useCountUp(
-  target: number,
-  duration = 900,
-  delay = 0,
-  enabled = true,
-): number {
+export function useCountUp(target: number, duration = 900, delay = 0, enabled = true): number {
   const [value, setValue] = useState(0);
   const raf = useRef<number | null>(null);
   const startRef = useRef<number | null>(null);

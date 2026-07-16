@@ -53,9 +53,7 @@ export const uploadExcelFile = createServerFn({ method: "POST" })
     const buffer = Buffer.from(data, "base64");
     fs.writeFileSync(targetPath, buffer);
 
-    console.log(
-      `[Upload] Saved ${targetFileName} (${buffer.byteLength} bytes)`,
-    );
+    console.log(`[Upload] Saved ${targetFileName} (${buffer.byteLength} bytes)`);
 
     return {
       success: true,

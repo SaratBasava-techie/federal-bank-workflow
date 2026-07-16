@@ -55,10 +55,10 @@ export const getDashboardData = createServerFn({ method: "GET" }).handler(
     const staticData: DashboardData = {
       ragSummary: staticRag as RagItem[],
       pendingFromTsys: staticPending as PendingItem[],
-      activities: (staticActivities as unknown as ActivityItem[]),
+      activities: staticActivities as unknown as ActivityItem[],
       riskLogs: staticRisks as RiskLogItem[],
       decisionLogs: staticDecisions as DecisionLogItem[],
-      checklist: (staticChecklist as unknown as ChecklistItem[]),
+      checklist: staticChecklist as unknown as ChecklistItem[],
     };
 
     if (!hasAnyUrl && !useLocalFiles) {
@@ -88,11 +88,9 @@ export const getDashboardData = createServerFn({ method: "GET" }).handler(
           // Force static data for RAG and TSYS to reflect recent manual updates
           ragSummary: staticData.ragSummary,
           pendingFromTsys: staticData.pendingFromTsys,
-          activities:
-            data.activities.length > 0 ? data.activities : staticData.activities,
+          activities: data.activities.length > 0 ? data.activities : staticData.activities,
           riskLogs: data.riskLogs.length > 0 ? data.riskLogs : staticData.riskLogs,
-          decisionLogs:
-            data.decisionLogs.length > 0 ? data.decisionLogs : staticData.decisionLogs,
+          decisionLogs: data.decisionLogs.length > 0 ? data.decisionLogs : staticData.decisionLogs,
           checklist: data.checklist.length > 0 ? data.checklist : staticData.checklist,
         },
         isConnected: true, // Mocked as connected to hide error

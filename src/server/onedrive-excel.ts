@@ -134,7 +134,9 @@ async function getMicrosoftGraphAccessToken(): Promise<string> {
   const clientSecret = process.env.MICROSOFT_CLIENT_SECRET;
 
   if (!tenantId || !clientId || !clientSecret) {
-    throw new Error("Missing Microsoft Entra ID configuration (tenant ID, client ID, or client secret)");
+    throw new Error(
+      "Missing Microsoft Entra ID configuration (tenant ID, client ID, or client secret)",
+    );
   }
 
   const res = await fetch(`https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`, {
@@ -192,14 +194,19 @@ async function fetchExcelBuffer(shareUrl: string): Promise<ArrayBuffer> {
 
       return res.arrayBuffer();
     } catch (e: any) {
-      console.warn(`[OneDrive Secure Auth] secure fetch failed, falling back to public download path:`, e.message || e);
+      console.warn(
+        `[OneDrive Secure Auth] secure fetch failed, falling back to public download path:`,
+        e.message || e,
+      );
     }
   }
 
   const directUrl = onedriveShareToDirectUrl(shareUrl);
   const res = await fetch(directUrl, { redirect: "follow" });
   if (!res.ok) {
-    throw new Error(`Failed to fetch Excel from OneDrive: ${res.status} ${res.statusText} (${directUrl})`);
+    throw new Error(
+      `Failed to fetch Excel from OneDrive: ${res.status} ${res.statusText} (${directUrl})`,
+    );
   }
   return res.arrayBuffer();
 }
@@ -439,9 +446,7 @@ export async function fetchDashboardDataFromOneDrive(): Promise<DashboardData> {
     ragSummary = parseRagSheet(readSheet(wb, "RAG"));
     // Try multiple possible sheet names for the TSYS activities
     const tsysRows =
-      readSheet(wb, "TSYS ACTIVITIES") ||
-      readSheet(wb, "TSYS") ||
-      readSheet(wb, "Sheet2");
+      readSheet(wb, "TSYS ACTIVITIES") || readSheet(wb, "TSYS") || readSheet(wb, "Sheet2");
     pendingFromTsys = parsePendingSheet(tsysRows.length ? tsysRows : []);
   }
 

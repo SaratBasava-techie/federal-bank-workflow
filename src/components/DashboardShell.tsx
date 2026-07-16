@@ -13,11 +13,7 @@ const tabs = [
   { to: "/decision-log", search: undefined, label: "Decision Log" },
 ] as const;
 
-export function DashboardShell({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export function DashboardShell({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
   const { data: response } = useDashboardData();
 
@@ -73,9 +69,7 @@ export function DashboardShell({
 
             <div className="mb-2 rounded-md border border-white/15 bg-white/5 px-3 py-1.5 text-[11px] text-white/80 backdrop-blur-sm transition-all duration-200 hover:bg-white/10 hover:border-white/25">
               Reporting period:
-              <span className="ml-1 font-semibold text-white">
-                June 2026
-              </span>
+              <span className="ml-1 font-semibold text-white">June 2026</span>
             </div>
           </div>
         </div>
@@ -91,7 +85,9 @@ export function DashboardShell({
             <div className="flex items-center gap-2">
               <span className="flex h-2 w-2 rounded-full bg-destructive animate-pulse" />
               <span className="font-semibold">Data Disconnected:</span>
-              <span>{response?.error || "Unable to sync live data. Using offline fallback data."}</span>
+              <span>
+                {response?.error || "Unable to sync live data. Using offline fallback data."}
+              </span>
             </div>
             <span className="text-xs opacity-75 bg-destructive/10 rounded px-2 py-0.5 font-medium select-none">
               OFFLINE FALLBACK
@@ -101,10 +97,7 @@ export function DashboardShell({
       )}
 
       {/* Page content — re-animates on route change via key */}
-      <main
-        key={pathname}
-        className="mx-auto max-w-[1400px] px-6 py-8 soulfire-page-enter"
-      >
+      <main key={pathname} className="mx-auto max-w-[1400px] px-6 py-8 soulfire-page-enter">
         {children}
       </main>
 

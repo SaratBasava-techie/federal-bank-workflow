@@ -1,424 +1,761 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="dark">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project Soulfire · KPMG</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Soulfire · KPMG</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "system-ui", "sans-serif"],
+            },
+            colors: {
+              background: "oklch(0.129 0.042 264.695)",
+              foreground: "oklch(0.984 0.003 247.858)",
+              card: "oklch(0.208 0.042 265.755)",
+              "card-foreground": "oklch(0.984 0.003 247.858)",
+              border: "oklch(1 0 0 / 10%)",
+              muted: "oklch(0.279 0.041 260.031)",
+              "muted-foreground": "oklch(0.704 0.04 256.788)",
+              fedNavy: "oklch(0.25 0.09 265)",
+              fedNavyDeep: "oklch(0.16 0.06 265)",
+              fedGold: "oklch(0.78 0.15 75)",
+              ragCritical: "oklch(0.58 0.22 25)",
+              ragWarning: "oklch(0.78 0.16 70)",
+              ragOntrack: "oklch(0.62 0.17 150)",
+              ragInfo: "oklch(0.6 0.14 220)",
+            },
           },
-          colors: {
-            background: 'oklch(0.129 0.042 264.695)',
-            foreground: 'oklch(0.984 0.003 247.858)',
-            card: 'oklch(0.208 0.042 265.755)',
-            'card-foreground': 'oklch(0.984 0.003 247.858)',
-            border: 'oklch(1 0 0 / 10%)',
-            muted: 'oklch(0.279 0.041 260.031)',
-            'muted-foreground': 'oklch(0.704 0.04 256.788)',
-            fedNavy: 'oklch(0.25 0.09 265)',
-            fedNavyDeep: 'oklch(0.16 0.06 265)',
-            fedGold: 'oklch(0.78 0.15 75)',
-            ragCritical: 'oklch(0.58 0.22 25)',
-            ragWarning: 'oklch(0.78 0.16 70)',
-            ragOntrack: 'oklch(0.62 0.17 150)',
-            ragInfo: 'oklch(0.6 0.14 220)',
-          }
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: theme("colors.background");
+        color: theme("colors.foreground");
+        font-family: "Inter", sans-serif;
+      }
+      .landing-bg {
+        background: linear-gradient(158deg, #00071c 0%, #000d30 38%, #001a4f 68%, #00205e 100%);
+      }
+      .dashboard-header-bg {
+        background: linear-gradient(135deg, oklch(0.18 0.07 265), oklch(0.3 0.11 260));
+      }
+      .shadow-card {
+        box-shadow:
+          0 1px 3px oklch(0.2 0.05 260 / 0.08),
+          0 8px 24px oklch(0.2 0.05 260 / 0.06);
+      }
+      @keyframes pulseDot {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.45;
+          transform: scale(0.78);
         }
       }
-    }
-  </script>
-  <style>
-    body {
-      background-color: theme('colors.background');
-      color: theme('colors.foreground');
-      font-family: 'Inter', sans-serif;
-    }
-    .landing-bg {
-      background: linear-gradient(158deg, #00071c 0%, #000d30 38%, #001a4f 68%, #00205e 100%);
-    }
-    .dashboard-header-bg {
-      background: linear-gradient(135deg, oklch(0.18 0.07 265), oklch(0.3 0.11 260));
-    }
-    .shadow-card {
-      box-shadow: 0 1px 3px oklch(0.2 0.05 260 / 0.08), 0 8px 24px oklch(0.2 0.05 260 / 0.06);
-    }
-    @keyframes pulseDot { 0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.45;transform:scale(0.78)} }
-    @keyframes pageWipe { 0%{opacity:0}18%{opacity:1}100%{opacity:1} }
-    .pulse-dot { animation: pulseDot 2s ease-in-out infinite; }
-    .page-wipe { animation: pageWipe 0.95s cubic-bezier(0.7,0,0.1,1) forwards; }
-    .nav-tab-active { background-color: theme('colors.background'); color: theme('colors.foreground'); }
-    .nav-tab-inactive { color: rgba(255,255,255,0.7); }
-    .nav-tab-inactive:hover { background-color: rgba(255,255,255,0.1); color: #fff; }
-    
-    #landing-page, #dashboard-page {
-      display: none;
-    }
-    
-    /* Active view logic */
-    body.show-landing #landing-page { display: flex; }
-    body.show-dashboard #dashboard-page { display: block; }
+      @keyframes pageWipe {
+        0% {
+          opacity: 0;
+        }
+        18% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+      .pulse-dot {
+        animation: pulseDot 2s ease-in-out infinite;
+      }
+      .page-wipe {
+        animation: pageWipe 0.95s cubic-bezier(0.7, 0, 0.1, 1) forwards;
+      }
+      .nav-tab-active {
+        background-color: theme("colors.background");
+        color: theme("colors.foreground");
+      }
+      .nav-tab-inactive {
+        color: rgba(255, 255, 255, 0.7);
+      }
+      .nav-tab-inactive:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #fff;
+      }
 
-    /* Fix focus outline */
-    #enter-dashboard-btn:focus-visible { outline: 2px solid rgba(0,153,168,0.7); outline-offset: 4px; }
-  </style>
-</head>
-<body class="min-h-screen">
+      #landing-page,
+      #dashboard-page {
+        display: none;
+      }
 
-  <!-- Landing Page -->
-  <div id="landing-page" class="fixed inset-0 overflow-hidden landing-bg flex-col">
-    <!-- Grid overlay -->
-    <div class="absolute inset-0 pointer-events-none" style="background-image: linear-gradient(rgba(0,48,135,0.16) 1px, transparent 1px), linear-gradient(90deg, rgba(0,48,135,0.16) 1px, transparent 1px); background-size: 70px 70px; mask-image: radial-gradient(ellipse 78% 78% at 50% 50%, black 25%, transparent 100%); -webkit-mask-image: radial-gradient(ellipse 78% 78% at 50% 50%, black 25%, transparent 100%);"></div>
+      /* Active view logic */
+      body.show-landing #landing-page {
+        display: flex;
+      }
+      body.show-dashboard #dashboard-page {
+        display: block;
+      }
 
-    <!-- Ambient glows -->
-    <div class="absolute top-[5%] left-1/2 -translate-x-1/2 w-[65vw] h-[50vh] pointer-events-none" style="background: radial-gradient(circle, rgba(0,140,180,0.11) 0%, transparent 70%); filter: blur(70px);"></div>
-    <div class="absolute bottom-0 left-[15%] w-[38vw] h-[28vh] pointer-events-none" style="background: radial-gradient(circle, rgba(0,48,135,0.15) 0%, transparent 70%); filter: blur(55px);"></div>
+      /* Fix focus outline */
+      #enter-dashboard-btn:focus-visible {
+        outline: 2px solid rgba(0, 153, 168, 0.7);
+        outline-offset: 4px;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen">
+    <!-- Landing Page -->
+    <div id="landing-page" class="fixed inset-0 overflow-hidden landing-bg flex-col">
+      <!-- Grid overlay -->
+      <div
+        class="absolute inset-0 pointer-events-none"
+        style="
+          background-image:
+            linear-gradient(rgba(0, 48, 135, 0.16) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 48, 135, 0.16) 1px, transparent 1px);
+          background-size: 70px 70px;
+          mask-image: radial-gradient(ellipse 78% 78% at 50% 50%, black 25%, transparent 100%);
+          -webkit-mask-image: radial-gradient(
+            ellipse 78% 78% at 50% 50%,
+            black 25%,
+            transparent 100%
+          );
+        "
+      ></div>
 
-    <!-- TOP NAV -->
-    <nav class="relative z-10 flex items-center justify-between px-10 py-4 border-b border-white/5 bg-[#00071a]/40 backdrop-blur-md">
-      <div class="flex items-center gap-3.5">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/9/9d/KPMG_logo.svg" alt="KPMG" class="h-6 w-auto object-contain brightness-0 invert" />
-        <div class="w-px h-5 bg-white/15"></div>
-        <span class="text-[11px] font-semibold tracking-[0.13em] text-white/45 uppercase">Federal Bank</span>
-      </div>
-      <div class="flex items-center gap-2 px-3 py-1 rounded border border-amber-500/20 bg-amber-500/5">
-        <div class="w-1.5 h-1.5 rounded-full bg-amber-500 pulse-dot"></div>
-        <span class="text-[10px] font-bold tracking-[0.15em] text-amber-500/80 uppercase">Confidential</span>
-      </div>
-    </nav>
+      <!-- Ambient glows -->
+      <div
+        class="absolute top-[5%] left-1/2 -translate-x-1/2 w-[65vw] h-[50vh] pointer-events-none"
+        style="
+          background: radial-gradient(circle, rgba(0, 140, 180, 0.11) 0%, transparent 70%);
+          filter: blur(70px);
+        "
+      ></div>
+      <div
+        class="absolute bottom-0 left-[15%] w-[38vw] h-[28vh] pointer-events-none"
+        style="
+          background: radial-gradient(circle, rgba(0, 48, 135, 0.15) 0%, transparent 70%);
+          filter: blur(55px);
+        "
+      ></div>
 
-    <!-- HERO -->
-    <main class="flex-1 flex flex-col items-center justify-center relative z-10 px-6">
-      
-      <!-- Clean Logo -->
-      <div class="relative mb-[clamp(24px,3.5vh,44px)]">
-        <!-- Soft ambient halo -->
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] pointer-events-none z-0" style="background: radial-gradient(ellipse at center, rgba(0,120,200,0.12) 0%, rgba(0,80,160,0.06) 40%, transparent 70%); filter: blur(30px);"></div>
-        <!-- Exact KPMG Logo without circle/border -->
-        <img src="https://upload.wikimedia.org/wikipedia/commons/9/9d/KPMG_logo.svg" alt="KPMG" class="relative z-10 h-[clamp(60px,8vw,120px)] w-auto object-contain block drop-shadow-lg" />
-      </div>
+      <!-- TOP NAV -->
+      <nav
+        class="relative z-10 flex items-center justify-between px-10 py-4 border-b border-white/5 bg-[#00071a]/40 backdrop-blur-md"
+      >
+        <div class="flex items-center gap-3.5">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/9/9d/KPMG_logo.svg"
+            alt="KPMG"
+            class="h-6 w-auto object-contain brightness-0 invert"
+          />
+          <div class="w-px h-5 bg-white/15"></div>
+          <span class="text-[11px] font-semibold tracking-[0.13em] text-white/45 uppercase"
+            >Federal Bank</span
+          >
+        </div>
+        <div
+          class="flex items-center gap-2 px-3 py-1 rounded border border-amber-500/20 bg-amber-500/5"
+        >
+          <div class="w-1.5 h-1.5 rounded-full bg-amber-500 pulse-dot"></div>
+          <span class="text-[10px] font-bold tracking-[0.15em] text-amber-500/80 uppercase"
+            >Confidential</span
+          >
+        </div>
+      </nav>
 
-      <!-- Eyebrow -->
-      <div class="flex items-center gap-3 mb-[clamp(10px,1.8vh,18px)]">
-        <div class="w-9 h-px" style="background: linear-gradient(90deg,transparent,rgba(0,153,168,0.7))"></div>
-        <span class="text-[clamp(9px,0.9vw,12px)] font-semibold tracking-[0.22em] uppercase text-[#00b4c8]/80">Executive Dashboard</span>
-        <div class="w-9 h-px" style="background: linear-gradient(90deg,rgba(0,153,168,0.7),transparent)"></div>
-      </div>
+      <!-- HERO -->
+      <main class="flex-1 flex flex-col items-center justify-center relative z-10 px-6">
+        <!-- Clean Logo -->
+        <div class="relative mb-[clamp(24px,3.5vh,44px)]">
+          <!-- Soft ambient halo -->
+          <div
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] pointer-events-none z-0"
+            style="
+              background: radial-gradient(
+                ellipse at center,
+                rgba(0, 120, 200, 0.12) 0%,
+                rgba(0, 80, 160, 0.06) 40%,
+                transparent 70%
+              );
+              filter: blur(30px);
+            "
+          ></div>
+          <!-- Exact KPMG Logo without circle/border -->
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/9/9d/KPMG_logo.svg"
+            alt="KPMG"
+            class="relative z-10 h-[clamp(60px,8vw,120px)] w-auto object-contain block drop-shadow-lg"
+          />
+        </div>
 
-      <!-- Title -->
-      <h1 class="m-0 mb-[clamp(8px,1.2vh,14px)] text-[clamp(34px,6vw,86px)] font-extrabold tracking-[-0.03em] leading-none text-center" style="background: linear-gradient(135deg,#ffffff 0%,#a8d0ff 48%,#76bcff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
-        Project Soulfire
-      </h1>
+        <!-- Eyebrow -->
+        <div class="flex items-center gap-3 mb-[clamp(10px,1.8vh,18px)]">
+          <div
+            class="w-9 h-px"
+            style="background: linear-gradient(90deg, transparent, rgba(0, 153, 168, 0.7))"
+          ></div>
+          <span
+            class="text-[clamp(9px,0.9vw,12px)] font-semibold tracking-[0.22em] uppercase text-[#00b4c8]/80"
+            >Executive Dashboard</span
+          >
+          <div
+            class="w-9 h-px"
+            style="background: linear-gradient(90deg, rgba(0, 153, 168, 0.7), transparent)"
+          ></div>
+        </div>
 
-      <!-- Subtitle -->
-      <p class="m-0 mb-[clamp(30px,4.5vh,54px)] text-[clamp(13px,1.35vw,19px)] font-normal tracking-[0.025em] text-[#acd2ff]/60 text-center">
-        Federal Bank&nbsp;&nbsp;·&nbsp;&nbsp;Credit Card Portfolio Migration
-      </p>
+        <!-- Title -->
+        <h1
+          class="m-0 mb-[clamp(8px,1.2vh,14px)] text-[clamp(34px,6vw,86px)] font-extrabold tracking-[-0.03em] leading-none text-center"
+          style="
+            background: linear-gradient(135deg, #ffffff 0%, #a8d0ff 48%, #76bcff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+          "
+        >
+          Project Soulfire
+        </h1>
 
-      <!-- CTA Button -->
-      <button id="enter-dashboard-btn" onclick="enterDashboard()" class="relative border-none outline-none rounded-full px-[clamp(34px,3.8vw,58px)] py-[clamp(13px,1.4vw,17px)] text-[clamp(12px,1.05vw,15px)] font-bold tracking-[0.07em] uppercase text-white flex items-center gap-2.5 transition-all duration-300 hover:scale-105 hover:-translate-y-0.5 cursor-pointer" style="background: linear-gradient(135deg,#003087 0%,#006080 100%); box-shadow: 0 0 22px rgba(0,48,135,0.28), 0 8px 22px rgba(0,0,0,0.35);" onmouseover="this.style.background='linear-gradient(135deg,#0050cc 0%,#00a0b4 100%)'; this.style.boxShadow='0 0 44px rgba(0,153,168,0.42),0 0 90px rgba(0,48,135,0.25),0 14px 30px rgba(0,0,0,0.45)'" onmouseout="this.style.background='linear-gradient(135deg,#003087 0%,#006080 100%)'; this.style.boxShadow='0 0 22px rgba(0,48,135,0.28),0 8px 22px rgba(0,0,0,0.35)'">
-        <span>Click to Enter Dashboard</span>
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-300 group-hover:translate-x-1">
-          <path d="M5 12h14M12 5l7 7-7 7" />
-        </svg>
-      </button>
+        <!-- Subtitle -->
+        <p
+          class="m-0 mb-[clamp(30px,4.5vh,54px)] text-[clamp(13px,1.35vw,19px)] font-normal tracking-[0.025em] text-[#acd2ff]/60 text-center"
+        >
+          Federal Bank&nbsp;&nbsp;·&nbsp;&nbsp;Credit Card Portfolio Migration
+        </p>
 
-      <!-- Powered by line -->
-      <div class="mt-[clamp(22px,3vh,38px)] flex items-center gap-4 opacity-40">
-        <div class="w-5 h-px bg-[#0099a8]/50"></div>
-        <span class="text-[10px] font-semibold tracking-[0.18em] uppercase text-[#0099a8]/70">Powered by KPMG</span>
-        <div class="w-5 h-px bg-[#0099a8]/50"></div>
-      </div>
-    </main>
+        <!-- CTA Button -->
+        <button
+          id="enter-dashboard-btn"
+          onclick="enterDashboard()"
+          class="relative border-none outline-none rounded-full px-[clamp(34px,3.8vw,58px)] py-[clamp(13px,1.4vw,17px)] text-[clamp(12px,1.05vw,15px)] font-bold tracking-[0.07em] uppercase text-white flex items-center gap-2.5 transition-all duration-300 hover:scale-105 hover:-translate-y-0.5 cursor-pointer"
+          style="
+            background: linear-gradient(135deg, #003087 0%, #006080 100%);
+            box-shadow:
+              0 0 22px rgba(0, 48, 135, 0.28),
+              0 8px 22px rgba(0, 0, 0, 0.35);
+          "
+          onmouseover="
+            this.style.background = 'linear-gradient(135deg,#0050cc 0%,#00a0b4 100%)';
+            this.style.boxShadow =
+              '0 0 44px rgba(0,153,168,0.42),0 0 90px rgba(0,48,135,0.25),0 14px 30px rgba(0,0,0,0.45)';
+          "
+          onmouseout="
+            this.style.background = 'linear-gradient(135deg,#003087 0%,#006080 100%)';
+            this.style.boxShadow = '0 0 22px rgba(0,48,135,0.28),0 8px 22px rgba(0,0,0,0.35)';
+          "
+        >
+          <span>Click to Enter Dashboard</span>
+          <svg
+            width="17"
+            height="17"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="transition-transform duration-300 group-hover:translate-x-1"
+          >
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </button>
 
-    <!-- FOOTER -->
-    <footer class="relative z-10 flex items-center justify-between px-10 py-3 border-t border-white/5 bg-[#00071a]/30 backdrop-blur-md">
-      <span class="text-[10px] font-medium tracking-[0.14em] text-white/20 uppercase">© 2026 KPMG. All rights reserved.</span>
-      <span class="text-[10px] font-bold tracking-[0.2em] text-white/25 uppercase">Confidential · July 2026</span>
-      <span class="text-[10px] font-medium tracking-[0.1em] text-white/20">For internal use only</span>
-    </footer>
+        <!-- Powered by line -->
+        <div class="mt-[clamp(22px,3vh,38px)] flex items-center gap-4 opacity-40">
+          <div class="w-5 h-px bg-[#0099a8]/50"></div>
+          <span class="text-[10px] font-semibold tracking-[0.18em] uppercase text-[#0099a8]/70"
+            >Powered by KPMG</span
+          >
+          <div class="w-5 h-px bg-[#0099a8]/50"></div>
+        </div>
+      </main>
 
-    <!-- Zoom overlay container -->
-    <div id="zoom-overlay" class="fixed inset-0 z-50 pointer-events-none hidden" style="background: radial-gradient(circle at center,#001847 0%,#00071c 100%);"></div>
-  </div>
+      <!-- FOOTER -->
+      <footer
+        class="relative z-10 flex items-center justify-between px-10 py-3 border-t border-white/5 bg-[#00071a]/30 backdrop-blur-md"
+      >
+        <span class="text-[10px] font-medium tracking-[0.14em] text-white/20 uppercase"
+          >© 2026 KPMG. All rights reserved.</span
+        >
+        <span class="text-[10px] font-bold tracking-[0.2em] text-white/25 uppercase"
+          >Confidential · July 2026</span
+        >
+        <span class="text-[10px] font-medium tracking-[0.1em] text-white/20"
+          >For internal use only</span
+        >
+      </footer>
 
-  <!-- Dashboard Page -->
-  <div id="dashboard-page" class="min-h-screen bg-background hidden">
-    <header class="relative overflow-hidden text-white dashboard-header-bg">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/9/9d/KPMG_logo.svg" alt="" class="pointer-events-none absolute right-10 top-1/2 h-40 -translate-y-1/2 opacity-5 select-none brightness-0 invert" />
-      
-      <div class="relative mx-auto max-w-[1400px] px-6 py-5">
-        <div class="flex flex-wrap items-start justify-between gap-6">
-          <div class="flex-1">
-            <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/60">
-              Federal Bank · Credit Card Portfolio Migration
+      <!-- Zoom overlay container -->
+      <div
+        id="zoom-overlay"
+        class="fixed inset-0 z-50 pointer-events-none hidden"
+        style="background: radial-gradient(circle at center, #001847 0%, #00071c 100%)"
+      ></div>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div id="dashboard-page" class="min-h-screen bg-background hidden">
+      <header class="relative overflow-hidden text-white dashboard-header-bg">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/9/9d/KPMG_logo.svg"
+          alt=""
+          class="pointer-events-none absolute right-10 top-1/2 h-40 -translate-y-1/2 opacity-5 select-none brightness-0 invert"
+        />
+
+        <div class="relative mx-auto max-w-[1400px] px-6 py-5">
+          <div class="flex flex-wrap items-start justify-between gap-6">
+            <div class="flex-1">
+              <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/60">
+                Federal Bank · Credit Card Portfolio Migration
+              </div>
+              <h1 class="mt-1 text-4xl font-semibold tracking-tight">
+                Project Soulfire - Executive Dashboard
+              </h1>
             </div>
-            <h1 class="mt-1 text-4xl font-semibold tracking-tight">
-              Project Soulfire - Executive Dashboard
-            </h1>
+
+            <div
+              class="flex items-center gap-2 rounded-md border border-white/15 bg-white/5 px-3 py-2 backdrop-blur-sm"
+            >
+              <span class="text-[10px] font-medium uppercase tracking-[0.14em] text-white/60"
+                >Powered by</span
+              >
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/9/9d/KPMG_logo.svg"
+                alt="KPMG"
+                class="h-5 w-auto object-contain brightness-0 invert"
+              />
+            </div>
           </div>
-          
-          <div class="flex items-center gap-2 rounded-md border border-white/15 bg-white/5 px-3 py-2 backdrop-blur-sm">
-            <span class="text-[10px] font-medium uppercase tracking-[0.14em] text-white/60">Powered by</span>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/9/9d/KPMG_logo.svg" alt="KPMG" class="h-5 w-auto object-contain brightness-0 invert" />
+
+          <div class="mt-6 flex flex-wrap items-end justify-between gap-4">
+            <nav class="flex gap-1" id="dashboard-nav">
+              <a
+                href="?entered=true"
+                class="nav-tab-active rounded-t-md px-4 py-2 text-sm font-medium transition-colors"
+                >RAG Summary</a
+              >
+              <a
+                href="javascript:void(0)"
+                class="nav-tab-inactive rounded-t-md px-4 py-2 text-sm font-medium transition-colors"
+                >Program Overview</a
+              >
+              <a
+                href="javascript:void(0)"
+                class="nav-tab-inactive rounded-t-md px-4 py-2 text-sm font-medium transition-colors"
+                >Joint Workstream Checklist</a
+              >
+              <a
+                href="javascript:void(0)"
+                class="nav-tab-inactive rounded-t-md px-4 py-2 text-sm font-medium transition-colors"
+                >Risk Log</a
+              >
+              <a
+                href="javascript:void(0)"
+                class="nav-tab-inactive rounded-t-md px-4 py-2 text-sm font-medium transition-colors"
+                >Decision Log</a
+              >
+            </nav>
+
+            <div
+              class="mb-2 rounded-md border border-white/15 bg-white/5 px-3 py-1.5 text-[11px] text-white/80 backdrop-blur-sm"
+            >
+              Reporting period:
+              <span class="ml-1 font-semibold text-white">July 2026</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="mx-auto max-w-[1400px] px-6 py-8">
+        <section class="mb-6 flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h2 class="text-xl font-semibold tracking-tight text-foreground">
+              RAG Summary Dashboard for June’26
+            </h2>
+            <p class="mt-1 text-sm text-muted-foreground">
+              Open risks, blockers and dependencies tracked across workstreams.
+            </p>
+          </div>
+
+          <div
+            class="flex items-center gap-2 rounded-md border border-dashed border-border bg-card px-3 py-2 text-xs"
+          >
+            <span class="font-semibold uppercase tracking-wider text-muted-foreground">Legend</span>
+            <span class="flex items-center gap-1.5"
+              ><span class="inline-block h-2.5 w-2.5 rounded-full bg-ragCritical"></span
+              ><span class="text-foreground">High</span></span
+            >
+            <span class="flex items-center gap-1.5"
+              ><span class="inline-block h-2.5 w-2.5 rounded-full bg-ragWarning"></span
+              ><span class="text-foreground">Medium</span></span
+            >
+            <span class="flex items-center gap-1.5"
+              ><span class="inline-block h-2.5 w-2.5 rounded-full bg-ragOntrack"></span
+              ><span class="text-foreground">Low</span></span
+            >
+          </div>
+        </section>
+
+        <div class="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <!-- Stat Tiles -->
+          <div
+            class="relative overflow-hidden rounded-lg border border-border bg-card p-4 shadow-card"
+          >
+            <div class="absolute inset-y-0 left-0 w-1 bg-ragInfo"></div>
+            <div class="pl-2">
+              <div class="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                Open items
+              </div>
+              <div class="mt-1 text-2xl font-semibold tabular-nums text-foreground">7</div>
+            </div>
+          </div>
+          <div
+            class="relative overflow-hidden rounded-lg border border-border bg-card p-4 shadow-card"
+          >
+            <div class="absolute inset-y-0 left-0 w-1 bg-ragCritical"></div>
+            <div class="pl-2">
+              <div class="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                High
+              </div>
+              <div class="mt-1 text-2xl font-semibold tabular-nums text-foreground">3</div>
+            </div>
+          </div>
+          <div
+            class="relative overflow-hidden rounded-lg border border-border bg-card p-4 shadow-card"
+          >
+            <div class="absolute inset-y-0 left-0 w-1 bg-ragWarning"></div>
+            <div class="pl-2">
+              <div class="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                Medium
+              </div>
+              <div class="mt-1 text-2xl font-semibold tabular-nums text-foreground">4</div>
+            </div>
+          </div>
+          <div
+            class="relative overflow-hidden rounded-lg border border-border bg-card p-4 shadow-card"
+          >
+            <div class="absolute inset-y-0 left-0 w-1 bg-ragOntrack"></div>
+            <div class="pl-2">
+              <div class="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                Low
+              </div>
+              <div class="mt-1 text-2xl font-semibold tabular-nums text-foreground">0</div>
+            </div>
           </div>
         </div>
 
-        <div class="mt-6 flex flex-wrap items-end justify-between gap-4">
-          <nav class="flex gap-1" id="dashboard-nav">
-            <a href="?entered=true" class="nav-tab-active rounded-t-md px-4 py-2 text-sm font-medium transition-colors">RAG Summary</a>
-            <a href="javascript:void(0)" class="nav-tab-inactive rounded-t-md px-4 py-2 text-sm font-medium transition-colors">Program Overview</a>
-            <a href="javascript:void(0)" class="nav-tab-inactive rounded-t-md px-4 py-2 text-sm font-medium transition-colors">Joint Workstream Checklist</a>
-            <a href="javascript:void(0)" class="nav-tab-inactive rounded-t-md px-4 py-2 text-sm font-medium transition-colors">Risk Log</a>
-            <a href="javascript:void(0)" class="nav-tab-inactive rounded-t-md px-4 py-2 text-sm font-medium transition-colors">Decision Log</a>
-          </nav>
-
-          <div class="mb-2 rounded-md border border-white/15 bg-white/5 px-3 py-1.5 text-[11px] text-white/80 backdrop-blur-sm">
-            Reporting period:
-            <span class="ml-1 font-semibold text-white">July 2026</span>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <main class="mx-auto max-w-[1400px] px-6 py-8">
-      <section class="mb-6 flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h2 class="text-xl font-semibold tracking-tight text-foreground">
-            RAG Summary Dashboard for June’26
-          </h2>
-          <p class="mt-1 text-sm text-muted-foreground">
-            Open risks, blockers and dependencies tracked across workstreams.
-          </p>
-        </div>
-        
-        <div class="flex items-center gap-2 rounded-md border border-dashed border-border bg-card px-3 py-2 text-xs">
-          <span class="font-semibold uppercase tracking-wider text-muted-foreground">Legend</span>
-          <span class="flex items-center gap-1.5"><span class="inline-block h-2.5 w-2.5 rounded-full bg-ragCritical"></span><span class="text-foreground">High</span></span>
-          <span class="flex items-center gap-1.5"><span class="inline-block h-2.5 w-2.5 rounded-full bg-ragWarning"></span><span class="text-foreground">Medium</span></span>
-          <span class="flex items-center gap-1.5"><span class="inline-block h-2.5 w-2.5 rounded-full bg-ragOntrack"></span><span class="text-foreground">Low</span></span>
-        </div>
-      </section>
-
-      <div class="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <!-- Stat Tiles -->
-        <div class="relative overflow-hidden rounded-lg border border-border bg-card p-4 shadow-card">
-          <div class="absolute inset-y-0 left-0 w-1 bg-ragInfo"></div>
-          <div class="pl-2">
-            <div class="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Open items</div>
-            <div class="mt-1 text-2xl font-semibold tabular-nums text-foreground">7</div>
-          </div>
-        </div>
-        <div class="relative overflow-hidden rounded-lg border border-border bg-card p-4 shadow-card">
-          <div class="absolute inset-y-0 left-0 w-1 bg-ragCritical"></div>
-          <div class="pl-2">
-            <div class="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">High</div>
-            <div class="mt-1 text-2xl font-semibold tabular-nums text-foreground">3</div>
-          </div>
-        </div>
-        <div class="relative overflow-hidden rounded-lg border border-border bg-card p-4 shadow-card">
-          <div class="absolute inset-y-0 left-0 w-1 bg-ragWarning"></div>
-          <div class="pl-2">
-            <div class="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Medium</div>
-            <div class="mt-1 text-2xl font-semibold tabular-nums text-foreground">4</div>
-          </div>
-        </div>
-        <div class="relative overflow-hidden rounded-lg border border-border bg-card p-4 shadow-card">
-          <div class="absolute inset-y-0 left-0 w-1 bg-ragOntrack"></div>
-          <div class="pl-2">
-            <div class="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Low</div>
-            <div class="mt-1 text-2xl font-semibold tabular-nums text-foreground">0</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- RAG Table -->
-      <div class="overflow-hidden rounded-lg border border-border bg-card shadow-card">
-        <div class="px-4 py-2.5 text-sm font-semibold text-white bg-fedNavy">Open RAG items</div>
-        <div class="overflow-x-auto">
-          <table class="w-full text-sm">
-            <thead>
-              <tr class="bg-muted/60 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                <th class="px-4 py-2.5">SN</th>
-                <th class="px-4 py-2.5">Workstream</th>
-                <th class="px-4 py-2.5">Activity</th>
-                <th class="px-4 py-2.5">Owner</th>
-                <th class="px-4 py-2.5 text-center whitespace-nowrap">Leads</th>
-                <th class="px-4 py-2.5">Target Date</th>
-                <th class="px-4 py-2.5">RAG</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="border-t border-border/70 hover:bg-muted/40">
-                <td class="px-4 py-3 align-top text-foreground/80">1</td>
-                <td class="px-4 py-3 align-top text-foreground/80 font-medium text-foreground">Business</td>
-                <td class="px-4 py-3 align-top text-foreground/80 max-w-[420px]">Client build & QA (MB/IB/IVR/LR/Batch files)</td>
-                <td class="px-4 py-3 align-top text-foreground/80">FB</td>
-                <td class="px-4 py-3 align-top text-foreground/80 text-center whitespace-nowrap">Dinu/ Dinesh</td>
-                <td class="px-4 py-3 align-top text-foreground/80 tabular-nums">31-07-2026</td>
-                <td class="px-4 py-3 align-top text-foreground/80"><span class="inline-flex min-w-[88px] items-center justify-center rounded-sm px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white bg-ragWarning">Medium</span></td>
-              </tr>
-              <tr class="border-t border-border/70 hover:bg-muted/40">
-                <td class="px-4 py-3 align-top text-foreground/80">2</td>
-                <td class="px-4 py-3 align-top text-foreground/80 font-medium text-foreground">Business</td>
-                <td class="px-4 py-3 align-top text-foreground/80 max-w-[420px]">Approach notes to be finalized and signed off</td>
-                <td class="px-4 py-3 align-top text-foreground/80">FB</td>
-                <td class="px-4 py-3 align-top text-foreground/80 text-center whitespace-nowrap">Kishore</td>
-                <td class="px-4 py-3 align-top text-foreground/80 tabular-nums">15-07-2026</td>
-                <td class="px-4 py-3 align-top text-foreground/80"><span class="inline-flex min-w-[88px] items-center justify-center rounded-sm px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white bg-ragWarning">Medium</span></td>
-              </tr>
-              <tr class="border-t border-border/70 hover:bg-muted/40">
-                <td class="px-4 py-3 align-top text-foreground/80">3</td>
-                <td class="px-4 py-3 align-top text-foreground/80 font-medium text-foreground">Platform/Infrastructure</td>
-                <td class="px-4 py-3 align-top text-foreground/80 max-w-[420px]">Creation of Prod and Data Migration environment with service testing</td>
-                <td class="px-4 py-3 align-top text-foreground/80">FB</td>
-                <td class="px-4 py-3 align-top text-foreground/80 text-center whitespace-nowrap">Dinu</td>
-                <td class="px-4 py-3 align-top text-foreground/80 tabular-nums">15-07-2026</td>
-                <td class="px-4 py-3 align-top text-foreground/80"><span class="inline-flex min-w-[88px] items-center justify-center rounded-sm px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white bg-ragCritical">High</span></td>
-              </tr>
-              <tr class="border-t border-border/70 hover:bg-muted/40">
-                <td class="px-4 py-3 align-top text-foreground/80">4</td>
-                <td class="px-4 py-3 align-top text-foreground/80 font-medium text-foreground">Scheme</td>
-                <td class="px-4 py-3 align-top text-foreground/80 max-w-[420px]">Production key exchange between TSYS & scheme post BAR forms finalization</td>
-                <td class="px-4 py-3 align-top text-foreground/80">TSYS & FB</td>
-                <td class="px-4 py-3 align-top text-foreground/80 text-center whitespace-nowrap">Jason/Sreejith</td>
-                <td class="px-4 py-3 align-top text-foreground/80 tabular-nums">15-07-2026</td>
-                <td class="px-4 py-3 align-top text-foreground/80"><span class="inline-flex min-w-[88px] items-center justify-center rounded-sm px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white bg-ragWarning">Medium</span></td>
-              </tr>
-              <tr class="border-t border-border/70 hover:bg-muted/40">
-                <td class="px-4 py-3 align-top text-foreground/80">5</td>
-                <td class="px-4 py-3 align-top text-foreground/80 font-medium text-foreground">Business</td>
-                <td class="px-4 py-3 align-top text-foreground/80 max-w-[420px]">Testing partner onboarding</td>
-                <td class="px-4 py-3 align-top text-foreground/80">FB</td>
-                <td class="px-4 py-3 align-top text-foreground/80 text-center whitespace-nowrap">Libu</td>
-                <td class="px-4 py-3 align-top text-foreground/80 tabular-nums">15-07-2026</td>
-                <td class="px-4 py-3 align-top text-foreground/80"><span class="inline-flex min-w-[88px] items-center justify-center rounded-sm px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white bg-ragWarning">Medium</span></td>
-              </tr>
-              <tr class="border-t border-border/70 hover:bg-muted/40">
-                <td class="px-4 py-3 align-top text-foreground/80">6</td>
-                <td class="px-4 py-3 align-top text-foreground/80 font-medium text-foreground">Mar-Com</td>
-                <td class="px-4 py-3 align-top text-foreground/80 max-w-[420px]">Consent communication has been rescheduled from 3 July to the second week of July, with the first tranche of 10K customers tentatively planned for 8 July. SCB content is awaited and expected by 3 July.</td>
-                <td class="px-4 py-3 align-top text-foreground/80">SCB</td>
-                <td class="px-4 py-3 align-top text-foreground/80 text-center whitespace-nowrap">Neha</td>
-                <td class="px-4 py-3 align-top text-foreground/80 tabular-nums">3/7/2026</td>
-                <td class="px-4 py-3 align-top text-foreground/80"><span class="inline-flex min-w-[88px] items-center justify-center rounded-sm px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white bg-ragCritical">High</span></td>
-              </tr>
-              <tr class="border-t border-border/70 hover:bg-muted/40">
-                <td class="px-4 py-3 align-top text-foreground/80">7</td>
-                <td class="px-4 py-3 align-top text-foreground/80 font-medium text-foreground">IT</td>
-                <td class="px-4 py-3 align-top text-foreground/80 max-w-[420px]">KAFKA Configuration and payload requirement from TSYS</td>
-                <td class="px-4 py-3 align-top text-foreground/80">FB & TSYS</td>
-                <td class="px-4 py-3 align-top text-foreground/80 text-center whitespace-nowrap">Dinu, Eldho/Christos</td>
-                <td class="px-4 py-3 align-top text-foreground/80 tabular-nums">1/7/2026</td>
-                <td class="px-4 py-3 align-top text-foreground/80"><span class="inline-flex min-w-[88px] items-center justify-center rounded-sm px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white bg-ragCritical">High</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- TSYS Table -->
-      <div class="mt-6">
+        <!-- RAG Table -->
         <div class="overflow-hidden rounded-lg border border-border bg-card shadow-card">
-          <div class="px-4 py-2.5 text-sm font-semibold text-white bg-fedNavyDeep">Activities pending from TSYS</div>
+          <div class="px-4 py-2.5 text-sm font-semibold text-white bg-fedNavy">Open RAG items</div>
           <div class="overflow-x-auto">
             <table class="w-full text-sm">
               <thead>
-                <tr class="bg-muted/60 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                <tr
+                  class="bg-muted/60 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground"
+                >
                   <th class="px-4 py-2.5">SN</th>
                   <th class="px-4 py-2.5">Workstream</th>
                   <th class="px-4 py-2.5">Activity</th>
+                  <th class="px-4 py-2.5">Owner</th>
                   <th class="px-4 py-2.5 text-center whitespace-nowrap">Leads</th>
-                  <th class="px-4 py-2.5">Date Raised</th>
+                  <th class="px-4 py-2.5">Target Date</th>
+                  <th class="px-4 py-2.5">RAG</th>
                 </tr>
               </thead>
               <tbody>
                 <tr class="border-t border-border/70 hover:bg-muted/40">
                   <td class="px-4 py-3 align-top text-foreground/80">1</td>
-                  <td class="px-4 py-3 align-top text-foreground/80 font-medium text-foreground">Program Plan</td>
-                  <td class="px-4 py-3 align-top text-foreground/80 max-w-[520px]">Detailed Project Plan to be shared by TSYS to FB including joint tripartite plan</td>
-                  <td class="px-4 py-3 align-top text-foreground/80 text-center whitespace-nowrap">Himanshu/Ananya</td>
-                  <td class="px-4 py-3 align-top text-foreground/80 tabular-nums">1/6/2026</td>
+                  <td class="px-4 py-3 align-top text-foreground/80 font-medium text-foreground">
+                    Business
+                  </td>
+                  <td class="px-4 py-3 align-top text-foreground/80 max-w-[420px]">
+                    Client build & QA (MB/IB/IVR/LR/Batch files)
+                  </td>
+                  <td class="px-4 py-3 align-top text-foreground/80">FB</td>
+                  <td class="px-4 py-3 align-top text-foreground/80 text-center whitespace-nowrap">
+                    Dinu/ Dinesh
+                  </td>
+                  <td class="px-4 py-3 align-top text-foreground/80 tabular-nums">31-07-2026</td>
+                  <td class="px-4 py-3 align-top text-foreground/80">
+                    <span
+                      class="inline-flex min-w-[88px] items-center justify-center rounded-sm px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white bg-ragWarning"
+                      >Medium</span
+                    >
+                  </td>
                 </tr>
                 <tr class="border-t border-border/70 hover:bg-muted/40">
                   <td class="px-4 py-3 align-top text-foreground/80">2</td>
-                  <td class="px-4 py-3 align-top text-foreground/80 font-medium text-foreground">DWH/data hosting</td>
-                  <td class="px-4 py-3 align-top text-foreground/80 max-w-[520px]">DWH File/data flow for FB consumption in defined templets</td>
-                  <td class="px-4 py-3 align-top text-foreground/80 text-center whitespace-nowrap">Vipin/Petros</td>
-                  <td class="px-4 py-3 align-top text-foreground/80 tabular-nums">22/6/2026</td>
+                  <td class="px-4 py-3 align-top text-foreground/80 font-medium text-foreground">
+                    Business
+                  </td>
+                  <td class="px-4 py-3 align-top text-foreground/80 max-w-[420px]">
+                    Approach notes to be finalized and signed off
+                  </td>
+                  <td class="px-4 py-3 align-top text-foreground/80">FB</td>
+                  <td class="px-4 py-3 align-top text-foreground/80 text-center whitespace-nowrap">
+                    Kishore
+                  </td>
+                  <td class="px-4 py-3 align-top text-foreground/80 tabular-nums">15-07-2026</td>
+                  <td class="px-4 py-3 align-top text-foreground/80">
+                    <span
+                      class="inline-flex min-w-[88px] items-center justify-center rounded-sm px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white bg-ragWarning"
+                      >Medium</span
+                    >
+                  </td>
                 </tr>
                 <tr class="border-t border-border/70 hover:bg-muted/40">
                   <td class="px-4 py-3 align-top text-foreground/80">3</td>
-                  <td class="px-4 py-3 align-top text-foreground/80 font-medium text-foreground">Data Migration</td>
-                  <td class="px-4 py-3 align-top text-foreground/80 max-w-[520px]">Final Data migration scope agreement</td>
-                  <td class="px-4 py-3 align-top text-foreground/80 text-center whitespace-nowrap">Nitin</td>
-                  <td class="px-4 py-3 align-top text-foreground/80 tabular-nums">3/7/2026</td>
+                  <td class="px-4 py-3 align-top text-foreground/80 font-medium text-foreground">
+                    Platform/Infrastructure
+                  </td>
+                  <td class="px-4 py-3 align-top text-foreground/80 max-w-[420px]">
+                    Creation of Prod and Data Migration environment with service testing
+                  </td>
+                  <td class="px-4 py-3 align-top text-foreground/80">FB</td>
+                  <td class="px-4 py-3 align-top text-foreground/80 text-center whitespace-nowrap">
+                    Dinu
+                  </td>
+                  <td class="px-4 py-3 align-top text-foreground/80 tabular-nums">15-07-2026</td>
+                  <td class="px-4 py-3 align-top text-foreground/80">
+                    <span
+                      class="inline-flex min-w-[88px] items-center justify-center rounded-sm px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white bg-ragCritical"
+                      >High</span
+                    >
+                  </td>
                 </tr>
                 <tr class="border-t border-border/70 hover:bg-muted/40">
                   <td class="px-4 py-3 align-top text-foreground/80">4</td>
-                  <td class="px-4 py-3 align-top text-foreground/80 font-medium text-foreground">Embossing Files</td>
-                  <td class="px-4 py-3 align-top text-foreground/80 max-w-[520px]">TSYS to start development with changes shared by FB</td>
-                  <td class="px-4 py-3 align-top text-foreground/80 text-center whitespace-nowrap">Mahendra</td>
+                  <td class="px-4 py-3 align-top text-foreground/80 font-medium text-foreground">
+                    Scheme
+                  </td>
+                  <td class="px-4 py-3 align-top text-foreground/80 max-w-[420px]">
+                    Production key exchange between TSYS & scheme post BAR forms finalization
+                  </td>
+                  <td class="px-4 py-3 align-top text-foreground/80">TSYS & FB</td>
+                  <td class="px-4 py-3 align-top text-foreground/80 text-center whitespace-nowrap">
+                    Jason/Sreejith
+                  </td>
+                  <td class="px-4 py-3 align-top text-foreground/80 tabular-nums">15-07-2026</td>
+                  <td class="px-4 py-3 align-top text-foreground/80">
+                    <span
+                      class="inline-flex min-w-[88px] items-center justify-center rounded-sm px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white bg-ragWarning"
+                      >Medium</span
+                    >
+                  </td>
+                </tr>
+                <tr class="border-t border-border/70 hover:bg-muted/40">
+                  <td class="px-4 py-3 align-top text-foreground/80">5</td>
+                  <td class="px-4 py-3 align-top text-foreground/80 font-medium text-foreground">
+                    Business
+                  </td>
+                  <td class="px-4 py-3 align-top text-foreground/80 max-w-[420px]">
+                    Testing partner onboarding
+                  </td>
+                  <td class="px-4 py-3 align-top text-foreground/80">FB</td>
+                  <td class="px-4 py-3 align-top text-foreground/80 text-center whitespace-nowrap">
+                    Libu
+                  </td>
+                  <td class="px-4 py-3 align-top text-foreground/80 tabular-nums">15-07-2026</td>
+                  <td class="px-4 py-3 align-top text-foreground/80">
+                    <span
+                      class="inline-flex min-w-[88px] items-center justify-center rounded-sm px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white bg-ragWarning"
+                      >Medium</span
+                    >
+                  </td>
+                </tr>
+                <tr class="border-t border-border/70 hover:bg-muted/40">
+                  <td class="px-4 py-3 align-top text-foreground/80">6</td>
+                  <td class="px-4 py-3 align-top text-foreground/80 font-medium text-foreground">
+                    Mar-Com
+                  </td>
+                  <td class="px-4 py-3 align-top text-foreground/80 max-w-[420px]">
+                    Consent communication has been rescheduled from 3 July to the second week of
+                    July, with the first tranche of 10K customers tentatively planned for 8 July.
+                    SCB content is awaited and expected by 3 July.
+                  </td>
+                  <td class="px-4 py-3 align-top text-foreground/80">SCB</td>
+                  <td class="px-4 py-3 align-top text-foreground/80 text-center whitespace-nowrap">
+                    Neha
+                  </td>
                   <td class="px-4 py-3 align-top text-foreground/80 tabular-nums">3/7/2026</td>
+                  <td class="px-4 py-3 align-top text-foreground/80">
+                    <span
+                      class="inline-flex min-w-[88px] items-center justify-center rounded-sm px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white bg-ragCritical"
+                      >High</span
+                    >
+                  </td>
+                </tr>
+                <tr class="border-t border-border/70 hover:bg-muted/40">
+                  <td class="px-4 py-3 align-top text-foreground/80">7</td>
+                  <td class="px-4 py-3 align-top text-foreground/80 font-medium text-foreground">
+                    IT
+                  </td>
+                  <td class="px-4 py-3 align-top text-foreground/80 max-w-[420px]">
+                    KAFKA Configuration and payload requirement from TSYS
+                  </td>
+                  <td class="px-4 py-3 align-top text-foreground/80">FB & TSYS</td>
+                  <td class="px-4 py-3 align-top text-foreground/80 text-center whitespace-nowrap">
+                    Dinu, Eldho/Christos
+                  </td>
+                  <td class="px-4 py-3 align-top text-foreground/80 tabular-nums">1/7/2026</td>
+                  <td class="px-4 py-3 align-top text-foreground/80">
+                    <span
+                      class="inline-flex min-w-[88px] items-center justify-center rounded-sm px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white bg-ragCritical"
+                      >High</span
+                    >
+                  </td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
-      </div>
-    </main>
 
-    <footer class="mx-auto max-w-[1400px] px-6 pb-8 text-xs text-muted-foreground">
-      Confidential · For internal programme governance use only.
-    </footer>
-  </div>
+        <!-- TSYS Table -->
+        <div class="mt-6">
+          <div class="overflow-hidden rounded-lg border border-border bg-card shadow-card">
+            <div class="px-4 py-2.5 text-sm font-semibold text-white bg-fedNavyDeep">
+              Activities pending from TSYS
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr
+                    class="bg-muted/60 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground"
+                  >
+                    <th class="px-4 py-2.5">SN</th>
+                    <th class="px-4 py-2.5">Workstream</th>
+                    <th class="px-4 py-2.5">Activity</th>
+                    <th class="px-4 py-2.5 text-center whitespace-nowrap">Leads</th>
+                    <th class="px-4 py-2.5">Date Raised</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="border-t border-border/70 hover:bg-muted/40">
+                    <td class="px-4 py-3 align-top text-foreground/80">1</td>
+                    <td class="px-4 py-3 align-top text-foreground/80 font-medium text-foreground">
+                      Program Plan
+                    </td>
+                    <td class="px-4 py-3 align-top text-foreground/80 max-w-[520px]">
+                      Detailed Project Plan to be shared by TSYS to FB including joint tripartite
+                      plan
+                    </td>
+                    <td
+                      class="px-4 py-3 align-top text-foreground/80 text-center whitespace-nowrap"
+                    >
+                      Himanshu/Ananya
+                    </td>
+                    <td class="px-4 py-3 align-top text-foreground/80 tabular-nums">1/6/2026</td>
+                  </tr>
+                  <tr class="border-t border-border/70 hover:bg-muted/40">
+                    <td class="px-4 py-3 align-top text-foreground/80">2</td>
+                    <td class="px-4 py-3 align-top text-foreground/80 font-medium text-foreground">
+                      DWH/data hosting
+                    </td>
+                    <td class="px-4 py-3 align-top text-foreground/80 max-w-[520px]">
+                      DWH File/data flow for FB consumption in defined templets
+                    </td>
+                    <td
+                      class="px-4 py-3 align-top text-foreground/80 text-center whitespace-nowrap"
+                    >
+                      Vipin/Petros
+                    </td>
+                    <td class="px-4 py-3 align-top text-foreground/80 tabular-nums">22/6/2026</td>
+                  </tr>
+                  <tr class="border-t border-border/70 hover:bg-muted/40">
+                    <td class="px-4 py-3 align-top text-foreground/80">3</td>
+                    <td class="px-4 py-3 align-top text-foreground/80 font-medium text-foreground">
+                      Data Migration
+                    </td>
+                    <td class="px-4 py-3 align-top text-foreground/80 max-w-[520px]">
+                      Final Data migration scope agreement
+                    </td>
+                    <td
+                      class="px-4 py-3 align-top text-foreground/80 text-center whitespace-nowrap"
+                    >
+                      Nitin
+                    </td>
+                    <td class="px-4 py-3 align-top text-foreground/80 tabular-nums">3/7/2026</td>
+                  </tr>
+                  <tr class="border-t border-border/70 hover:bg-muted/40">
+                    <td class="px-4 py-3 align-top text-foreground/80">4</td>
+                    <td class="px-4 py-3 align-top text-foreground/80 font-medium text-foreground">
+                      Embossing Files
+                    </td>
+                    <td class="px-4 py-3 align-top text-foreground/80 max-w-[520px]">
+                      TSYS to start development with changes shared by FB
+                    </td>
+                    <td
+                      class="px-4 py-3 align-top text-foreground/80 text-center whitespace-nowrap"
+                    >
+                      Mahendra
+                    </td>
+                    <td class="px-4 py-3 align-top text-foreground/80 tabular-nums">3/7/2026</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
 
-  <script>
-    // Routing Logic
-    function checkRoute() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const isEntered = urlParams.get('entered') === 'true';
-      
-      if (isEntered) {
-        document.body.classList.remove('show-landing');
-        document.body.classList.add('show-dashboard');
-      } else {
-        document.body.classList.remove('show-dashboard');
-        document.body.classList.add('show-landing');
+      <footer class="mx-auto max-w-[1400px] px-6 pb-8 text-xs text-muted-foreground">
+        Confidential · For internal programme governance use only.
+      </footer>
+    </div>
+
+    <script>
+      // Routing Logic
+      function checkRoute() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const isEntered = urlParams.get("entered") === "true";
+
+        if (isEntered) {
+          document.body.classList.remove("show-landing");
+          document.body.classList.add("show-dashboard");
+        } else {
+          document.body.classList.remove("show-dashboard");
+          document.body.classList.add("show-landing");
+        }
       }
-    }
 
-    function enterDashboard() {
-      const zoomOverlay = document.getElementById('zoom-overlay');
-      zoomOverlay.classList.remove('hidden');
-      zoomOverlay.classList.add('page-wipe');
-      
-      setTimeout(() => {
-        // Use history API to update URL without reload
-        const newUrl = new URL(window.location);
-        newUrl.searchParams.set('entered', 'true');
-        window.history.pushState({}, '', newUrl);
-        checkRoute();
-        
-        // Hide overlay after transition
+      function enterDashboard() {
+        const zoomOverlay = document.getElementById("zoom-overlay");
+        zoomOverlay.classList.remove("hidden");
+        zoomOverlay.classList.add("page-wipe");
+
         setTimeout(() => {
-          zoomOverlay.classList.add('hidden');
-          zoomOverlay.classList.remove('page-wipe');
-        }, 100);
-      }, 950);
-    }
+          // Use history API to update URL without reload
+          const newUrl = new URL(window.location);
+          newUrl.searchParams.set("entered", "true");
+          window.history.pushState({}, "", newUrl);
+          checkRoute();
 
-    // Handle browser back/forward buttons
-    window.addEventListener('popstate', checkRoute);
+          // Hide overlay after transition
+          setTimeout(() => {
+            zoomOverlay.classList.add("hidden");
+            zoomOverlay.classList.remove("page-wipe");
+          }, 100);
+        }, 950);
+      }
 
-    // Initial load check
-    checkRoute();
-  </script>
-</body>
+      // Handle browser back/forward buttons
+      window.addEventListener("popstate", checkRoute);
+
+      // Initial load check
+      checkRoute();
+    </script>
+  </body>
 </html>

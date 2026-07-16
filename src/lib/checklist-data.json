@@ -187,7 +187,7 @@
     "start": "",
     "finish": "Tue, 30-Jun-26",
     "by": "Libu/Rahoul/Jaydithua",
-    "owner": "Jointly",
+    "owner": "FB/SCB",
     "status": "WIP",
     "comments": "24 Jun - Awaiting final document from TSYS"
   },
@@ -199,7 +199,7 @@
     "start": "",
     "finish": "Tue, 30-Jun-26",
     "by": "Libu/Rahoul/Jaydithua",
-    "owner": "Jointly",
+    "owner": "FB/SCB",
     "status": "WIP",
     "comments": ""
   },
@@ -1333,7 +1333,7 @@
   },
   {
     "sn": 100,
-    "workstream": "Finance",
+    "workstream": "KYC & DD",
     "task": "GL data to be provided on the date of cut off.",
     "duration": "",
     "start": "",
@@ -1342,53 +1342,5 @@
     "owner": "SCB",
     "status": "NS",
     "comments": "As per Gratis - Part of Finance workstream"
-  },
-  {
-    "sn": 111,
-    "workstream": "KYC & DD",
-    "task": "Customer KYC data migration/file sharing approach finalization",
-    "duration": "",
-    "start": "",
-    "finish": "Wed, 08-Jul-26",
-    "by": "Bindiya / Varelaxmi & Mathews",
-    "owner": "Jointly",
-    "status": "B",
-    "comments": ""
-  },
-  {
-    "sn": 112,
-    "workstream": "KYC & DD",
-    "task": "Fields mapping for KYC details",
-    "duration": "",
-    "start": "",
-    "finish": "Wed, 08-Jul-26",
-    "by": "Bindiya / Varelaxmi & Mathews",
-    "owner": "Jointly",
-    "status": "B",
-    "comments": ""
-  },
-  {
-    "sn": 113,
-    "workstream": "KYC & DD",
-    "task": "SCB to share the List of online and offline documents collected for onboarding and ReKYC",
-    "duration": "",
-    "start": "",
-    "finish": "Wed, 08-Jul-26",
-    "by": "Bindiya / Varelaxmi & Mathews",
-    "owner": "Jointly",
-    "status": "NS",
-    "comments": ""
-  },
-  {
-    "sn": 114,
-    "workstream": "KYC & DD",
-    "task": "By when customer profile information will be shared",
-    "duration": "",
-    "start": "",
-    "finish": "Wed, 08-Jul-26",
-    "by": "",
-    "owner": "Jointly",
-    "status": "NS",
-    "comments": ""
   }
 ]

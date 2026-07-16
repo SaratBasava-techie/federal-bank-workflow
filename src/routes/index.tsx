@@ -18,10 +18,7 @@ type IndexSearch = { entered: boolean };
 
 export const Route = createFileRoute("/")({
   validateSearch: (search: Record<string, unknown>): IndexSearch => ({
-    entered:
-      search.entered === "true" ||
-      search.entered === true ||
-      search.entered === "1",
+    entered: search.entered === "true" || search.entered === true || search.entered === "1",
   }),
   head: () => ({
     meta: [
@@ -150,12 +147,7 @@ function CountdownRing({
     >
       {/* SVG countdown ring */}
       <div style={{ position: "relative", width: 108, height: 108 }}>
-        <svg
-          width="108"
-          height="108"
-          viewBox="0 0 108 108"
-          style={{ transform: "rotate(-90deg)" }}
-        >
+        <svg width="108" height="108" viewBox="0 0 108 108" style={{ transform: "rotate(-90deg)" }}>
           {/* Track */}
           <circle
             cx="54"
@@ -224,9 +216,7 @@ function CountdownRing({
         onClick={onSkip}
         style={{
           border: "1px solid rgba(0,153,168,0.35)",
-          background: skipHover
-            ? "rgba(0,153,168,0.14)"
-            : "rgba(0,153,168,0.06)",
+          background: skipHover ? "rgba(0,153,168,0.14)" : "rgba(0,153,168,0.06)",
           color: skipHover ? "rgba(0,200,220,0.95)" : "rgba(0,153,168,0.7)",
           borderRadius: 100,
           padding: "5px 16px",
@@ -243,7 +233,16 @@ function CountdownRing({
         }}
       >
         Skip
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          width="12"
+          height="12"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <path d="M5 12h14M12 5l7 7-7 7" />
         </svg>
       </button>
@@ -280,10 +279,7 @@ function LandingPage() {
     if (zooming) return;
     if (intervalRef.current) clearInterval(intervalRef.current);
     setZooming(true);
-    setTimeout(
-      () => navigate({ to: "/", search: { entered: true } }),
-      950,
-    );
+    setTimeout(() => navigate({ to: "/", search: { entered: true } }), 950);
   }, [zooming, navigate]);
 
   // Auto-countdown interval
@@ -303,7 +299,7 @@ function LandingPage() {
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mounted]);
 
   const show = mounted && !zooming;
@@ -314,8 +310,7 @@ function LandingPage() {
         position: "fixed",
         inset: 0,
         overflow: "hidden",
-        background:
-          "linear-gradient(158deg, #00071c 0%, #000d30 38%, #001a4f 68%, #00205e 100%)",
+        background: "linear-gradient(158deg, #00071c 0%, #000d30 38%, #001a4f 68%, #00205e 100%)",
         fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
         display: "flex",
         flexDirection: "column",
@@ -330,8 +325,7 @@ function LandingPage() {
           backgroundImage:
             "linear-gradient(rgba(0,48,135,0.16) 1px, transparent 1px), linear-gradient(90deg, rgba(0,48,135,0.16) 1px, transparent 1px)",
           backgroundSize: "70px 70px",
-          maskImage:
-            "radial-gradient(ellipse 78% 78% at 50% 50%, black 25%, transparent 100%)",
+          maskImage: "radial-gradient(ellipse 78% 78% at 50% 50%, black 25%, transparent 100%)",
           WebkitMaskImage:
             "radial-gradient(ellipse 78% 78% at 50% 50%, black 25%, transparent 100%)",
         }}
@@ -346,8 +340,7 @@ function LandingPage() {
           transform: "translateX(-50%)",
           width: "65vw",
           height: "50vh",
-          background:
-            "radial-gradient(circle, rgba(0,140,180,0.11) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(0,140,180,0.11) 0%, transparent 70%)",
           filter: "blur(70px)",
           pointerEvents: "none",
         }}
@@ -359,8 +352,7 @@ function LandingPage() {
           left: "15%",
           width: "38vw",
           height: "28vh",
-          background:
-            "radial-gradient(circle, rgba(0,48,135,0.15) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(0,48,135,0.15) 0%, transparent 70%)",
           filter: "blur(55px)",
           pointerEvents: "none",
         }}
@@ -437,10 +429,7 @@ function LandingPage() {
                   width: p.size,
                   height: p.size,
                   borderRadius: "50%",
-                  background:
-                    p.size > 2.5
-                      ? "rgba(0,153,168,0.55)"
-                      : "rgba(147,197,253,0.45)",
+                  background: p.size > 2.5 ? "rgba(0,153,168,0.55)" : "rgba(147,197,253,0.45)",
                   opacity: op,
                   transform: "translate(-50%,-50%)",
                 }}
@@ -472,8 +461,7 @@ function LandingPage() {
                 top: `${p.y}%`,
                 width: p.size * 10,
                 height: 1,
-                background:
-                  "linear-gradient(90deg,transparent,rgba(0,153,168,0.45),transparent)",
+                background: "linear-gradient(90deg,transparent,rgba(0,153,168,0.45),transparent)",
                 opacity: op,
                 transform: "translate(-50%,-50%)",
               }}
@@ -497,7 +485,8 @@ function LandingPage() {
           WebkitBackdropFilter: "blur(12px)",
           opacity: show ? 1 : 0,
           transform: show ? "translateY(0)" : "translateY(-16px)",
-          transition: "opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1)",
+          transition:
+            "opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1)",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
@@ -637,8 +626,7 @@ function LandingPage() {
             style={{
               width: 36,
               height: 1,
-              background:
-                "linear-gradient(90deg,transparent,rgba(0,153,168,0.7))",
+              background: "linear-gradient(90deg,transparent,rgba(0,153,168,0.7))",
             }}
           />
           <span
@@ -656,8 +644,7 @@ function LandingPage() {
             style={{
               width: 36,
               height: 1,
-              background:
-                "linear-gradient(90deg,rgba(0,153,168,0.7),transparent)",
+              background: "linear-gradient(90deg,rgba(0,153,168,0.7),transparent)",
             }}
           />
         </div>
@@ -676,8 +663,7 @@ function LandingPage() {
             transform: show ? "translateY(0)" : "translateY(28px)",
             transition:
               "opacity 0.9s cubic-bezier(0.16,1,0.3,1) 0.28s, transform 0.9s cubic-bezier(0.16,1,0.3,1) 0.28s",
-            background:
-              "linear-gradient(135deg,#ffffff 0%,#a8d0ff 48%,#76bcff 100%)",
+            background: "linear-gradient(135deg,#ffffff 0%,#a8d0ff 48%,#76bcff 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             backgroundClip: "text",
@@ -730,9 +716,7 @@ function LandingPage() {
             boxShadow: ctaHover
               ? "0 0 44px rgba(0,153,168,0.42),0 0 90px rgba(0,48,135,0.25),0 14px 30px rgba(0,0,0,0.45)"
               : "0 0 22px rgba(0,48,135,0.28),0 8px 22px rgba(0,0,0,0.35)",
-            transform: ctaHover
-              ? "scale(1.065) translateY(-2px)"
-              : "scale(1) translateY(0)",
+            transform: ctaHover ? "scale(1.065) translateY(-2px)" : "scale(1) translateY(0)",
             transition: "all 0.32s cubic-bezier(0.16,1,0.3,1)",
             opacity: show ? 1 : 0,
             display: "flex",
@@ -742,12 +726,15 @@ function LandingPage() {
           }}
         >
           {/* Continuous shimmer on button */}
-          <div className="soulfire-shimmer" style={{
-            position: "absolute",
-            inset: 0,
-            borderRadius: 100,
-            pointerEvents: "none",
-          }} />
+          <div
+            className="soulfire-shimmer"
+            style={{
+              position: "absolute",
+              inset: 0,
+              borderRadius: 100,
+              pointerEvents: "none",
+            }}
+          />
           <span style={{ position: "relative", zIndex: 1 }}>Click to Enter Dashboard</span>
           <svg
             width="17"
@@ -876,10 +863,8 @@ function LandingPage() {
             position: "fixed",
             inset: 0,
             zIndex: 200,
-            background:
-              "radial-gradient(circle at center,#001847 0%,#00071c 100%)",
-            animation:
-              "pageWipe 0.95s cubic-bezier(0.7,0,0.1,1) forwards",
+            background: "radial-gradient(circle at center,#001847 0%,#00071c 100%)",
+            animation: "pageWipe 0.95s cubic-bezier(0.7,0,0.1,1) forwards",
             pointerEvents: "none",
           }}
         />
@@ -930,25 +915,15 @@ function DashboardPage() {
       {/* Stat tiles — staggered card entrance */}
       <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <StatTile label="Open items" value={ragSummary.length} tone="info" delay={0} />
-        <StatTile label="High"    value={counts.critical ?? 0} tone="critical" delay={1} />
-        <StatTile label="Medium"  value={counts.warning ?? 0}  tone="warning"  delay={2} />
-        <StatTile label="Low"     value={counts.ontrack ?? 0}  tone="ontrack"  delay={3} />
+        <StatTile label="High" value={counts.critical ?? 0} tone="critical" delay={1} />
+        <StatTile label="Medium" value={counts.warning ?? 0} tone="warning" delay={2} />
+        <StatTile label="Low" value={counts.ontrack ?? 0} tone="ontrack" delay={3} />
       </div>
 
       <div className="soulfire-entrance soulfire-delay-4">
         <Card>
           <CardHeader title="Open RAG items" />
-          <Table
-            headers={[
-              "SN",
-              "Workstream",
-              "Activity",
-              "Owner",
-              "Leads",
-              "Target Date",
-              "RAG",
-            ]}
-          >
+          <Table headers={["SN", "Workstream", "Activity", "Owner", "Leads", "Target Date", "RAG"]}>
             {ragSummary.map((r, idx) => (
               <tr
                 key={r.sn}
@@ -959,12 +934,8 @@ function DashboardPage() {
                 }}
               >
                 <Td>{r.sn}</Td>
-                <Td className="font-medium text-foreground">
-                  {r.workstream}
-                </Td>
-                <Td className="max-w-[420px] text-foreground/80">
-                  {r.activity}
-                </Td>
+                <Td className="font-medium text-foreground">{r.workstream}</Td>
+                <Td className="max-w-[420px] text-foreground/80">{r.activity}</Td>
                 <Td>{r.owner}</Td>
                 <Td className="text-center whitespace-nowrap">{r.leads}</Td>
                 <Td className="tabular-nums">{r.targetDate}</Td>
@@ -980,15 +951,7 @@ function DashboardPage() {
       <div className="mt-6 soulfire-entrance soulfire-delay-5">
         <Card>
           <CardHeader title="Activities pending from TSYS" accent />
-          <Table
-            headers={[
-              "SN",
-              "Workstream",
-              "Activity",
-              "Leads",
-              "Date Raised",
-            ]}
-          >
+          <Table headers={["SN", "Workstream", "Activity", "Leads", "Date Raised"]}>
             {pendingFromTsys.map((r, idx) => (
               <tr
                 key={r.sn}
@@ -999,15 +962,9 @@ function DashboardPage() {
                 }}
               >
                 <Td>{r.sn}</Td>
-                <Td className="font-medium text-foreground">
-                  {r.workstream}
-                </Td>
-                <Td className="max-w-[520px] text-foreground/80">
-                  {r.activity}
-                </Td>
-                <Td className="text-center whitespace-nowrap">
-                  {r.leads}
-                </Td>
+                <Td className="font-medium text-foreground">{r.workstream}</Td>
+                <Td className="max-w-[520px] text-foreground/80">{r.activity}</Td>
+                <Td className="text-center whitespace-nowrap">{r.leads}</Td>
                 <Td className="tabular-nums">{r.dateRaised}</Td>
               </tr>
             ))}
@@ -1036,9 +993,7 @@ function Legend() {
   ];
   return (
     <div className="flex items-center gap-2 rounded-md border border-dashed border-border bg-card px-3 py-2 text-xs">
-      <span className="font-semibold uppercase tracking-wider text-muted-foreground">
-        Legend
-      </span>
+      <span className="font-semibold uppercase tracking-wider text-muted-foreground">Legend</span>
       {items.map((i) => (
         <span key={i.label} className="flex items-center gap-1.5">
           <span
@@ -1061,12 +1016,7 @@ function ragColor(s: RagStatus) {
 }
 
 function RagPill({ status }: { status: RagStatus }) {
-  const label =
-    status === "critical"
-      ? "High"
-      : status === "warning"
-        ? "Medium"
-        : "On track";
+  const label = status === "critical" ? "High" : status === "warning" ? "Medium" : "On track";
   return (
     <span
       className="inline-flex min-w-[88px] items-center justify-center rounded-sm px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white"
@@ -1144,20 +1094,12 @@ function Card({ children }: { children: React.ReactNode }) {
   );
 }
 
-function CardHeader({
-  title,
-  accent,
-}: {
-  title: string;
-  accent?: boolean;
-}) {
+function CardHeader({ title, accent }: { title: string; accent?: boolean }) {
   return (
     <div
       className="px-4 py-2.5 text-sm font-semibold text-white"
       style={{
-        background: accent
-          ? "var(--fed-navy-deep)"
-          : "var(--fed-navy)",
+        background: accent ? "var(--fed-navy-deep)" : "var(--fed-navy)",
       }}
     >
       {title}
@@ -1165,13 +1107,7 @@ function CardHeader({
   );
 }
 
-function Table({
-  headers,
-  children,
-}: {
-  headers: string[];
-  children: React.ReactNode;
-}) {
+function Table({ headers, children }: { headers: string[]; children: React.ReactNode }) {
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
@@ -1193,16 +1129,6 @@ function Table({
   );
 }
 
-function Td({
-  children,
-  className = "",
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-    <td className={`px-4 py-3 align-top text-foreground/80 ${className}`}>
-      {children}
-    </td>
-  );
+function Td({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  return <td className={`px-4 py-3 align-top text-foreground/80 ${className}`}>{children}</td>;
 }

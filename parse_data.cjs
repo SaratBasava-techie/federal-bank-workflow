@@ -1,6 +1,6 @@
-const fs = require('fs');
+const fs = require("fs");
 
-const promptData = fs.readFileSync('prompt_data.txt', 'utf8');
+const promptData = fs.readFileSync("prompt_data.txt", "utf8");
 
 // Helper to parse TSV blocks
 function parseBlock(startToken, endToken) {
@@ -17,25 +17,27 @@ const sections = promptData.split(/----------+/g);
 
 const updates = {};
 for (const section of sections) {
-  if (section.includes('Update decision log with above data')) {
+  if (section.includes("Update decision log with above data")) {
     updates.decision = section.trim();
-  } else if (section.includes('Update Risk log with above data')) {
+  } else if (section.includes("Update Risk log with above data")) {
     updates.risk = section.trim();
-  } else if (section.includes('Update Rag summary with this data')) {
+  } else if (section.includes("Update Rag summary with this data")) {
     updates.rag = section.trim();
-  } else if (section.includes('Update TSYS Data with above data')) {
+  } else if (section.includes("Update TSYS Data with above data")) {
     updates.pendingTsys = section.trim(); // wait, the pending from tsys is above this?
-  } else if (section.includes('Update the Program Overview with above data')) {
+  } else if (section.includes("Update the Program Overview with above data")) {
     updates.tsysData = section.trim();
-  } else if (section.includes('Update the product in joint workstream checklist with above data')) {
+  } else if (section.includes("Update the product in joint workstream checklist with above data")) {
     updates.productJoint = section.trim();
-  } else if (section.includes('Update the comms and marketing in joint workstream checklist with above data')) {
+  } else if (
+    section.includes("Update the comms and marketing in joint workstream checklist with above data")
+  ) {
     updates.commsJoint = section.trim();
-  } else if (section.includes('Update the IT in joint workstream checklist with above data')) {
+  } else if (section.includes("Update the IT in joint workstream checklist with above data")) {
     updates.itJoint = section.trim();
-  } else if (section.includes('Update the operations in joint workstream checklist above data')) {
+  } else if (section.includes("Update the operations in joint workstream checklist above data")) {
     updates.opsJoint = section.trim();
-  } else if (section.includes('Update Finance in joint workstream checklist with above data')) {
+  } else if (section.includes("Update Finance in joint workstream checklist with above data")) {
     updates.financeJoint = section.trim();
   }
 }

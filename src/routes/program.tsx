@@ -88,7 +88,9 @@ function ProgramPage() {
     const wip = ALL_ACTIVITIES.filter((a) => a.status === "WIP").length;
     const inProgress = ALL_ACTIVITIES.filter((a) => a.status === "In Progress").length;
     const notStarted = ALL_ACTIVITIES.filter((a) => a.status === "Not Started").length;
-    const overdue = ALL_ACTIVITIES.filter((a) => a.status !== "Completed" && isOverdue(a.deadline)).length;
+    const overdue = ALL_ACTIVITIES.filter(
+      (a) => a.status !== "Completed" && isOverdue(a.deadline),
+    ).length;
 
     return {
       total,
@@ -144,7 +146,10 @@ function ProgramPage() {
     });
     return Array.from(map.values()).sort(
       (a, b) =>
-        (Number(b.Completed) + Number(b.WIP) + Number(b["In Progress"]) + Number(b["Not Started"])) -
+        Number(b.Completed) +
+        Number(b.WIP) +
+        Number(b["In Progress"]) +
+        Number(b["Not Started"]) -
         (Number(a.Completed) + Number(a.WIP) + Number(a["In Progress"]) + Number(a["Not Started"])),
     );
   }, [ALL_ACTIVITIES]);
@@ -161,127 +166,144 @@ function ProgramPage() {
       </section>
 
       <div className="mb-6 grid grid-cols-2 gap-0 overflow-hidden rounded-lg border border-border md:grid-cols-4">
-        <Kpi label="Total Activities" value={k.total} sub="Across 13 workstreams" tone="navy" delay={0} />
+        <Kpi
+          label="Total Activities"
+          value={k.total}
+          sub="Across 13 workstreams"
+          tone="navy"
+          delay={0}
+        />
         <Kpi label="Completed" value={k.completed} sub="Activities done" tone="ontrack" delay={1} />
         <Kpi label="WIP" value={k.wip} sub="Work in progress" tone="info" delay={2} />
-        <Kpi label="Yet to Start" value={k.notStarted} sub="Planned Jul – Nov" tone="muted" delay={3} />
+        <Kpi
+          label="Yet to Start"
+          value={k.notStarted}
+          sub="Planned Jul – Nov"
+          tone="muted"
+          delay={3}
+        />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="soulfire-entrance soulfire-delay-4">
-        <Panel title="Activity Completion Status">
-          <div className="h-72">
-            <ResponsiveContainer>
-              <PieChart>
-                <Pie
-                  data={completionStatus}
-                  dataKey="value"
-                  nameKey="name"
-                  innerRadius={50}
-                  outerRadius={90}
-                  paddingAngle={2}
-                  stroke="var(--color-card)"
-                  labelLine={false}
-                  label={({ percent }) =>
-                    percent > 0 ? `${(percent * 100).toFixed(0)}%` : ""
-                  }
-                >
-                  {completionStatus.map((d) => (
-                    <Cell key={d.name} fill={d.color} />
-                  ))}
-                </Pie>
-                <Tooltip
-                  contentStyle={{
-                    background: "var(--color-card)",
-                    border: "1px solid var(--color-border)",
-                    borderRadius: 6,
-                    fontSize: 12,
-                  }}
-                />
-                <Legend
-                  verticalAlign="bottom"
-                  iconType="circle"
-                  wrapperStyle={{ fontSize: 12 }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        </Panel>
+          <Panel title="Activity Completion Status">
+            <div className="h-72">
+              <ResponsiveContainer>
+                <PieChart>
+                  <Pie
+                    data={completionStatus}
+                    dataKey="value"
+                    nameKey="name"
+                    innerRadius={50}
+                    outerRadius={90}
+                    paddingAngle={2}
+                    stroke="var(--color-card)"
+                    labelLine={false}
+                    label={({ percent }) => (percent > 0 ? `${(percent * 100).toFixed(0)}%` : "")}
+                  >
+                    {completionStatus.map((d) => (
+                      <Cell key={d.name} fill={d.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{
+                      background: "var(--color-card)",
+                      border: "1px solid var(--color-border)",
+                      borderRadius: 6,
+                      fontSize: 12,
+                    }}
+                  />
+                  <Legend
+                    verticalAlign="bottom"
+                    iconType="circle"
+                    wrapperStyle={{ fontSize: 12 }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </Panel>
         </div>
 
         <div className="soulfire-entrance soulfire-delay-5">
-        <Panel title="% Completion by Phase">
-          <div className="h-72">
-            <ResponsiveContainer>
-              <BarChart
-                data={completionByPhase}
-                layout="vertical"
-                margin={{ left: 10, right: 24, top: 8, bottom: 8 }}
-              >
-                <CartesianGrid horizontal={false} stroke="var(--color-border)" />
-                <XAxis
-                  type="number"
-                  domain={[0, 100]}
-                  tickFormatter={(v) => `${v}%`}
-                  stroke="var(--color-muted-foreground)"
-                  fontSize={11}
-                />
-                <YAxis
-                  type="category"
-                  dataKey="phase"
-                  stroke="var(--color-muted-foreground)"
-                  fontSize={11}
-                  width={120}
-                  interval={0}
-                />
-                <Tooltip
-                  formatter={(v: number) => [`${v}%`, "Complete"]}
-                  contentStyle={{
-                    background: "var(--color-card)",
-                    border: "1px solid var(--color-border)",
-                    borderRadius: 6,
-                    fontSize: 12,
-                  }}
-                />
-                <Bar dataKey="pct" fill="oklch(0.6 0.13 195)" radius={[0, 3, 3, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </Panel>
+          <Panel title="% Completion by Phase">
+            <div className="h-72">
+              <ResponsiveContainer>
+                <BarChart
+                  data={completionByPhase}
+                  layout="vertical"
+                  margin={{ left: 10, right: 24, top: 8, bottom: 8 }}
+                >
+                  <CartesianGrid horizontal={false} stroke="var(--color-border)" />
+                  <XAxis
+                    type="number"
+                    domain={[0, 100]}
+                    tickFormatter={(v) => `${v}%`}
+                    stroke="var(--color-muted-foreground)"
+                    fontSize={11}
+                  />
+                  <YAxis
+                    type="category"
+                    dataKey="phase"
+                    stroke="var(--color-muted-foreground)"
+                    fontSize={11}
+                    width={120}
+                    interval={0}
+                  />
+                  <Tooltip
+                    formatter={(v: number) => [`${v}%`, "Complete"]}
+                    contentStyle={{
+                      background: "var(--color-card)",
+                      border: "1px solid var(--color-border)",
+                      borderRadius: 6,
+                      fontSize: 12,
+                    }}
+                  />
+                  <Bar dataKey="pct" fill="oklch(0.6 0.13 195)" radius={[0, 3, 3, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </Panel>
         </div>
 
         <div className="soulfire-entrance soulfire-delay-6">
-        <Panel title="Activities by Department & Status">
-          <div className="h-72">
-            <ResponsiveContainer>
-              <BarChart data={departmentStatusData} margin={{ left: 0, right: 16, top: 8, bottom: 30 }}>
-                <CartesianGrid stroke="var(--color-border)" strokeDasharray="3 3" />
-                <XAxis
-                  dataKey="dept"
-                  stroke="var(--color-muted-foreground)"
-                  fontSize={10}
-                  interval={0}
-                  angle={-25}
-                  textAnchor="end"
-                  height={60}
-                />
-                <YAxis stroke="var(--color-muted-foreground)" fontSize={11} allowDecimals={false} />
-                <Tooltip
-                  contentStyle={{
-                    background: "var(--color-card)",
-                    border: "1px solid var(--color-border)",
-                    borderRadius: 6,
-                    fontSize: 12,
-                  }}
-                />
-                <Legend wrapperStyle={{ fontSize: 12 }} />
-                <Bar dataKey="Completed" stackId="a" fill="#16a34a" />
-                <Bar dataKey="WIP" stackId="a" fill="#38bdf8" />
-                <Bar dataKey="Not Started" stackId="a" fill="#94a3b8" name="Yet to Start" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </Panel>
+          <Panel title="Activities by Department & Status">
+            <div className="h-72">
+              <ResponsiveContainer>
+                <BarChart
+                  data={departmentStatusData}
+                  margin={{ left: 0, right: 16, top: 8, bottom: 30 }}
+                >
+                  <CartesianGrid stroke="var(--color-border)" strokeDasharray="3 3" />
+                  <XAxis
+                    dataKey="dept"
+                    stroke="var(--color-muted-foreground)"
+                    fontSize={10}
+                    interval={0}
+                    angle={-25}
+                    textAnchor="end"
+                    height={60}
+                  />
+                  <YAxis
+                    stroke="var(--color-muted-foreground)"
+                    fontSize={11}
+                    allowDecimals={false}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      background: "var(--color-card)",
+                      border: "1px solid var(--color-border)",
+                      borderRadius: 6,
+                      fontSize: 12,
+                    }}
+                  />
+                  <Legend wrapperStyle={{ fontSize: 12 }} />
+                  <Bar dataKey="Completed" stackId="a" fill="#16a34a" />
+                  <Bar dataKey="WIP" stackId="a" fill="#38bdf8" />
+                  <Bar dataKey="Not Started" stackId="a" fill="#94a3b8" name="Yet to Start" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </Panel>
         </div>
       </div>
 
@@ -313,7 +335,9 @@ const WORKSTREAM_ORDER = Array.from(
 
 function ActivityList({ activities }: { activities: any[] }) {
   const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState<"all" | "Completed" | "WIP" | "In Progress" | "Not Started">("all");
+  const [statusFilter, setStatusFilter] = useState<
+    "all" | "Completed" | "WIP" | "In Progress" | "Not Started"
+  >("all");
   const [openStreams, setOpenStreams] = useState<Record<string, boolean>>(() => {
     const init: Record<string, boolean> = {};
     WORKSTREAM_ORDER.forEach((w) => (init[w] = true));
@@ -337,19 +361,17 @@ function ActivityList({ activities }: { activities: any[] }) {
 
   const filtered = grouped.map(([ws, list]) => {
     const q = search.toLowerCase();
-    const filteredList = list.filter(
-      (a) => {
-        if (statusFilter !== "all" && a.status !== statusFilter) return false;
-        if (!q) return true;
-        return (
-          a.activity.toLowerCase().includes(q) ||
-          (a.owner || "").toLowerCase().includes(q) ||
-          a.phase.toLowerCase().includes(q) ||
-          (a.deadline || "").toLowerCase().includes(q) ||
-          (a.department || "").toLowerCase().includes(q)
-        );
-      },
-    );
+    const filteredList = list.filter((a) => {
+      if (statusFilter !== "all" && a.status !== statusFilter) return false;
+      if (!q) return true;
+      return (
+        a.activity.toLowerCase().includes(q) ||
+        (a.owner || "").toLowerCase().includes(q) ||
+        a.phase.toLowerCase().includes(q) ||
+        (a.deadline || "").toLowerCase().includes(q) ||
+        (a.department || "").toLowerCase().includes(q)
+      );
+    });
     return [ws, filteredList] as const;
   });
 
@@ -612,12 +634,12 @@ const STREAM_COLORS: Record<string, string> = {
   "Scheme & Compliance": "#ef4444",
   "Encryption Keys": "#a855f7",
   "Channel Connectivity": "#8b5cf6",
-  "Testing": "#06b6d4",
-  "Recarding": "#f97316",
+  Testing: "#06b6d4",
+  Recarding: "#f97316",
   "Production Readiness & Go-Live": "#dc2626",
   "BAU Services & Readiness": "#10b981",
-  "TMS": "#64748b",
-  "Program": "#78716c",
+  TMS: "#64748b",
+  Program: "#78716c",
   Business: "#22c55e",
   Contracting: "#ec4899",
 };
@@ -655,7 +677,11 @@ function Kpi({
               ? "oklch(0.35 0.16 25)"
               : "oklch(0.22 0.07 230)";
   const accentText =
-    tone === "accent" ? "oklch(0.78 0.13 195)" : tone === "ontrack" ? "oklch(0.85 0.18 150)" : "white";
+    tone === "accent"
+      ? "oklch(0.78 0.13 195)"
+      : tone === "ontrack"
+        ? "oklch(0.85 0.18 150)"
+        : "white";
 
   // Animate numeric values only
   const numericValue = typeof value === "number" ? value : 0;
@@ -674,10 +700,7 @@ function Kpi({
       <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/70">
         {label}
       </div>
-      <div
-        className="mt-1 text-3xl font-semibold tabular-nums"
-        style={{ color: accentText }}
-      >
+      <div className="mt-1 text-3xl font-semibold tabular-nums" style={{ color: accentText }}>
         {isNumeric ? animated : value}
       </div>
       <div className="mt-0.5 text-[11px] text-white/60">{sub}</div>

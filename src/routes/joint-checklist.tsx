@@ -5,7 +5,20 @@ import { useDashboardData } from "../hooks/useDashboardData";
 
 function formatDate(dateStr: string | undefined) {
   if (!dateStr) return "—";
-  const months: Record<string, string> = { jan: "01", feb: "02", mar: "03", apr: "04", may: "05", jun: "06", jul: "07", aug: "08", sep: "09", oct: "10", nov: "11", dec: "12" };
+  const months: Record<string, string> = {
+    jan: "01",
+    feb: "02",
+    mar: "03",
+    apr: "04",
+    may: "05",
+    jun: "06",
+    jul: "07",
+    aug: "08",
+    sep: "09",
+    oct: "10",
+    nov: "11",
+    dec: "12",
+  };
   const m = dateStr.match(/(\d{1,2})[- ]([A-Za-z]{3})[- ]?(\d{2,4})?/);
   if (m) {
     const d = m[1].padStart(2, "0");
@@ -77,7 +90,9 @@ function JointChecklistPage() {
   }, [liveChecklist]);
 
   useEffect(() => {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); } catch {}
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    } catch {}
   }, [items]);
 
   const update = (sn: number, patch: Partial<ChecklistItem>) =>
@@ -85,7 +100,9 @@ function JointChecklistPage() {
 
   const counts = useMemo(() => {
     const c = { NS: 0, IP: 0, D: 0, B: 0 } as Record<Status, number>;
-    items.forEach((i) => { if (i.status in c) c[i.status]++; });
+    items.forEach((i) => {
+      if (i.status in c) c[i.status]++;
+    });
     return c;
   }, [items]);
 
@@ -107,7 +124,9 @@ function JointChecklistPage() {
       <div className="space-y-6">
         <div>
           <h2 className="text-xl font-semibold text-foreground">Joint Workstream Checklist</h2>
-          <p className="text-sm text-muted-foreground">Track SCB / FB / Jointly-owned activities and update status as work progresses.</p>
+          <p className="text-sm text-muted-foreground">
+            Track SCB / FB / Jointly-owned activities and update status as work progresses.
+          </p>
         </div>
 
         <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
@@ -134,7 +153,9 @@ function JointChecklistPage() {
               key={f}
               onClick={() => setFilter(f)}
               className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
-                filter === f ? "border-foreground bg-foreground text-background" : "border-border bg-background hover:bg-muted"
+                filter === f
+                  ? "border-foreground bg-foreground text-background"
+                  : "border-border bg-background hover:bg-muted"
               }`}
             >
               {f === "all" ? "All" : statusMeta[f].label}
@@ -166,12 +187,22 @@ function JointChecklistPage() {
                 <tbody>
                   {rows.map((r, idx) => (
                     <tr key={r.sn} className="border-t hover:bg-muted/20 align-top">
-                      <td className="px-3 py-3 text-muted-foreground tabular-nums text-left">{idx + 1}</td>
-                      <td className="px-3 py-3 text-foreground break-words whitespace-normal text-left">{r.task}</td>
-                      <td className="px-3 py-3 text-xs break-words whitespace-normal text-left tabular-nums">{formatDate(r.finish)}</td>
-                      <td className="px-3 py-3 text-xs break-words whitespace-normal text-left">{r.by}</td>
+                      <td className="px-3 py-3 text-muted-foreground tabular-nums text-left">
+                        {idx + 1}
+                      </td>
+                      <td className="px-3 py-3 text-foreground break-words whitespace-normal text-left">
+                        {r.task}
+                      </td>
+                      <td className="px-3 py-3 text-xs break-words whitespace-normal text-left tabular-nums">
+                        {formatDate(r.finish)}
+                      </td>
+                      <td className="px-3 py-3 text-xs break-words whitespace-normal text-left">
+                        {r.by}
+                      </td>
                       <td className="px-3 py-3 text-left">
-                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap ${ownerMeta[r.owner] ?? "bg-gray-100 text-gray-800"}`}>
+                        <span
+                          className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap ${ownerMeta[r.owner] ?? "bg-gray-100 text-gray-800"}`}
+                        >
                           {r.owner ?? "—"}
                         </span>
                       </td>
@@ -194,7 +225,15 @@ function JointChecklistPage() {
   );
 }
 
-function Kpi({ label, value, tone = "slate" }: { label: string; value: number; tone?: "slate" | "emerald" | "amber" | "rose" }) {
+function Kpi({
+  label,
+  value,
+  tone = "slate",
+}: {
+  label: string;
+  value: number;
+  tone?: "slate" | "emerald" | "amber" | "rose";
+}) {
   const tones: Record<string, string> = {
     slate: "text-slate-700",
     emerald: "text-emerald-700",
