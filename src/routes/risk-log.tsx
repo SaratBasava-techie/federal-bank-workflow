@@ -23,11 +23,9 @@ function RiskLogPage() {
     sn: number;
     workstream: string;
     detail: string;
-    mitigation: string;
     raised: string;
     level: string;
     status: LogStatus;
-    remarks: string;
   }[];
   const [filter, setFilter] = useState<LogStatus | "All">("All");
   const rows = filter === "All" ? riskLogs : riskLogs.filter((r) => r.status === filter);
@@ -60,19 +58,16 @@ function RiskLogPage() {
             "SN",
             "Workstream",
             "Issue / Risk Detail",
-            "Mitigation Plan",
             "Date Raised",
             "Level",
             "Status",
-            "Remarks",
           ]}
         >
           {rows.map((r) => (
             <tr key={r.sn} className="border-t border-border/70 hover:bg-muted/40">
               <Td>{r.sn}</Td>
               <Td className="font-medium text-foreground whitespace-nowrap">{r.workstream}</Td>
-              <Td className="max-w-[300px] text-foreground/80">{r.detail}</Td>
-              <Td className="max-w-[240px] text-foreground/70 text-xs">{r.mitigation || "—"}</Td>
+              <Td className="max-w-[400px] text-foreground/80">{r.detail}</Td>
               <Td className="tabular-nums whitespace-nowrap">{r.raised}</Td>
               <Td>
                 <LevelPill level={r.level} />
@@ -80,7 +75,6 @@ function RiskLogPage() {
               <Td>
                 <LogStatusPill status={r.status} />
               </Td>
-              <Td className="max-w-[200px] text-xs text-muted-foreground">{r.remarks || "—"}</Td>
             </tr>
           ))}
         </Table>

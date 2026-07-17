@@ -26,7 +26,6 @@ function DecisionLogPage() {
     details: string;
     owner: string;
     status: LogStatus;
-    remarks: string;
   }[];
   const [filter, setFilter] = useState<LogStatus | "All">("All");
   const rows = filter === "All" ? decisionLogs : decisionLogs.filter((r) => r.status === filter);
@@ -62,7 +61,6 @@ function DecisionLogPage() {
             "Decision Details",
             "Owner",
             "Status",
-            "Remarks",
           ]}
         >
           {rows.map((r) => (
@@ -70,12 +68,11 @@ function DecisionLogPage() {
               <Td>{r.sn}</Td>
               <Td className="font-medium text-foreground whitespace-nowrap">{r.workstream}</Td>
               <Td className="whitespace-nowrap">{r.area}</Td>
-              <Td className="max-w-[420px] text-foreground/80">{r.details}</Td>
+              <Td className="max-w-[500px] text-foreground/80">{r.details}</Td>
               <Td className="whitespace-nowrap">{r.owner}</Td>
               <Td>
                 <LogStatusPill status={r.status} />
               </Td>
-              <Td className="max-w-[220px] text-xs text-muted-foreground">{r.remarks || "—"}</Td>
             </tr>
           ))}
         </Table>
