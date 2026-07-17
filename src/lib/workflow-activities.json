@@ -27,7 +27,7 @@
     "department": "Business",
     "deadline": "10-Aug",
     "status": "WIP",
-    "remarks": "PAD doc to be prepared by  Kishore. Common customer handling",
+    "remarks": "PAD doc to be prepared by Kishore. Common customer handling",
     "month": "Aug",
     "sr": 2
   },
@@ -203,8 +203,8 @@
     "department": "Business",
     "deadline": "15-Jul",
     "status": "WIP",
-    "remarks": "Awaiting internal Risk signoff",
-    "month": "",
+    "remarks": "Awaiting internal Risk signoff. 3 Jul - Internal discussion in progress. Unstructured data to be a part",
+    "month": "Jul",
     "sr": 13
   },
   {
@@ -218,7 +218,7 @@
     "owner": "Kishore",
     "department": "Business",
     "deadline": "15-Jul",
-    "status": "Not Started",
+    "status": "WIP",
     "remarks": "TSYS format, customer number, dedupe to be added",
     "month": "Jul",
     "sr": 14
@@ -247,7 +247,7 @@
     "jointFlag": "",
     "milestone": "Y",
     "activity": "FIS Due Diligence",
-    "owner": "Kishore,Libu",
+    "owner": "Kishore, Libu",
     "department": "Business",
     "deadline": "31-Aug",
     "status": "WIP",
@@ -266,7 +266,7 @@
     "owner": "Sreejith, Prajith",
     "department": "Business",
     "deadline": "15-Jul",
-    "status": "Not Started",
+    "status": "Delayed",
     "remarks": "",
     "month": "Jul",
     "sr": 17
@@ -283,7 +283,7 @@
     "department": "Business",
     "deadline": "24-Jul",
     "status": "WIP",
-    "remarks": "Kishore to update Abhilash for dropping email and follow up on RCSA doc from all WS leads",
+    "remarks": "Kishore to update Abhilash for dropping email and follow up on RCSA doc from all WS leads. Critical to initiate",
     "month": "Jul",
     "sr": 18
   },
@@ -348,7 +348,7 @@
     "deadline": "15-Aug",
     "status": "Not Started",
     "remarks": "Based on Data migration note",
-    "month": "",
+    "month": "Aug",
     "sr": 22
   },
   {
@@ -362,7 +362,7 @@
     "owner": "Dinu",
     "department": "IT",
     "deadline": "15-Jul",
-    "status": "WIP",
+    "status": "Completed",
     "remarks": "",
     "month": "Jul",
     "sr": 23
@@ -426,7 +426,7 @@
     "owner": "Dinu, Dinesh",
     "department": "IT, DCE",
     "deadline": "15-Jul",
-    "status": "WIP",
+    "status": "Completed",
     "remarks": "Finalizing of KAFKA SMS",
     "month": "Jul",
     "sr": 27
@@ -442,7 +442,7 @@
     "owner": "Dinu",
     "department": "IT",
     "deadline": "15-Jul",
-    "status": "WIP",
+    "status": "Completed",
     "remarks": "Prod, migration and test",
     "month": "Jul",
     "sr": 28
@@ -458,7 +458,7 @@
     "owner": "Dinu, Dinesh",
     "department": "IT, DCE",
     "deadline": "15-Jul",
-    "status": "WIP",
+    "status": "Completed",
     "remarks": "",
     "month": "Jul",
     "sr": 29
@@ -473,7 +473,7 @@
     "activity": "Production environment setup",
     "owner": "Dinu",
     "department": "IT",
-    "deadline": "15-Jul",
+    "deadline": "31-Jul",
     "status": "WIP",
     "remarks": "",
     "month": "Jul",
@@ -489,8 +489,8 @@
     "activity": "Production Platform Setup for Key Generation",
     "owner": "FIS",
     "department": "FIS",
-    "deadline": "15-Jul",
-    "status": "Not Started",
+    "deadline": "24-Jul",
+    "status": "WIP",
     "remarks": "",
     "month": "Jul",
     "sr": 31
@@ -505,7 +505,7 @@
     "activity": "Service channel testing (Web, API, File exchange, KAFKA)",
     "owner": "Dinu, Dinesh",
     "department": "IT, DCE",
-    "deadline": "15-Jul",
+    "deadline": "24-Jul",
     "status": "WIP",
     "remarks": "",
     "month": "Jul",
@@ -521,7 +521,7 @@
     "activity": "Remaining services for go-live",
     "owner": "Dinu",
     "department": "IT",
-    "deadline": "15-Jul",
+    "deadline": "31-Jul",
     "status": "Not Started",
     "remarks": "",
     "month": "Jul",
@@ -538,7 +538,7 @@
     "owner": "Dinu",
     "department": "IT",
     "deadline": "31-Jul",
-    "status": "Not Started",
+    "status": "WIP",
     "remarks": "",
     "month": "Jul",
     "sr": 34
@@ -554,7 +554,7 @@
     "owner": "FIS",
     "department": "FIS",
     "deadline": "31-Jul",
-    "status": "Not Started",
+    "status": "WIP",
     "remarks": "",
     "month": "Jul",
     "sr": 35
@@ -570,7 +570,7 @@
     "owner": "Dinu, Dinesh",
     "department": "IT, DCE",
     "deadline": "31-Jul",
-    "status": "Not Started",
+    "status": "WIP",
     "remarks": "",
     "month": "Jul",
     "sr": 36
@@ -586,7 +586,7 @@
     "owner": "FIS",
     "department": "FIS",
     "deadline": "31-Jul",
-    "status": "Not Started",
+    "status": "WIP",
     "remarks": "",
     "month": "Jul",
     "sr": 37
@@ -602,7 +602,7 @@
     "owner": "Dinu",
     "department": "IT",
     "deadline": "31-Jul",
-    "status": "Not Started",
+    "status": "WIP",
     "remarks": "",
     "month": "Jul",
     "sr": 38
@@ -682,7 +682,7 @@
     "owner": "Dinu, Dinesh",
     "department": "IT, DCE",
     "deadline": "20-Jul",
-    "status": "WIP",
+    "status": "Completed",
     "remarks": "",
     "month": "Jul",
     "sr": 43
@@ -698,7 +698,7 @@
     "owner": "Dinu, Dinesh",
     "department": "IT, DCE",
     "deadline": "25-Jul",
-    "status": "Not Started",
+    "status": "WIP",
     "remarks": "",
     "month": "Jul",
     "sr": 44
@@ -761,7 +761,7 @@
     "activity": "CR executed",
     "owner": "Dinesh",
     "department": "DCE",
-    "deadline": "20-Jul",
+    "deadline": "31-Jul",
     "status": "Not Started",
     "remarks": "",
     "month": "Jul",
@@ -825,7 +825,7 @@
     "activity": "CR executed",
     "owner": "Dinesh",
     "department": "DCE",
-    "deadline": "20-Jul",
+    "deadline": "31-Jul",
     "status": "Not Started",
     "remarks": "",
     "month": "Jul",
@@ -890,7 +890,7 @@
     "owner": "Dinesh, Bhagyashree",
     "department": "DCE, SQD",
     "deadline": "20-Jul",
-    "status": "WIP",
+    "status": "Completed",
     "remarks": "",
     "month": "Jul",
     "sr": 56
@@ -1003,7 +1003,7 @@
     "department": "IT",
     "deadline": "31-Jul",
     "status": "WIP",
-    "remarks": "",
+    "remarks": "Take a mail confirmation on KAFKA",
     "month": "Jul",
     "sr": 63
   },
@@ -1019,7 +1019,7 @@
     "department": "Business",
     "deadline": "30-Jun",
     "status": "Completed",
-    "remarks": "TSYS to add the Payload detais",
+    "remarks": "TSYS to add the Payload details",
     "month": "Jun",
     "sr": 64
   },
@@ -1035,7 +1035,7 @@
     "department": "Business, IT",
     "deadline": "20-Jul",
     "status": "WIP",
-    "remarks": "Vipin has shared 4 payload will cover 60 notification details.",
+    "remarks": "Vipin has shared 4 payload will cover 60 notification details. 10 Jul - Connectivity part has been done. 15 Jul - Vipin has shared all the messages. Pending mapping of bucketing of the message.",
     "month": "Jul",
     "sr": 65
   },
@@ -1063,7 +1063,7 @@
     "jointFlag": "",
     "milestone": "",
     "activity": "Rewards file process to LR",
-    "owner": "Prasad,Anubhav",
+    "owner": "Prasad, Anubhav",
     "department": "Business",
     "deadline": "31-Jul",
     "status": "WIP",
@@ -1082,7 +1082,7 @@
     "owner": "Prasad, Anubhav, Dinu",
     "department": "Business, IT",
     "deadline": "10-Jul",
-    "status": "WIP",
+    "status": "Delayed",
     "remarks": "Meeting done with TSYS and LR team on 3 Jul. Followup meeting on 8 Jul.",
     "month": "Jul",
     "sr": 68
@@ -1094,11 +1094,11 @@
     "ledBy": "FIS & Client",
     "jointFlag": "",
     "milestone": "",
-    "activity": "PRIME & LR alignment on file exhange",
+    "activity": "PRIME & LR alignment on file exchange",
     "owner": "Prasad, Anubhav, Dinu",
     "department": "Business, IT",
     "deadline": "20-Jul",
-    "status": "Not Started",
+    "status": "WIP",
     "remarks": "",
     "month": "Jul",
     "sr": 69
@@ -1272,10 +1272,10 @@
     "milestone": "",
     "activity": "Block codes alignment",
     "owner": "Krishna",
-    "department": "Credit RIsk",
+    "department": "Credit Risk",
     "deadline": "15-Jul",
-    "status": "WIP",
-    "remarks": "",
+    "status": "Delayed",
+    "remarks": "scb call is required",
     "month": "Jul",
     "sr": 80
   },
@@ -1288,10 +1288,10 @@
     "milestone": "",
     "activity": "Pool plan and agency allocation alignment",
     "owner": "Krishna",
-    "department": "Credit RIsk",
+    "department": "Credit Risk",
     "deadline": "31-Jul",
     "status": "Not Started",
-    "remarks": "",
+    "remarks": "krishna to check amith",
     "month": "Jul",
     "sr": 81
   },
@@ -1322,7 +1322,7 @@
     "owner": "Bhagyashree, Brijesh, Simi, Krishna",
     "department": "SQD, Ops",
     "deadline": "10-Jul",
-    "status": "Not Started",
+    "status": "WIP",
     "remarks": "",
     "month": "Jul",
     "sr": 83
@@ -1367,11 +1367,11 @@
     "jointFlag": "",
     "milestone": "",
     "activity": "Statement changes",
-    "owner": "Dinu, Sreejith",
+    "owner": "Sreejith",
     "department": "Business",
     "deadline": "31-Jul",
     "status": "WIP",
-    "remarks": "Meeting with Metele partner to be scheduled",
+    "remarks": "Meeting with Metele partner to be scheduled. Requirement is not finalized",
     "month": "Jul",
     "sr": 86
   },
@@ -1402,7 +1402,7 @@
     "owner": "Dinu, Sreejith",
     "department": "IT, Business",
     "deadline": "15-Jul",
-    "status": "Not Started",
+    "status": "WIP",
     "remarks": "",
     "month": "Jul",
     "sr": 88
@@ -1466,7 +1466,7 @@
     "owner": "Brijesh, Sreejith",
     "department": "Operations, Business",
     "deadline": "10-Jul",
-    "status": "WIP",
+    "status": "Completed",
     "remarks": "",
     "month": "Jul",
     "sr": 92
@@ -1481,8 +1481,8 @@
     "activity": "MCT configuration",
     "owner": "Brijesh",
     "department": "Operations",
-    "deadline": "20-Jul",
-    "status": "Not Started",
+    "deadline": "31-Jul",
+    "status": "WIP",
     "remarks": "",
     "month": "Jul",
     "sr": 93
@@ -1530,7 +1530,7 @@
     "owner": "Dinu, Sreejith",
     "department": "IT",
     "deadline": "30-Jun",
-    "status": "WIP",
+    "status": "Completed",
     "remarks": "",
     "month": "Jun",
     "sr": 96
@@ -1546,7 +1546,7 @@
     "owner": "Sreejith",
     "department": "Business",
     "deadline": "10-Jul",
-    "status": "Not Started",
+    "status": "WIP",
     "remarks": "",
     "month": "Jul",
     "sr": 97
@@ -1627,8 +1627,8 @@
     "department": "Business",
     "deadline": "15-Jul",
     "status": "WIP",
-    "remarks": "24 Jun- Scoping discussion done with KPMG team.",
-    "month": "",
+    "remarks": "24 Jun- Scoping discussion done with KPMG team. 10 Jul - Saventech will be vendor, cost is being discussed.",
+    "month": "Jul",
     "sr": 102
   },
   {
@@ -1639,8 +1639,8 @@
     "jointFlag": "",
     "milestone": "",
     "activity": "Site development",
-    "owner": "Dinesh",
-    "department": "DCE",
+    "owner": "Kishore",
+    "department": "Business",
     "deadline": "31-Jul",
     "status": "Not Started",
     "remarks": "",
@@ -1655,8 +1655,8 @@
     "jointFlag": "",
     "milestone": "",
     "activity": "Alignment with vendor for deployment",
-    "owner": "Dinesh",
-    "department": "DCE",
+    "owner": "Kishore",
+    "department": "Business",
     "deadline": "31-Jul",
     "status": "Not Started",
     "remarks": "",
@@ -1739,8 +1739,8 @@
     "department": "Business",
     "deadline": "3-Jul",
     "status": "Delayed",
-    "remarks": "All queries resolved in tri-party call.",
-    "month": "",
+    "remarks": "All queries resolved in tri-party call. 6 Jul - Received final doc from TSYS late 3 Jul for review. 17 July is target date.",
+    "month": "Jul",
     "sr": 109
   },
   {
@@ -1752,7 +1752,7 @@
     "milestone": "",
     "activity": "Detailed Data Migration Alignment",
     "owner": "Nitin, Libu",
-    "department": "Busines",
+    "department": "Business",
     "deadline": "30-Jun",
     "status": "WIP",
     "remarks": "Nitin to shared the final doc for signoff",
@@ -2138,7 +2138,7 @@
     "owner": "FIS",
     "department": "FIS",
     "deadline": "31-Jul",
-    "status": "Not Started",
+    "status": "WIP",
     "remarks": "",
     "month": "Jul",
     "sr": 134
@@ -2231,7 +2231,7 @@
     "jointFlag": "",
     "milestone": "",
     "activity": "Production Scheme Readiness (V&MC)",
-    "owner": "Jason,Sreejith",
+    "owner": "Jason, Sreejith",
     "department": "Business",
     "deadline": "20-Oct",
     "status": "Not Started",
@@ -2247,7 +2247,7 @@
     "jointFlag": "",
     "milestone": "",
     "activity": "Scheme host certification",
-    "owner": "Jason,Sreejith",
+    "owner": "Jason, Sreejith",
     "department": "Business",
     "deadline": "15-Jun",
     "status": "Completed",
@@ -2263,7 +2263,7 @@
     "jointFlag": "",
     "milestone": "",
     "activity": "Bin procurement",
-    "owner": "Jason,Sreejith",
+    "owner": "Jason, Sreejith",
     "department": "Business",
     "deadline": "15-Jun",
     "status": "Completed",
@@ -2279,7 +2279,7 @@
     "jointFlag": "",
     "milestone": "",
     "activity": "Bin launch plan alignment",
-    "owner": "Jason,Sreejith",
+    "owner": "Jason, Sreejith",
     "department": "Business",
     "deadline": "15-Jul",
     "status": "WIP",
@@ -2295,7 +2295,7 @@
     "jointFlag": "",
     "milestone": "",
     "activity": "Scheme form submission",
-    "owner": "Jason,Sreejith",
+    "owner": "Jason, Sreejith",
     "department": "Business",
     "deadline": "15-Jul",
     "status": "WIP",
@@ -2310,8 +2310,8 @@
     "ledBy": "FIS & Client",
     "jointFlag": "",
     "milestone": "",
-    "activity": "Visa ( Key Management CIQ +Issuer CIQ + VDCS Enrollment Form + Card Range Form + VAA VRM Form + VROL Form submission to Visa. All forms should be in good order)",
-    "owner": "Jason,Sreejith",
+    "activity": "Visa (Key Management CIQ + Issuer CIQ + VDCS Enrollment Form + Card Range Form + VAA VRM Form + VROL Form submission to Visa)",
+    "owner": "Jason, Sreejith",
     "department": "Business",
     "deadline": "3-Aug",
     "status": "WIP",
@@ -2327,7 +2327,7 @@
     "jointFlag": "",
     "milestone": "",
     "activity": "Mastercard",
-    "owner": "Jason,Sreejith",
+    "owner": "Jason, Sreejith",
     "department": "Business",
     "deadline": "15-Jul",
     "status": "WIP",
@@ -2343,7 +2343,7 @@
     "jointFlag": "",
     "milestone": "",
     "activity": "Share Production Keys",
-    "owner": "Jason,Sreejith",
+    "owner": "Jason, Sreejith",
     "department": "Business",
     "deadline": "31-Aug",
     "status": "Not Started",
@@ -2359,7 +2359,7 @@
     "jointFlag": "",
     "milestone": "",
     "activity": "Visa",
-    "owner": "Jason,Sreejith",
+    "owner": "Jason, Sreejith",
     "department": "Business",
     "deadline": "31-Aug",
     "status": "Not Started",
@@ -2375,7 +2375,7 @@
     "jointFlag": "",
     "milestone": "",
     "activity": "Mastercard",
-    "owner": "Jason,Sreejith",
+    "owner": "Jason, Sreejith",
     "department": "Business",
     "deadline": "31-Aug",
     "status": "Not Started",
@@ -2391,7 +2391,7 @@
     "jointFlag": "",
     "milestone": "Y",
     "activity": "Scheme confirmation for Auth Clearing",
-    "owner": "Jason,Sreejith",
+    "owner": "Jason, Sreejith",
     "department": "Business",
     "deadline": "15-Oct",
     "status": "Not Started",
@@ -2406,22 +2406,14 @@
     "ledBy": "FIS & Client",
     "jointFlag": "",
     "milestone": "",
-    "activity": "Launch and emboss Cards for",
+    "activity": "Launch and emboss Cards for Scheme Keys Validation (KMS)",
+    "owner": "Jason, Sreejith",
+    "department": "Business",
+    "deadline": "1-Sep",
+    "status": "Not Started",
     "remarks": "",
-    "month": "",
+    "month": "Sep",
     "sr": 151
-  },
-  {
-    "displaySr": "Scheme Keys Validation (KMS)",
-    "workstream": "Jason,Sreejith",
-    "phase": "Business",
-    "ledBy": "1-Sep",
-    "jointFlag": "Not Started",
-    "milestone": "",
-    "activity": "Sep",
-    "remarks": "",
-    "month": "",
-    "sr": 152
   },
   {
     "displaySr": "8",
@@ -2431,13 +2423,13 @@
     "jointFlag": "",
     "milestone": "",
     "activity": "New bins launched for validation (ATM, POS, Ecom)",
-    "owner": "Jason,Sreejith",
+    "owner": "Jason, Sreejith",
     "department": "Business",
     "deadline": "20-Oct",
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 153
+    "sr": 152
   },
   {
     "displaySr": "9",
@@ -2447,13 +2439,13 @@
     "jointFlag": "",
     "milestone": "",
     "activity": "Bin validation completed",
-    "owner": "Jason,Sreejith",
+    "owner": "Jason, Sreejith",
     "department": "Business",
     "deadline": "20-Oct",
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 154
+    "sr": 153
   },
   {
     "displaySr": "G",
@@ -2463,13 +2455,13 @@
     "jointFlag": "",
     "milestone": "",
     "activity": "Key Conveyance for Launch",
-    "owner": "Jason,Sreejith",
+    "owner": "Jason, Sreejith",
     "department": "Business",
     "deadline": "31-Aug",
     "status": "Not Started",
     "remarks": "",
     "month": "Aug",
-    "sr": 155
+    "sr": 154
   },
   {
     "displaySr": "1",
@@ -2485,7 +2477,7 @@
     "status": "Completed",
     "remarks": "",
     "month": "Jun",
-    "sr": 156
+    "sr": 155
   },
   {
     "displaySr": "2",
@@ -2501,7 +2493,7 @@
     "status": "Completed",
     "remarks": "Key workbook required as input",
     "month": "Jun",
-    "sr": 157
+    "sr": 156
   },
   {
     "displaySr": "3",
@@ -2511,13 +2503,13 @@
     "jointFlag": "",
     "milestone": "",
     "activity": "BAR Forms Signed for UAT",
-    "owner": "Jason,Sreejith",
+    "owner": "Jason, Sreejith",
     "department": "Business",
     "deadline": "30-Jun",
     "status": "Completed",
-    "remarks": "Both UAT and poduction BAR forms shared with TSYS",
+    "remarks": "Both UAT and production BAR forms shared with TSYS",
     "month": "Jun",
-    "sr": 158
+    "sr": 157
   },
   {
     "displaySr": "4",
@@ -2533,7 +2525,7 @@
     "status": "WIP",
     "remarks": "",
     "month": "Jun",
-    "sr": 159
+    "sr": 158
   },
   {
     "displaySr": "5",
@@ -2543,13 +2535,13 @@
     "jointFlag": "",
     "milestone": "",
     "activity": "BAR Forms Signed for Production",
-    "owner": "Jason,Sreejith",
+    "owner": "Jason, Sreejith",
     "department": "Business",
     "deadline": "30-Jun",
     "status": "Completed",
     "remarks": "",
     "month": "Jun",
-    "sr": 160
+    "sr": 159
   },
   {
     "displaySr": "6",
@@ -2559,13 +2551,13 @@
     "jointFlag": "",
     "milestone": "",
     "activity": "Key conveyance completed for migration launch",
-    "owner": "Jason,Sreejith",
+    "owner": "Jason, Sreejith",
     "department": "Business",
     "deadline": "31-Aug",
     "status": "Not Started",
     "remarks": "",
     "month": "Aug",
-    "sr": 161
+    "sr": 160
   },
   {
     "displaySr": "7",
@@ -2574,22 +2566,14 @@
     "ledBy": "FIS",
     "jointFlag": "",
     "milestone": "Y",
-    "activity": "Keys Applied to Production",
+    "activity": "Keys Applied to Production Environment",
+    "owner": "FIS",
+    "department": "FIS",
+    "deadline": "31-Aug",
+    "status": "Not Started",
     "remarks": "",
-    "month": "",
-    "sr": 162
-  },
-  {
-    "displaySr": "Environment",
-    "workstream": "FIS",
-    "phase": "FIS",
-    "ledBy": "31-Aug",
-    "jointFlag": "Not Started",
-    "milestone": "",
-    "activity": "Aug",
-    "remarks": "",
-    "month": "",
-    "sr": 163
+    "month": "Aug",
+    "sr": 161
   },
   {
     "displaySr": "H",
@@ -2605,7 +2589,7 @@
     "status": "WIP",
     "remarks": "",
     "month": "Oct",
-    "sr": 164
+    "sr": 162
   },
   {
     "displaySr": "1",
@@ -2621,7 +2605,7 @@
     "status": "WIP",
     "remarks": "On track",
     "month": "Jul",
-    "sr": 165
+    "sr": 163
   },
   {
     "displaySr": "2",
@@ -2637,7 +2621,7 @@
     "status": "WIP",
     "remarks": "On track",
     "month": "Jul",
-    "sr": 166
+    "sr": 164
   },
   {
     "displaySr": "3",
@@ -2653,7 +2637,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 167
+    "sr": 165
   },
   {
     "displaySr": "4",
@@ -2669,7 +2653,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 168
+    "sr": 166
   },
   {
     "displaySr": "5",
@@ -2685,7 +2669,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 169
+    "sr": 167
   },
   {
     "displaySr": "6",
@@ -2701,7 +2685,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 170
+    "sr": 168
   },
   {
     "displaySr": "7",
@@ -2717,7 +2701,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 171
+    "sr": 169
   },
   {
     "displaySr": "8",
@@ -2733,7 +2717,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 172
+    "sr": 170
   },
   {
     "displaySr": "9",
@@ -2749,7 +2733,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 173
+    "sr": 171
   },
   {
     "displaySr": "10",
@@ -2765,7 +2749,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 174
+    "sr": 172
   },
   {
     "displaySr": "11",
@@ -2781,7 +2765,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 175
+    "sr": 173
   },
   {
     "displaySr": "12",
@@ -2797,7 +2781,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 176
+    "sr": 174
   },
   {
     "displaySr": "13",
@@ -2813,7 +2797,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 177
+    "sr": 175
   },
   {
     "displaySr": "13.1",
@@ -2829,7 +2813,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 178
+    "sr": 176
   },
   {
     "displaySr": "13.2",
@@ -2845,7 +2829,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 179
+    "sr": 177
   },
   {
     "displaySr": "13.3",
@@ -2861,7 +2845,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 180
+    "sr": 178
   },
   {
     "displaySr": "13.4",
@@ -2877,7 +2861,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 181
+    "sr": 179
   },
   {
     "displaySr": "I",
@@ -2893,7 +2877,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 182
+    "sr": 180
   },
   {
     "displaySr": "1",
@@ -2909,7 +2893,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 183
+    "sr": 181
   },
   {
     "displaySr": "2",
@@ -2925,7 +2909,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 184
+    "sr": 182
   },
   {
     "displaySr": "3",
@@ -2941,7 +2925,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 185
+    "sr": 183
   },
   {
     "displaySr": "4",
@@ -2957,7 +2941,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 186
+    "sr": 184
   },
   {
     "displaySr": "5",
@@ -2973,7 +2957,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 187
+    "sr": 185
   },
   {
     "displaySr": "J",
@@ -2989,7 +2973,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 188
+    "sr": 186
   },
   {
     "displaySr": "1",
@@ -3005,7 +2989,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Aug",
-    "sr": 189
+    "sr": 187
   },
   {
     "displaySr": "2",
@@ -3021,7 +3005,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Aug",
-    "sr": 190
+    "sr": 188
   },
   {
     "displaySr": "2.1",
@@ -3037,7 +3021,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Aug",
-    "sr": 191
+    "sr": 189
   },
   {
     "displaySr": "2.2",
@@ -3053,7 +3037,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 192
+    "sr": 190
   },
   {
     "displaySr": "2.3",
@@ -3069,7 +3053,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 193
+    "sr": 191
   },
   {
     "displaySr": "2.4",
@@ -3085,7 +3069,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 194
+    "sr": 192
   },
   {
     "displaySr": "2.5",
@@ -3101,7 +3085,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 195
+    "sr": 193
   },
   {
     "displaySr": "3",
@@ -3117,7 +3101,7 @@
     "status": "WIP",
     "remarks": "",
     "month": "Sep",
-    "sr": 196
+    "sr": 194
   },
   {
     "displaySr": "3.1",
@@ -3133,7 +3117,7 @@
     "status": "WIP",
     "remarks": "",
     "month": "Jul",
-    "sr": 197
+    "sr": 195
   },
   {
     "displaySr": "3.2",
@@ -3146,10 +3130,10 @@
     "owner": "Libu, Bhagyshree",
     "department": "Business, SQD",
     "deadline": "31-Jul",
-    "status": "Not Started",
+    "status": "WIP",
     "remarks": "",
     "month": "Jul",
-    "sr": 198
+    "sr": 196
   },
   {
     "displaySr": "3.3",
@@ -3165,7 +3149,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Jul",
-    "sr": 199
+    "sr": 197
   },
   {
     "displaySr": "3.4",
@@ -3181,7 +3165,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 200
+    "sr": 198
   },
   {
     "displaySr": "3.5",
@@ -3197,7 +3181,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 201
+    "sr": 199
   },
   {
     "displaySr": "4",
@@ -3206,22 +3190,14 @@
     "ledBy": "FIS & Client",
     "jointFlag": "",
     "milestone": "Y",
-    "activity": "Production BAU Operational",
+    "activity": "Production BAU Operational Readiness Confirmed",
+    "owner": "Dinu",
+    "department": "IT",
+    "deadline": "30-Sep",
+    "status": "Not Started",
     "remarks": "",
-    "month": "",
-    "sr": 202
-  },
-  {
-    "displaySr": "Readiness Confirmed",
-    "workstream": "Dinu",
-    "phase": "IT",
-    "ledBy": "30-Sep",
-    "jointFlag": "Not Started",
-    "milestone": "",
-    "activity": "Sep",
-    "remarks": "",
-    "month": "",
-    "sr": 203
+    "month": "Sep",
+    "sr": 200
   },
   {
     "displaySr": "K",
@@ -3237,7 +3213,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 204
+    "sr": 201
   },
   {
     "displaySr": "1",
@@ -3253,7 +3229,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 205
+    "sr": 202
   },
   {
     "displaySr": "2",
@@ -3269,7 +3245,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 206
+    "sr": 203
   },
   {
     "displaySr": "3",
@@ -3278,22 +3254,14 @@
     "ledBy": "FIS & Client",
     "jointFlag": "",
     "milestone": "",
-    "activity": "Go-Decision Provided to Payment",
+    "activity": "Go-Decision Provided to Payment Scheme (Keys loaded and setups confirmed by scheme)",
+    "owner": "Sreejith",
+    "department": "Business",
+    "deadline": "15-Oct",
+    "status": "Not Started",
     "remarks": "",
-    "month": "",
-    "sr": 207
-  },
-  {
-    "displaySr": "confirmed by scheme)",
-    "workstream": "Sreejith",
-    "phase": "Business",
-    "ledBy": "15-Oct",
-    "jointFlag": "Not Started",
-    "milestone": "",
-    "activity": "Oct",
-    "remarks": "",
-    "month": "",
-    "sr": 208
+    "month": "Oct",
+    "sr": 204
   },
   {
     "displaySr": "4",
@@ -3309,7 +3277,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 209
+    "sr": 205
   },
   {
     "displaySr": "5",
@@ -3325,7 +3293,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 210
+    "sr": 206
   },
   {
     "displaySr": "6",
@@ -3335,13 +3303,13 @@
     "jointFlag": "",
     "milestone": "Y",
     "activity": "Go-Live Completed",
-    "owner": "Libu,Dinu",
+    "owner": "Libu, Dinu",
     "department": "Business",
     "deadline": "24-Oct",
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 211
+    "sr": 207
   },
   {
     "displaySr": "7",
@@ -3357,7 +3325,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 212
+    "sr": 208
   },
   {
     "displaySr": "8",
@@ -3366,22 +3334,14 @@
     "ledBy": "Client",
     "jointFlag": "",
     "milestone": "",
-    "activity": "Client Declares BAU for Operation",
+    "activity": "Client Declares BAU for Operation Teams",
+    "owner": "Dinu",
+    "department": "IT",
+    "deadline": "24-Oct",
+    "status": "Not Started",
     "remarks": "",
-    "month": "",
-    "sr": 213
-  },
-  {
-    "displaySr": "Teams",
-    "workstream": "Dinu",
-    "phase": "IT",
-    "ledBy": "24-Oct",
-    "jointFlag": "Not Started",
-    "milestone": "",
-    "activity": "Oct",
-    "remarks": "",
-    "month": "",
-    "sr": 214
+    "month": "Oct",
+    "sr": 209
   },
   {
     "displaySr": "9",
@@ -3397,7 +3357,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 215
+    "sr": 210
   },
   {
     "displaySr": "10",
@@ -3413,7 +3373,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 216
+    "sr": 211
   },
   {
     "displaySr": "L",
@@ -3429,7 +3389,7 @@
     "status": "WIP",
     "remarks": "",
     "month": "Oct",
-    "sr": 217
+    "sr": 212
   },
   {
     "displaySr": "1",
@@ -3445,7 +3405,7 @@
     "status": "WIP",
     "remarks": "Discussion on TMS Prime initated on 19 Jun",
     "month": "Jul",
-    "sr": 218
+    "sr": 213
   },
   {
     "displaySr": "2",
@@ -3461,7 +3421,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Sep",
-    "sr": 219
+    "sr": 214
   },
   {
     "displaySr": "3",
@@ -3477,7 +3437,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 220
+    "sr": 215
   },
   {
     "displaySr": "M",
@@ -3493,7 +3453,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Nov",
-    "sr": 221
+    "sr": 216
   },
   {
     "displaySr": "1",
@@ -3509,7 +3469,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 222
+    "sr": 217
   },
   {
     "displaySr": "2",
@@ -3525,7 +3485,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 223
+    "sr": 218
   },
   {
     "displaySr": "3",
@@ -3541,7 +3501,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 224
+    "sr": 219
   },
   {
     "displaySr": "4",
@@ -3557,7 +3517,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Oct",
-    "sr": 225
+    "sr": 220
   },
   {
     "displaySr": "5",
@@ -3573,7 +3533,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Nov",
-    "sr": 226
+    "sr": 221
   },
   {
     "displaySr": "6",
@@ -3589,7 +3549,7 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Nov",
-    "sr": 227
+    "sr": 222
   },
   {
     "displaySr": "7",
@@ -3605,6 +3565,6 @@
     "status": "Not Started",
     "remarks": "",
     "month": "Nov",
-    "sr": 228
+    "sr": 223
   }
 ]
