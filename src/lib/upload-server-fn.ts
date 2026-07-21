@@ -1,5 +1,53 @@
 import { createServerFn } from "@tanstack/react-start";
 
+const MAX_DASHBOARD_WORKBOOK_BYTES = 20 * 1024 * 1024;
+
+/**
+ * Accepts one multi-sheet dashboard workbook from the frontend and parses it
+ * on the server. The parsed records are returned to the browser for display;
+ * the uploaded file is not persisted.
+ */
+export const parseUploadedDashboardExcel = createServerFn({ method: "POST" })
+  .validator((input: unknown) => {
+    const body = input as { fileName?: string; data?: string };
+    if (!body.fileName || !body.data) {
+      throw new Error("Choose an Excel file before submitting.");
+    }
+    if (!/\.xlsx?$/i.test(body.fileName)) {
+      throw new Error("Only .xlsx and .xls Excel files are supported.");
+    }
+    return { fileName: body.fileName, data: body.data };
+  })
+  .handler(async ({ data: { fileName, data } }) => {
+    const fileBuffer = Buffer.from(data, "base64");
+    if (fileBuffer.byteLength === 0) {
+      throw new Error("The selected Excel file is empty.");
+    }
+    if (fileBuffer.byteLength > MAX_DASHBOARD_WORKBOOK_BYTES) {
+      throw new Error("The Excel file is larger than the 20 MB upload limit.");
+    }
+
+    const { parseUploadedDashboardWorkbook } = await import("../server/onedrive-excel");
+    const result = parseUploadedDashboardWorkbook(fileBuffer);
+    const totalRows = Object.values(result.counts).reduce((total, count) => total + count, 0);
+    const moduleCount = [
+      result.counts.ragSummary + result.counts.pendingFromTsys,
+      result.counts.programOverview,
+      result.counts.jointChecklist,
+      result.counts.riskLog,
+      result.counts.decisionLog,
+    ].filter((count) => count > 0).length;
+
+    if (totalRows === 0) {
+      throw new Error(
+        "No dashboard data was found. Check the workbook sheet names and column headings.",
+      );
+    }
+
+    console.log(`[Upload] Parsed ${fileName}: ${totalRows} dashboard rows`);
+    return { ...result, fileName, totalRows, moduleCount };
+  });
+
 /**
  * Server function that accepts Excel file uploads from Power Automate.
  * Secured with an API_UPLOAD_KEY environment variable.

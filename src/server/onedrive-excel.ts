@@ -193,10 +193,10 @@ async function fetchExcelBuffer(shareUrl: string): Promise<ArrayBuffer> {
       }
 
       return res.arrayBuffer();
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.warn(
         `[OneDrive Secure Auth] secure fetch failed, falling back to public download path:`,
-        e.message || e,
+        e instanceof Error ? e.message : e,
       );
     }
   }
@@ -382,6 +382,167 @@ function parseChecklistSheet(
     }));
 }
 
+function firstMatchingSheet(
+  workbook: XLSX.WorkBook,
+  sheetNames: string[],
+): Record<string, unknown>[] {
+  for (const sheetName of sheetNames) {
+    const rows = readSheet(workbook, sheetName);
+    if (rows.length > 0) return rows;
+  }
+  return [];
+}
+
+function sheetHasColumnGroups(rows: Record<string, unknown>[], columnGroups: string[][]): boolean {
+  if (rows.length === 0) return false;
+  const headings = new Set(Object.keys(rows[0]).map((heading) => heading.toLowerCase().trim()));
+  return columnGroups.every((group) =>
+    group.some((heading) => headings.has(heading.toLowerCase().trim())),
+  );
+}
+
+function findSheetByColumns(workbook: XLSX.WorkBook, columnGroups: string[][]) {
+  for (const sheetName of workbook.SheetNames) {
+    const rows = readSheet(workbook, sheetName);
+    if (sheetHasColumnGroups(rows, columnGroups)) return rows;
+  }
+  return [];
+}
+
+function namedSheetOrColumns(
+  workbook: XLSX.WorkBook,
+  sheetNames: string[],
+  columnGroups: string[][],
+) {
+  const namedRows = firstMatchingSheet(workbook, sheetNames);
+  return namedRows.length > 0 ? namedRows : findSheetByColumns(workbook, columnGroups);
+}
+
+function parseCombinedChecklistSheet(rows: Record<string, unknown>[]): ChecklistItem[] {
+  return rows
+    .filter((r) => str(col(r, "Task Name", "Task", "Activity")).length > 0)
+    .map((r, i) => ({
+      sn: num(col(r, "SN", "S.No", "S No", "sn")) || i + 1,
+      workstream: str(col(r, "Workstream", "Work Stream", "Category")),
+      task: str(col(r, "Task Name", "Task", "Activity")),
+      duration: str(col(r, "Duration")),
+      start: str(col(r, "Start")),
+      finish: str(col(r, "Finish", "End Date")),
+      by: str(col(r, "By Who", "By", "Lead")),
+      owner: normalizeOwner(col(r, "SCB/FB/Jointly", "Owner")),
+      status: normalizeChecklistStatus(col(r, "Status")),
+      comments: str(col(r, "Comments", "Remarks")),
+    }));
+}
+
+export interface UploadedWorkbookCounts {
+  ragSummary: number;
+  pendingFromTsys: number;
+  programOverview: number;
+  jointChecklist: number;
+  riskLog: number;
+  decisionLog: number;
+}
+
+/**
+ * Parses one uploaded workbook containing sheets for every dashboard module.
+ * This is intentionally server-side so the browser only sends the file and
+ * receives normalized dashboard records.
+ */
+export function parseUploadedDashboardWorkbook(fileData: Uint8Array): {
+  data: DashboardData;
+  counts: UploadedWorkbookCounts;
+} {
+  const workbook = XLSX.read(fileData, { type: "array" });
+
+  const ragSummary = parseRagSheet(
+    namedSheetOrColumns(
+      workbook,
+      ["RAG", "RAG Summary"],
+      [["RAG"], ["Activity", "Activity Description"], ["Workstream", "Work Stream"]],
+    ),
+  );
+  const pendingFromTsys = parsePendingSheet(
+    namedSheetOrColumns(
+      workbook,
+      ["TSYS ACTIVITIES", "TSYS", "Pending from TSYS"],
+      [
+        ["Date Raised", "Raised"],
+        ["Leads", "Lead"],
+        ["Activity", "Activity Description"],
+      ],
+    ),
+  );
+  const activities = parseActivities(
+    namedSheetOrColumns(
+      workbook,
+      ["Program Overview", "Program", "Programme Overview", "Activities", "Project Plan"],
+      [["Phase"], ["Activity Description", "Milestone"], ["Led by", "Led By", "LedBy"]],
+    ),
+  );
+  const riskLogs = parseRiskLog(
+    namedSheetOrColumns(
+      workbook,
+      ["Risk Log", "Risk", "Risks"],
+      [
+        ["Issue/Risk Detail", "Issue/Risk", "Risk Detail"],
+        ["Mitigation Plan", "Mitigation"],
+      ],
+    ),
+  );
+  const decisionLogs = parseDecisionLog(
+    namedSheetOrColumns(
+      workbook,
+      ["Decision Log", "Decision", "Decisions"],
+      [["Decision Area"], ["Decision Details"]],
+    ),
+  );
+
+  const checklistSheetNames = [
+    "Product",
+    "Comms & Marketing",
+    "IT",
+    "Operations",
+    "KYC & DD",
+    "Customer Service",
+  ];
+  const checklist: ChecklistItem[] = [];
+  for (const sheetName of checklistSheetNames) {
+    const rows = readSheet(workbook, sheetName);
+    if (rows.length > 0) {
+      checklist.push(...parseChecklistSheet(rows, sheetName, checklist.length + 1));
+    }
+  }
+
+  if (checklist.length === 0) {
+    const combinedRows = namedSheetOrColumns(
+      workbook,
+      ["Joint Workstream Checklist", "Joint Checklist", "Checklist"],
+      [["Task Name", "Task"], ["Status"], ["Duration", "Finish", "Comments"]],
+    );
+    checklist.push(...parseCombinedChecklistSheet(combinedRows));
+  }
+
+  const data: DashboardData = {
+    ragSummary,
+    pendingFromTsys,
+    activities,
+    checklist,
+    riskLogs,
+    decisionLogs,
+  };
+  const counts: UploadedWorkbookCounts = {
+    ragSummary: ragSummary.length,
+    pendingFromTsys: pendingFromTsys.length,
+    programOverview: activities.length,
+    jointChecklist: checklist.length,
+    riskLog: riskLogs.length,
+    decisionLog: decisionLogs.length,
+  };
+
+  return { data, counts };
+}
+
 // ─── Local File Helper ───────────────────────────────────────────────
 async function fetchLocalFileBuffer(fileName: string): Promise<ArrayBuffer> {
   const filePath = path.join(process.cwd(), "data", fileName);
@@ -459,7 +620,7 @@ export async function fetchDashboardDataFromOneDrive(): Promise<DashboardData> {
   }
 
   // Parse Joint Checklist.xlsx → Multiple sheets
-  let checklist: ChecklistItem[] = [];
+  const checklist: ChecklistItem[] = [];
   if (checklistBuf) {
     const wb = XLSX.read(new Uint8Array(checklistBuf), { type: "array" });
     const checklistSheets = [

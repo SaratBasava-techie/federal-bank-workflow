@@ -2,6 +2,7 @@ import { Link, useLocation } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { useDashboardData } from "../hooks/useDashboardData";
+import { ExcelUploadDialog } from "./ExcelUploadDialog";
 
 // Tabs for the dashboard navigation. RAG Summary uses the root "/"
 // with ?entered=true to distinguish it from the landing page.
@@ -45,7 +46,8 @@ export function DashboardShell({ children }: { children: ReactNode }) {
             </div>
 
             {/* Right Section */}
-            <div className="soulfire-entrance soulfire-delay-2">
+            <div className="flex items-center gap-3 soulfire-entrance soulfire-delay-2">
+              <ExcelUploadDialog />
               <PoweredByKpmg />
             </div>
           </div>
@@ -56,13 +58,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
               {tabs.map((t) => {
                 const active = pathname === t.to;
                 return (
-                  <NavTab
-                    key={t.to}
-                    to={t.to}
-                    search={t.search as any}
-                    label={t.label}
-                    active={active}
-                  />
+                  <NavTab key={t.to} to={t.to} search={t.search} label={t.label} active={active} />
                 );
               })}
             </nav>
@@ -116,8 +112,8 @@ function NavTab({
   label,
   active,
 }: {
-  to: string;
-  search: any;
+  to: (typeof tabs)[number]["to"];
+  search: { entered: true } | undefined;
   label: string;
   active: boolean;
 }) {
