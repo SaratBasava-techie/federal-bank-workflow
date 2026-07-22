@@ -16,7 +16,6 @@ import { Label } from "@/components/ui/label";
 import type { DashboardResponse } from "@/lib/dashboard-server-fn";
 import {
   applyClientExcelOverrides,
-  clearClientExcelOverrides,
   hasClientExcelOverrides,
   mergeClientExcelData,
 } from "@/lib/client-excel-upload";
@@ -110,14 +109,6 @@ export function ExcelUploadDialog() {
         message: error instanceof Error ? error.message : "The Excel files could not be parsed.",
       });
     }
-  };
-
-  const handleClear = async () => {
-    clearClientExcelOverrides();
-    setHasOverride(false);
-    resetForm();
-    await queryClient.invalidateQueries({ queryKey: ["dashboard-data"] });
-    setOpen(false);
   };
 
   return (
@@ -227,14 +218,7 @@ export function ExcelUploadDialog() {
           )}
         </div>
 
-        <DialogFooter className="gap-2 sm:justify-between sm:space-x-0">
-          <div>
-            {hasOverride && (
-              <Button type="button" variant="ghost" onClick={handleClear} disabled={isBusy}>
-                Restore default data
-              </Button>
-            )}
-          </div>
+        <DialogFooter>
           <Button
             type="button"
             onClick={handleUpload}

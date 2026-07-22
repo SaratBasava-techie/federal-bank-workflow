@@ -100,12 +100,37 @@ function normalizeOwner(v: unknown): "SCB" | "FB" | "Jointly" {
   return "Jointly";
 }
 
-/** Look up a cell by trying multiple possible column names (case-insensitive). */
+/**
+ * Normalize a heading for comparison: lowercase and collapse every run of
+ * whitespace (including in-cell line breaks from Alt+Enter, e.g.
+ * "Decision\nDetails") into a single space. This is what makes header matching
+ * resilient to the multi-line header cells used in the real KPMG workbooks.
+ */
+function norm(v: unknown): string {
+  return str(v)
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/** Look up a cell by trying multiple possible column names (whitespace/case-insensitive). */
 function col(row: Record<string, unknown>, ...keys: string[]): unknown {
+  const rowKeys = Object.keys(row);
   for (const k of keys) {
     if (k in row) return row[k];
-    const found = Object.keys(row).find((rk) => rk.toLowerCase().trim() === k.toLowerCase().trim());
+    const nk = norm(k);
+    // Exact (normalized) match first.
+    let found = rowKeys.find((rk) => norm(rk) === nk);
     if (found) return row[found];
+    // Then a contains match, but only for reasonably specific headings so
+    // short tokens like "sn"/"by" cannot latch onto the wrong column.
+    if (nk.length >= 4) {
+      found = rowKeys.find((rk) => {
+        const nr = norm(rk);
+        return nr.includes(nk) || nk.includes(nr);
+      });
+      if (found && str(row[found])) return row[found];
+    }
   }
   return "";
 }
@@ -116,14 +141,21 @@ function sheetToAoa(sheet: XLSX.WorkSheet): unknown[][] {
 }
 
 /** Find the row index that best matches the expected column headings. */
-function findHeaderRow(aoa: unknown[][], expectedLower: string[]): number {
+function findHeaderRow(aoa: unknown[][], expected: string[]): number {
+  const expectedNorm = expected.map((e) => norm(e));
   let bestRow = 0;
   let bestScore = 0;
   const limit = Math.min(aoa.length, 20);
   for (let i = 0; i < limit; i++) {
-    const cells = (aoa[i] || []).map((c) => str(c).toLowerCase());
+    const cells = (aoa[i] || []).map((c) => norm(c));
     let score = 0;
-    for (const c of cells) if (c && expectedLower.includes(c)) score++;
+    for (const c of cells) {
+      if (!c) continue;
+      if (expectedNorm.includes(c))
+        score += 2; // exact heading
+      else if (expectedNorm.some((e) => e.length >= 4 && (c.includes(e) || e.includes(c))))
+        score += 1; // partial heading (handles slight wording differences)
+    }
     if (score > bestScore) {
       bestScore = score;
       bestRow = i;
@@ -143,11 +175,10 @@ function readRecords(
   if (!sheet) return [];
   const aoa = sheetToAoa(sheet);
   if (aoa.length === 0) return [];
-  const headerRow = findHeaderRow(
-    aoa,
-    expected.map((e) => e.toLowerCase().trim()),
-  );
-  const headers = (aoa[headerRow] || []).map((h) => str(h));
+  const headerRow = findHeaderRow(aoa, expected);
+  // Collapse in-cell line breaks / double spaces so keys like "Decision\nDetails"
+  // become "Decision Details" and match the lookups in the parsers below.
+  const headers = (aoa[headerRow] || []).map((h) => str(h).replace(/\s+/g, " "));
   const records: Record<string, unknown>[] = [];
   for (let i = headerRow + 1; i < aoa.length; i++) {
     const row = aoa[i] || [];
@@ -308,12 +339,13 @@ function detectByName(fileName: string): ModuleType {
 
 function detectByContent(wb: XLSX.WorkBook): ModuleType {
   // Gather every heading token that appears in the first 20 rows of any sheet.
+  // Use norm() so multi-line cells like "Decision\nDetails" become "decision details".
   const tokens = new Set<string>();
   for (const name of wb.SheetNames) {
     const aoa = sheetToAoa(wb.Sheets[name]);
     for (let i = 0; i < Math.min(aoa.length, 20); i++) {
       for (const c of aoa[i] || []) {
-        const t = str(c).toLowerCase();
+        const t = norm(c);
         if (t) tokens.add(t);
       }
     }
