@@ -15,28 +15,36 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { DashboardResponse } from "@/lib/dashboard-server-fn";
 import {
-  applyClientExcelOverride,
+  applyClientExcelOverrides,
   clearClientExcelOverrides,
   hasClientExcelOverrides,
   mergeClientExcelData,
 } from "@/lib/client-excel-upload";
-import { parseUploadedDashboardExcel } from "@/lib/upload-server-fn";
+import { parseUploadedDashboardFiles } from "@/lib/upload-server-fn";
+
+interface FileSummary {
+  fileName: string;
+  type: string;
+  label: string;
+  rows: number;
+  modules: string[];
+}
 
 type UploadStatus =
   | { kind: "idle" }
   | { kind: "reading"; message: string }
   | { kind: "processing"; message: string }
-  | { kind: "success"; message: string }
+  | { kind: "success"; message: string; summary: FileSummary[] }
   | { kind: "error"; message: string };
 
 function readFileAsBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onerror = () => reject(new Error("The selected file could not be read."));
+    reader.onerror = () => reject(new Error(`"${file.name}" could not be read.`));
     reader.onload = () => {
       const result = reader.result;
       if (typeof result !== "string") {
-        reject(new Error("The selected file could not be read."));
+        reject(new Error(`"${file.name}" could not be read.`));
         return;
       }
       resolve(result.slice(result.indexOf(",") + 1));
@@ -49,48 +57,57 @@ export function ExcelUploadDialog() {
   const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [status, setStatus] = useState<UploadStatus>({ kind: "idle" });
   const [hasOverride, setHasOverride] = useState(hasClientExcelOverrides());
   const isBusy = status.kind === "reading" || status.kind === "processing";
 
   const resetForm = () => {
-    setSelectedFile(null);
+    setSelectedFiles([]);
     setStatus({ kind: "idle" });
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const handleUpload = async () => {
-    if (!selectedFile) {
-      setStatus({ kind: "error", message: "Choose an Excel file before submitting." });
+    if (selectedFiles.length === 0) {
+      setStatus({ kind: "error", message: "Choose one or more Excel files before submitting." });
       return;
     }
 
     try {
-      setStatus({ kind: "reading", message: "Reading the Excel file…" });
-      const data = await readFileAsBase64(selectedFile);
+      setStatus({ kind: "reading", message: "Reading the selected files…" });
+      const files = await Promise.all(
+        selectedFiles.map(async (file) => ({
+          fileName: file.name,
+          data: await readFileAsBase64(file),
+        })),
+      );
 
       setStatus({
         kind: "processing",
-        message: "Uploaded. The backend is parsing all dashboard sheets…",
+        message: "Uploaded. The backend is parsing your workbooks…",
       });
-      const result = await parseUploadedDashboardExcel({
-        data: { fileName: selectedFile.name, data },
-      });
+      const result = await parseUploadedDashboardFiles({ data: { files } });
 
-      applyClientExcelOverride(result.data);
+      applyClientExcelOverrides(result.data);
       queryClient.setQueryData<DashboardResponse>(["dashboard-data"], (current) =>
         current ? mergeClientExcelData(current) : current,
       );
       setHasOverride(true);
-      setStatus({
-        kind: "success",
-        message: `${result.totalRows} rows parsed successfully across ${result.moduleCount} of 5 modules.`,
-      });
+
+      const parsedFiles = result.summary.filter((s) => s.rows > 0);
+      const emptyFiles = result.summary.filter((s) => s.rows === 0);
+      const message =
+        `${result.totalRows} rows parsed from ${parsedFiles.length} of ` +
+        `${result.summary.length} file(s).` +
+        (emptyFiles.length > 0
+          ? ` ${emptyFiles.length} file(s) had no recognizable data and were skipped.`
+          : "");
+      setStatus({ kind: "success", message, summary: result.summary });
     } catch (error) {
       setStatus({
         kind: "error",
-        message: error instanceof Error ? error.message : "The Excel file could not be parsed.",
+        message: error instanceof Error ? error.message : "The Excel files could not be parsed.",
       });
     }
   };
@@ -125,7 +142,7 @@ export function ExcelUploadDialog() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[520px]">
+      <DialogContent className="sm:max-w-[560px]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <FileSpreadsheet className="h-5 w-5 text-emerald-600" />
@@ -133,22 +150,58 @@ export function ExcelUploadDialog() {
           </DialogTitle>
         </DialogHeader>
 
-        <div className="grid gap-5 py-2">
+        <div className="grid gap-4 py-2">
           <div className="grid gap-2">
-            <Label htmlFor="dashboard-excel-file">Excel file</Label>
+            <Label htmlFor="dashboard-excel-file">Excel files</Label>
             <Input
               ref={fileInputRef}
               id="dashboard-excel-file"
               type="file"
+              multiple
               accept=".xlsx,.xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
               className="h-11 cursor-pointer py-2 file:mr-3 file:cursor-pointer"
               disabled={isBusy}
               onChange={(event) => {
-                setSelectedFile(event.target.files?.[0] ?? null);
+                setSelectedFiles(Array.from(event.target.files ?? []));
                 setStatus({ kind: "idle" });
               }}
             />
+            <p className="text-xs text-muted-foreground">
+              Select any of: RAG, Program Overview, Joint Workstream Checklist, Risk Log, Decision
+              Log. Files you leave out keep their current data.
+            </p>
           </div>
+
+          {selectedFiles.length > 0 && status.kind !== "success" && (
+            <ul className="grid gap-1 rounded-md border border-border bg-muted/30 px-3 py-2 text-sm">
+              {selectedFiles.map((file) => (
+                <li key={file.name} className="flex items-center gap-2 text-foreground/80">
+                  <FileSpreadsheet className="h-3.5 w-3.5 shrink-0 text-emerald-600" />
+                  <span className="truncate">{file.name}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {status.kind === "success" && (
+            <ul className="grid gap-1.5 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2.5 text-sm">
+              {status.summary.map((file) => (
+                <li key={file.fileName} className="flex items-center justify-between gap-2">
+                  <span className="flex min-w-0 items-center gap-2">
+                    {file.rows > 0 ? (
+                      <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-600" />
+                    ) : (
+                      <AlertCircle className="h-3.5 w-3.5 shrink-0 text-amber-500" />
+                    )}
+                    <span className="truncate text-emerald-900">{file.fileName}</span>
+                  </span>
+                  <span className="shrink-0 whitespace-nowrap text-xs font-medium text-emerald-700">
+                    {file.rows > 0 ? `${file.label} · ${file.rows} rows` : "not recognized"}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
 
           {status.kind !== "idle" && (
             <div
@@ -178,11 +231,15 @@ export function ExcelUploadDialog() {
           <div>
             {hasOverride && (
               <Button type="button" variant="ghost" onClick={handleClear} disabled={isBusy}>
-                Restore backend data
+                Restore default data
               </Button>
             )}
           </div>
-          <Button type="button" onClick={handleUpload} disabled={!selectedFile || isBusy}>
+          <Button
+            type="button"
+            onClick={handleUpload}
+            disabled={selectedFiles.length === 0 || isBusy}
+          >
             {isBusy ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" />

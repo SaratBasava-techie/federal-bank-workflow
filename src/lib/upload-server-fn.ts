@@ -1,51 +1,60 @@
 import { createServerFn } from "@tanstack/react-start";
 
 const MAX_DASHBOARD_WORKBOOK_BYTES = 20 * 1024 * 1024;
+const MAX_UPLOAD_FILES = 10;
 
 /**
- * Accepts one multi-sheet dashboard workbook from the frontend and parses it
- * on the server. The parsed records are returned to the browser for display;
- * the uploaded file is not persisted.
+ * Accepts multiple dashboard workbooks (RAG, Program Overview, Joint
+ * Workstream Checklist, Risk Log, Decision Log) in a single request and
+ * parses them on the server. Each file maps to one dashboard module; only
+ * the modules that parse successfully are returned so the browser can keep
+ * showing existing data for any module the user did not upload.
  */
-export const parseUploadedDashboardExcel = createServerFn({ method: "POST" })
+export const parseUploadedDashboardFiles = createServerFn({ method: "POST" })
   .validator((input: unknown) => {
-    const body = input as { fileName?: string; data?: string };
-    if (!body.fileName || !body.data) {
-      throw new Error("Choose an Excel file before submitting.");
+    const body = input as { files?: { fileName?: string; data?: string }[] };
+    if (!body.files || !Array.isArray(body.files) || body.files.length === 0) {
+      throw new Error("Choose at least one Excel file before submitting.");
     }
-    if (!/\.xlsx?$/i.test(body.fileName)) {
-      throw new Error("Only .xlsx and .xls Excel files are supported.");
+    if (body.files.length > MAX_UPLOAD_FILES) {
+      throw new Error(`You can upload at most ${MAX_UPLOAD_FILES} files at once.`);
     }
-    return { fileName: body.fileName, data: body.data };
+    for (const file of body.files) {
+      if (!file.fileName || !file.data) {
+        throw new Error("Each uploaded file needs a name and content.");
+      }
+      if (!/\.xlsx?$/i.test(file.fileName)) {
+        throw new Error(`Only .xlsx and .xls Excel files are supported (got "${file.fileName}").`);
+      }
+    }
+    return { files: body.files as { fileName: string; data: string }[] };
   })
-  .handler(async ({ data: { fileName, data } }) => {
-    const fileBuffer = Buffer.from(data, "base64");
-    if (fileBuffer.byteLength === 0) {
-      throw new Error("The selected Excel file is empty.");
-    }
-    if (fileBuffer.byteLength > MAX_DASHBOARD_WORKBOOK_BYTES) {
-      throw new Error("The Excel file is larger than the 20 MB upload limit.");
-    }
+  .handler(async ({ data: { files } }) => {
+    const buffers = files.map(({ fileName, data }) => {
+      const buffer = Buffer.from(data, "base64");
+      if (buffer.byteLength === 0) {
+        throw new Error(`"${fileName}" is empty.`);
+      }
+      if (buffer.byteLength > MAX_DASHBOARD_WORKBOOK_BYTES) {
+        throw new Error(`"${fileName}" is larger than the 20 MB upload limit.`);
+      }
+      return { fileName, buffer };
+    });
 
-    const { parseUploadedDashboardWorkbook } = await import("../server/onedrive-excel");
-    const result = parseUploadedDashboardWorkbook(fileBuffer);
-    const totalRows = Object.values(result.counts).reduce((total, count) => total + count, 0);
-    const moduleCount = [
-      result.counts.ragSummary + result.counts.pendingFromTsys,
-      result.counts.programOverview,
-      result.counts.jointChecklist,
-      result.counts.riskLog,
-      result.counts.decisionLog,
-    ].filter((count) => count > 0).length;
+    const { parseUploadedModuleFiles } = await import("../server/excel-parsing");
+    const result = parseUploadedModuleFiles(buffers);
 
-    if (totalRows === 0) {
+    if (result.totalRows === 0) {
       throw new Error(
-        "No dashboard data was found. Check the workbook sheet names and column headings.",
+        "No dashboard data was found in the uploaded files. Check the sheet names and column headings.",
       );
     }
 
-    console.log(`[Upload] Parsed ${fileName}: ${totalRows} dashboard rows`);
-    return { ...result, fileName, totalRows, moduleCount };
+    console.log(
+      `[Upload] Parsed ${files.length} file(s): ${result.totalRows} rows across ` +
+        `${result.summary.filter((s) => s.rows > 0).length} module(s)`,
+    );
+    return result;
   });
 
 /**

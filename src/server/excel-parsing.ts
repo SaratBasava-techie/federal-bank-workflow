@@ -1,0 +1,439 @@
+import * as XLSX from "xlsx";
+import type {
+  DashboardData,
+  RagItem,
+  PendingItem,
+  ActivityItem,
+  RiskLogItem,
+  DecisionLogItem,
+  ChecklistItem,
+} from "./onedrive-excel";
+
+// ─────────────────────────────────────────────────────────────────────
+// Multi-file dashboard workbook parser.
+//
+// Each uploaded file is a SEPARATE workbook that maps to one dashboard
+// module (RAG, Program Overview, Joint Workstream Checklist, Risk Log,
+// Decision Log). The real KPMG workbooks have title/legend banner rows
+// ABOVE the actual column headers, so we detect the header row instead of
+// blindly trusting row 1 — that is what previously caused the
+// "No dashboard data was found" error.
+// ─────────────────────────────────────────────────────────────────────
+
+export type ModuleType = "rag" | "program" | "checklist" | "risk" | "decision" | "unknown";
+
+const MODULE_LABEL: Record<ModuleType, string> = {
+  rag: "RAG Summary",
+  program: "Program Overview",
+  checklist: "Joint Workstream Checklist",
+  risk: "Risk Log",
+  decision: "Decision Log",
+  unknown: "Unrecognized",
+};
+
+export interface FileSummary {
+  fileName: string;
+  type: ModuleType;
+  label: string;
+  rows: number;
+  /** DashboardData keys this file populated */
+  modules: (keyof DashboardData)[];
+}
+
+export interface ParsedUpload {
+  /** Only the modules that parsed successfully (rows > 0) are present. */
+  data: Partial<DashboardData>;
+  summary: FileSummary[];
+  totalRows: number;
+}
+
+// ─── Value helpers ───────────────────────────────────────────────────
+function str(v: unknown): string {
+  if (v == null) return "";
+  return String(v).trim();
+}
+
+function num(v: unknown): number {
+  const n = Number(v);
+  return Number.isNaN(n) ? 0 : n;
+}
+
+function normalizeRag(v: unknown): "critical" | "warning" | "ontrack" {
+  const s = str(v).toLowerCase();
+  if (["red", "critical", "high", "r", "h"].includes(s)) return "critical";
+  if (["amber", "warning", "yellow", "medium", "med", "a", "m"].includes(s)) return "warning";
+  if (["green", "ontrack", "on track", "low", "g", "l"].includes(s)) return "ontrack";
+  // Fuzzy fallback for values like "High risk" / "Amber/Red"
+  if (s.includes("red") || s.includes("crit") || s.includes("high")) return "critical";
+  if (s.includes("amber") || s.includes("medium") || s.includes("warn") || s.includes("yellow"))
+    return "warning";
+  return "ontrack";
+}
+
+function normalizeLogStatus(v: unknown): "Open" | "Closed" | "WIP" {
+  const s = str(v).toLowerCase();
+  if (s === "closed" || s === "done" || s === "completed" || s === "complete") return "Closed";
+  if (s === "wip" || s === "in progress" || s === "inprogress") return "WIP";
+  return "Open";
+}
+
+function normalizeRiskLevel(v: unknown): "High" | "Medium" | "Low" {
+  const s = str(v).toLowerCase();
+  if (s === "high" || s === "h") return "High";
+  if (s === "medium" || s === "med" || s === "m") return "Medium";
+  return "Low";
+}
+
+function normalizeChecklistStatus(v: unknown): "NS" | "IP" | "D" | "B" {
+  const s = str(v).toLowerCase();
+  if (s === "d" || s === "done" || s === "completed" || s === "complete") return "D";
+  if (s === "ip" || s === "in progress" || s === "inprogress" || s === "wip") return "IP";
+  if (s === "b" || s === "blocked" || s === "open") return "B";
+  return "NS";
+}
+
+function normalizeOwner(v: unknown): "SCB" | "FB" | "Jointly" {
+  const s = str(v).toLowerCase();
+  if (s.includes("jointly") || s.includes("joint")) return "Jointly";
+  if (s.includes("fb") || s.includes("federal")) return "FB";
+  if (s.includes("scb") || s.includes("standard")) return "SCB";
+  return "Jointly";
+}
+
+/** Look up a cell by trying multiple possible column names (case-insensitive). */
+function col(row: Record<string, unknown>, ...keys: string[]): unknown {
+  for (const k of keys) {
+    if (k in row) return row[k];
+    const found = Object.keys(row).find((rk) => rk.toLowerCase().trim() === k.toLowerCase().trim());
+    if (found) return row[found];
+  }
+  return "";
+}
+
+// ─── Header-aware sheet reader ───────────────────────────────────────
+function sheetToAoa(sheet: XLSX.WorkSheet): unknown[][] {
+  return XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "", blankrows: false });
+}
+
+/** Find the row index that best matches the expected column headings. */
+function findHeaderRow(aoa: unknown[][], expectedLower: string[]): number {
+  let bestRow = 0;
+  let bestScore = 0;
+  const limit = Math.min(aoa.length, 20);
+  for (let i = 0; i < limit; i++) {
+    const cells = (aoa[i] || []).map((c) => str(c).toLowerCase());
+    let score = 0;
+    for (const c of cells) if (c && expectedLower.includes(c)) score++;
+    if (score > bestScore) {
+      bestScore = score;
+      bestRow = i;
+    }
+  }
+  return bestScore >= 2 ? bestRow : 0;
+}
+
+/**
+ * Convert a worksheet to row objects, skipping any title/legend banner rows
+ * above the real header row.
+ */
+function readRecords(
+  sheet: XLSX.WorkSheet | undefined,
+  expected: string[],
+): Record<string, unknown>[] {
+  if (!sheet) return [];
+  const aoa = sheetToAoa(sheet);
+  if (aoa.length === 0) return [];
+  const headerRow = findHeaderRow(
+    aoa,
+    expected.map((e) => e.toLowerCase().trim()),
+  );
+  const headers = (aoa[headerRow] || []).map((h) => str(h));
+  const records: Record<string, unknown>[] = [];
+  for (let i = headerRow + 1; i < aoa.length; i++) {
+    const row = aoa[i] || [];
+    if (row.every((c) => str(c) === "")) continue;
+    const rec: Record<string, unknown> = {};
+    for (let j = 0; j < headers.length; j++) {
+      const h = headers[j];
+      if (h) rec[h] = row[j] ?? "";
+    }
+    records.push(rec);
+  }
+  return records;
+}
+
+function pickSheet(wb: XLSX.WorkBook, ...matchers: RegExp[]): XLSX.WorkSheet | undefined {
+  for (const re of matchers) {
+    const name = wb.SheetNames.find((n) => re.test(n));
+    if (name) return wb.Sheets[name];
+  }
+  return undefined;
+}
+
+// ─── Expected column vocabularies (used for header detection) ────────
+const EXP_RAG = ["sn", "s no", "s.no", "workstream", "activity", "owner", "leads", "target date", "rag"];
+const EXP_PENDING = ["sn", "s no", "workstream", "activity", "leads", "date raised"];
+const EXP_PROGRAM = [
+  "sr. no", "sr no", "sr.no", "workstreams", "workstream", "led by", "activity description",
+  "owner/s", "owner", "department", "end date", "status", "month",
+];
+const EXP_RISK = [
+  "s no", "sn", "workstream", "issue/risk detail", "mitigation plan", "date raised",
+  "risk level", "status",
+];
+const EXP_DECISION = ["sn", "workstream", "decision area", "decision details", "owner", "status"];
+const EXP_CHECKLIST = [
+  "sr.no", "sr. no", "sr no", "task name", "task", "duration", "start", "finish", "by who",
+  "scb/fb/jointly", "status", "comments",
+];
+
+// ─── Per-sheet parsers ───────────────────────────────────────────────
+function parseRag(rows: Record<string, unknown>[]): RagItem[] {
+  return rows
+    .filter((r) => str(col(r, "Activity", "Activity Description")) || str(col(r, "Workstream", "Work Stream")))
+    .map((r, i) => ({
+      sn: num(col(r, "SN", "S.No", "S No", "sn")) || i + 1,
+      workstream: str(col(r, "Workstream", "Work Stream")),
+      activity: str(col(r, "Activity", "Activity Description")),
+      owner: str(col(r, "Owner", "Owner/s")),
+      leads: str(col(r, "Leads", "Lead", "Led by")),
+      targetDate: str(col(r, "Target date", "Target Date", "End Date", "Deadline")),
+      rag: normalizeRag(col(r, "RAG", "Rag", "Status")),
+    }));
+}
+
+function parsePending(rows: Record<string, unknown>[]): PendingItem[] {
+  return rows
+    .filter((r) => str(col(r, "Activity", "Activity Description")) || str(col(r, "Workstream", "Work Stream")))
+    .map((r, i) => ({
+      sn: num(col(r, "SN", "S.No", "S No", "sn")) || i + 1,
+      workstream: str(col(r, "Workstream", "Work Stream")),
+      activity: str(col(r, "Activity", "Activity Description")),
+      leads: str(col(r, "Leads", "Lead")),
+      dateRaised: str(col(r, "Date Raised", "Date raised", "Raised")),
+    }));
+}
+
+function parseActivities(rows: Record<string, unknown>[]): ActivityItem[] {
+  return rows
+    .filter((r) => str(col(r, "Activity Description", "Activity", "Milestone")))
+    .map((r, i) => {
+      const sr = num(col(r, "Sr. No", "Sr.No", "Sr No", "SR", "sr", "SN")) || i + 1;
+      return {
+        sr,
+        displaySr: str(col(r, "Sr. No", "Sr.No", "Sr No", "SR", "sr", "SN")) || String(sr),
+        workstream: str(col(r, "Workstreams", "Workstream", "Work Stream")),
+        phase: str(col(r, "Phase")),
+        ledBy: str(col(r, "Led by", "Led By", "LedBy")),
+        activity: str(col(r, "Activity Description", "Activity", "Milestone")),
+        owner: str(col(r, "Owner/s", "Owner", "Owners")),
+        department: str(col(r, "Department", "Dept")),
+        status: str(col(r, "Status")),
+        deadline: str(col(r, "End Date", "Deadline", "Target Date")),
+        month: str(col(r, "Month")),
+      };
+    });
+}
+
+function parseRisk(rows: Record<string, unknown>[]): RiskLogItem[] {
+  return rows
+    .filter((r) => str(col(r, "Issue/Risk Detail", "Issue/Risk", "Detail", "Risk Detail")))
+    .map((r, i) => ({
+      sn: num(col(r, "S No", "SN", "S.No", "sn")) || i + 1,
+      workstream: str(col(r, "Workstream", "Work Stream")),
+      detail: str(col(r, "Issue/Risk Detail", "Issue/Risk", "Detail", "Risk Detail")),
+      mitigation: str(col(r, "Mitigation Plan", "Mitigation", "Mitigation plan")),
+      raised: str(col(r, "Date Raised", "Raised")),
+      level: normalizeRiskLevel(col(r, "Risk Level", "Level")),
+      status: normalizeLogStatus(col(r, "Status")),
+    }));
+}
+
+function parseDecision(rows: Record<string, unknown>[]): DecisionLogItem[] {
+  return rows
+    .filter((r) => str(col(r, "Decision Details", "Details")) || str(col(r, "Decision Area", "Area")))
+    .map((r, i) => ({
+      sn: num(col(r, "SN", "S.No", "S No", "sn")) || i + 1,
+      workstream: str(col(r, "Workstream", "Work Stream")),
+      area: str(col(r, "Decision Area", "Area")),
+      details: str(col(r, "Decision Details", "Details")),
+      owner: str(col(r, "Owner", "Owner/s")),
+      status: normalizeLogStatus(col(r, "Status")),
+    }));
+}
+
+function parseChecklistSheet(
+  rows: Record<string, unknown>[],
+  workstream: string,
+  startSn: number,
+): ChecklistItem[] {
+  return rows
+    .filter((r) => {
+      const task = str(col(r, "Task Name", "Task", "Activity"));
+      if (!task) return false;
+      // Skip section/category banner rows that only carry a title with no
+      // schedule/owner/status data.
+      const hasData =
+        str(col(r, "Status")) ||
+        str(col(r, "By Who", "By", "Lead")) ||
+        str(col(r, "Finish", "End Date")) ||
+        str(col(r, "Start")) ||
+        str(col(r, "SCB/FB/Jointly", "Owner"));
+      return Boolean(hasData);
+    })
+    .map((r, i) => ({
+      sn: startSn + i,
+      workstream,
+      task: str(col(r, "Task Name", "Task", "Activity")),
+      duration: str(col(r, "Duration")),
+      start: str(col(r, "Start")),
+      finish: str(col(r, "Finish", "End Date")),
+      by: str(col(r, "By Who", "By", "Lead")),
+      owner: normalizeOwner(col(r, "SCB/FB/Jointly", "Owner")),
+      status: normalizeChecklistStatus(col(r, "Status")),
+      comments: str(col(r, "Comments", "Remarks")),
+    }));
+}
+
+// ─── File-type detection ─────────────────────────────────────────────
+function detectByName(fileName: string): ModuleType {
+  const n = fileName.toLowerCase();
+  if (/risk/.test(n)) return "risk";
+  if (/decision/.test(n)) return "decision";
+  if (/checklist|joint|workstream/.test(n)) return "checklist";
+  if (/program|overview/.test(n)) return "program";
+  if (/rag/.test(n)) return "rag";
+  return "unknown";
+}
+
+function detectByContent(wb: XLSX.WorkBook): ModuleType {
+  // Gather every heading token that appears in the first 20 rows of any sheet.
+  const tokens = new Set<string>();
+  for (const name of wb.SheetNames) {
+    const aoa = sheetToAoa(wb.Sheets[name]);
+    for (let i = 0; i < Math.min(aoa.length, 20); i++) {
+      for (const c of aoa[i] || []) {
+        const t = str(c).toLowerCase();
+        if (t) tokens.add(t);
+      }
+    }
+  }
+  const has = (...t: string[]) => t.some((x) => tokens.has(x));
+  if (has("issue/risk detail", "mitigation plan", "risk level")) return "risk";
+  if (has("decision area", "decision details")) return "decision";
+  if (has("scb/fb/jointly", "task name", "by who")) return "checklist";
+  if (has("activity description", "led by", "owner/s")) return "program";
+  if (has("rag")) return "rag";
+  return "unknown";
+}
+
+// ─── Single-file parser ──────────────────────────────────────────────
+function parseFile(
+  fileName: string,
+  buffer: Uint8Array,
+): { data: Partial<DashboardData>; summary: FileSummary } {
+  const wb = XLSX.read(buffer, { type: "array" });
+  let type = detectByName(fileName);
+  if (type === "unknown") type = detectByContent(wb);
+
+  const data: Partial<DashboardData> = {};
+  const modules: (keyof DashboardData)[] = [];
+
+  switch (type) {
+    case "rag": {
+      const ragSheet =
+        pickSheet(wb, /^rag/i, /rag/i) ?? wb.Sheets[wb.SheetNames[0]];
+      const tsysSheet = pickSheet(wb, /tsys/i, /pending/i);
+      const ragSummary = parseRag(readRecords(ragSheet, EXP_RAG));
+      const pendingFromTsys = parsePending(readRecords(tsysSheet, EXP_PENDING));
+      if (ragSummary.length) {
+        data.ragSummary = ragSummary;
+        modules.push("ragSummary");
+      }
+      if (pendingFromTsys.length) {
+        data.pendingFromTsys = pendingFromTsys;
+        modules.push("pendingFromTsys");
+      }
+      break;
+    }
+    case "program": {
+      // Prefer the sheet that actually contains programme columns.
+      let sheet = wb.Sheets[wb.SheetNames[0]];
+      for (const name of wb.SheetNames) {
+        const aoa = sheetToAoa(wb.Sheets[name]);
+        const found = aoa
+          .slice(0, 20)
+          .some((row) =>
+            (row || []).some((c) => {
+              const t = str(c).toLowerCase();
+              return t === "activity description" || t === "led by";
+            }),
+          );
+        if (found) {
+          sheet = wb.Sheets[name];
+          break;
+        }
+      }
+      const activities = parseActivities(readRecords(sheet, EXP_PROGRAM));
+      if (activities.length) {
+        data.activities = activities;
+        modules.push("activities");
+      }
+      break;
+    }
+    case "checklist": {
+      const checklist: ChecklistItem[] = [];
+      for (const name of wb.SheetNames) {
+        const rows = readRecords(wb.Sheets[name], EXP_CHECKLIST);
+        const items = parseChecklistSheet(rows, name.trim(), checklist.length + 1);
+        checklist.push(...items);
+      }
+      if (checklist.length) {
+        data.checklist = checklist;
+        modules.push("checklist");
+      }
+      break;
+    }
+    case "risk": {
+      const sheet = pickSheet(wb, /risk/i) ?? wb.Sheets[wb.SheetNames[0]];
+      const riskLogs = parseRisk(readRecords(sheet, EXP_RISK));
+      if (riskLogs.length) {
+        data.riskLogs = riskLogs;
+        modules.push("riskLogs");
+      }
+      break;
+    }
+    case "decision": {
+      const sheet = pickSheet(wb, /decision/i) ?? wb.Sheets[wb.SheetNames[0]];
+      const decisionLogs = parseDecision(readRecords(sheet, EXP_DECISION));
+      if (decisionLogs.length) {
+        data.decisionLogs = decisionLogs;
+        modules.push("decisionLogs");
+      }
+      break;
+    }
+  }
+
+  const rows = Object.values(data).reduce((sum, arr) => sum + (arr?.length ?? 0), 0);
+  return {
+    data,
+    summary: { fileName, type, label: MODULE_LABEL[type], rows, modules },
+  };
+}
+
+// ─── Public entry point ──────────────────────────────────────────────
+export function parseUploadedModuleFiles(
+  files: { fileName: string; buffer: Uint8Array }[],
+): ParsedUpload {
+  const merged: Partial<DashboardData> = {};
+  const summary: FileSummary[] = [];
+
+  for (const { fileName, buffer } of files) {
+    const { data, summary: fileSummary } = parseFile(fileName, buffer);
+    Object.assign(merged, data);
+    summary.push(fileSummary);
+  }
+
+  const totalRows = Object.values(merged).reduce((sum, arr) => sum + (arr?.length ?? 0), 0);
+  return { data: merged, summary, totalRows };
+}
