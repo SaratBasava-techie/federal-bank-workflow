@@ -2,8 +2,8 @@ import type { DashboardData, DashboardResponse } from "./dashboard-server-fn";
 
 export type ModuleKey = keyof DashboardData;
 
-const STORAGE_KEY = "soulfire-excel-overrides-v2";
-const LEGACY_STORAGE_KEY = "soulfire-excel-overrides-v1";
+const STORAGE_KEY = "soulfire-excel-overrides-v3";
+const LEGACY_STORAGE_KEYS = ["soulfire-excel-overrides-v1", "soulfire-excel-overrides-v2"];
 
 /**
  * Per-module overrides sourced from uploaded Excel files. Each key that is
@@ -13,21 +13,24 @@ const LEGACY_STORAGE_KEY = "soulfire-excel-overrides-v1";
  */
 type Overrides = Partial<DashboardData>;
 
-function isDecisionLogValid(logs: any[]): boolean {
+function isDecisionLogValid(logs: unknown[]): boolean {
   if (!Array.isArray(logs) || logs.length === 0) return false;
-  // If all rows are missing details or contain known mismatched checklist strings, mark invalid
-  const hasValidDetails = logs.some((r) => r && typeof r.details === "string" && r.details.trim().length > 0);
-  const hasBadChecklistText = logs.some(
-    (r) => r && (String(r.area).includes("audit readiness") || String(r.details).includes("audit readiness")),
-  );
-  return hasValidDetails && !hasBadChecklistText;
+  return logs.every((value) => {
+    if (!value || typeof value !== "object") return false;
+    const row = value as Record<string, unknown>;
+    const hasDecisionContent =
+      (typeof row.area === "string" && row.area.trim().length > 0) ||
+      (typeof row.details === "string" && row.details.trim().length > 0);
+    return typeof row.sn === "number" && hasDecisionContent;
+  });
 }
 
 function loadOverrides(): Overrides {
   if (typeof localStorage === "undefined") return {};
   try {
-    // Clear legacy corrupted v1 storage if present
-    localStorage.removeItem(LEGACY_STORAGE_KEY);
+    // Uploaded data uses a versioned schema. Remove older persisted shapes so
+    // a parser fix takes effect even when browser cache/site data was retained.
+    for (const key of LEGACY_STORAGE_KEYS) localStorage.removeItem(key);
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return {};
     const parsed = JSON.parse(raw) as Overrides;

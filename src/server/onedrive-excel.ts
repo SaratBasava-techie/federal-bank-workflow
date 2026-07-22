@@ -213,10 +213,7 @@ async function fetchExcelBuffer(shareUrl: string): Promise<ArrayBuffer> {
 
 // ─── Helpers ─────────────────────────────────────────────────────────
 function norm(v: unknown): string {
-  return str(v)
-    .toLowerCase()
-    .replace(/\s+/g, " ")
-    .trim();
+  return str(v).toLowerCase().replace(/\s+/g, " ").trim();
 }
 
 function readSheet(workbook: XLSX.WorkBook, sheetName: string): Record<string, unknown>[] {
@@ -228,7 +225,11 @@ function readSheet(workbook: XLSX.WorkBook, sheetName: string): Record<string, u
     if (!key) return [];
     sheet = workbook.Sheets[key];
   }
-  const aoa = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "", blankrows: false }) as unknown[][];
+  const aoa = XLSX.utils.sheet_to_json(sheet, {
+    header: 1,
+    defval: "",
+    blankrows: false,
+  }) as unknown[][];
   if (aoa.length === 0) return [];
   let headerRow = 0;
   for (let i = 0; i < Math.min(aoa.length, 10); i++) {
@@ -318,15 +319,8 @@ function col(row: Record<string, unknown>, ...keys: string[]): unknown {
   for (const k of keys) {
     if (k in row) return row[k];
     const nk = norm(k);
-    let found = rowKeys.find((rk) => norm(rk) === nk);
+    const found = rowKeys.find((rk) => norm(rk) === nk);
     if (found) return row[found];
-    if (nk.length >= 4) {
-      found = rowKeys.find((rk) => {
-        const nr = norm(rk);
-        return nr.includes(nk) || nk.includes(nr);
-      });
-      if (found && str(row[found])) return row[found];
-    }
   }
   return "";
 }
@@ -399,15 +393,15 @@ function parseDecisionLog(rows: Record<string, unknown>[]): DecisionLogItem[] {
     .filter(
       (r) =>
         str(col(r, "Decision Details", "Details", "Decision Detail", "Description")) ||
-        str(col(r, "Decision Area", "Area", "Decision area")) ||
-        str(col(r, "Workstream", "Work Stream", "workstream")) ||
-        str(col(r, "SN", "S.No", "S No", "sn")),
+        str(col(r, "Decision Area", "Area", "Decision area")),
     )
     .map((r, i) => ({
       sn: num(col(r, "SN", "S.No", "S No", "sn", "Sr. No", "Sr No")) || i + 1,
       workstream: str(col(r, "Workstream", "Work Stream", "workstream", "Category")),
       area: str(col(r, "Decision Area", "Area", "area", "Decision area")),
-      details: str(col(r, "Decision Details", "Details", "details", "Decision Detail", "Description")),
+      details: str(
+        col(r, "Decision Details", "Details", "details", "Decision Detail", "Description"),
+      ),
       owner: str(col(r, "Owner", "Owner/s", "owner", "Owners", "Lead")),
       status: normalizeLogStatus(col(r, "Status", "status", "State")),
       remarks: str(col(r, "Remarks", "remarks", "Comment", "Comments")),

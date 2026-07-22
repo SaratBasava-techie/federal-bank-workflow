@@ -107,30 +107,17 @@ function normalizeOwner(v: unknown): "SCB" | "FB" | "Jointly" {
  * resilient to the multi-line header cells used in the real KPMG workbooks.
  */
 function norm(v: unknown): string {
-  return str(v)
-    .toLowerCase()
-    .replace(/\s+/g, " ")
-    .trim();
+  return str(v).toLowerCase().replace(/\s+/g, " ").trim();
 }
 
-/** Look up a cell by trying multiple possible column names (whitespace/case-insensitive). */
+/** Look up a cell by explicit column aliases (whitespace/case-insensitive). */
 function col(row: Record<string, unknown>, ...keys: string[]): unknown {
   const rowKeys = Object.keys(row);
   for (const k of keys) {
     if (k in row) return row[k];
     const nk = norm(k);
-    // Exact (normalized) match first.
-    let found = rowKeys.find((rk) => norm(rk) === nk);
+    const found = rowKeys.find((rk) => norm(rk) === nk);
     if (found) return row[found];
-    // Then a contains match, but only for reasonably specific headings so
-    // short tokens like "sn"/"by" cannot latch onto the wrong column.
-    if (nk.length >= 4) {
-      found = rowKeys.find((rk) => {
-        const nr = norm(rk);
-        return nr.includes(nk) || nk.includes(nr);
-      });
-      if (found && str(row[found])) return row[found];
-    }
   }
   return "";
 }
@@ -202,26 +189,66 @@ function pickSheet(wb: XLSX.WorkBook, ...matchers: RegExp[]): XLSX.WorkSheet | u
 }
 
 // ─── Expected column vocabularies (used for header detection) ────────
-const EXP_RAG = ["sn", "s no", "s.no", "workstream", "activity", "owner", "leads", "target date", "rag"];
+const EXP_RAG = [
+  "sn",
+  "s no",
+  "s.no",
+  "workstream",
+  "activity",
+  "owner",
+  "leads",
+  "target date",
+  "rag",
+];
 const EXP_PENDING = ["sn", "s no", "workstream", "activity", "leads", "date raised"];
 const EXP_PROGRAM = [
-  "sr. no", "sr no", "sr.no", "workstreams", "workstream", "led by", "activity description",
-  "owner/s", "owner", "department", "end date", "status", "month",
+  "sr. no",
+  "sr no",
+  "sr.no",
+  "workstreams",
+  "workstream",
+  "led by",
+  "activity description",
+  "owner/s",
+  "owner",
+  "department",
+  "end date",
+  "status",
+  "month",
 ];
 const EXP_RISK = [
-  "s no", "sn", "workstream", "issue/risk detail", "mitigation plan", "date raised",
-  "risk level", "status",
+  "s no",
+  "sn",
+  "workstream",
+  "issue/risk detail",
+  "mitigation plan",
+  "date raised",
+  "risk level",
+  "status",
 ];
 const EXP_DECISION = ["sn", "workstream", "decision area", "decision details", "owner", "status"];
 const EXP_CHECKLIST = [
-  "sr.no", "sr. no", "sr no", "task name", "task", "duration", "start", "finish", "by who",
-  "scb/fb/jointly", "status", "comments",
+  "sr.no",
+  "sr. no",
+  "sr no",
+  "task name",
+  "task",
+  "duration",
+  "start",
+  "finish",
+  "by who",
+  "scb/fb/jointly",
+  "status",
+  "comments",
 ];
 
 // ─── Per-sheet parsers ───────────────────────────────────────────────
 function parseRag(rows: Record<string, unknown>[]): RagItem[] {
   return rows
-    .filter((r) => str(col(r, "Activity", "Activity Description")) || str(col(r, "Workstream", "Work Stream")))
+    .filter(
+      (r) =>
+        str(col(r, "Activity", "Activity Description")) || str(col(r, "Workstream", "Work Stream")),
+    )
     .map((r, i) => ({
       sn: num(col(r, "SN", "S.No", "S No", "sn")) || i + 1,
       workstream: str(col(r, "Workstream", "Work Stream")),
@@ -235,7 +262,10 @@ function parseRag(rows: Record<string, unknown>[]): RagItem[] {
 
 function parsePending(rows: Record<string, unknown>[]): PendingItem[] {
   return rows
-    .filter((r) => str(col(r, "Activity", "Activity Description")) || str(col(r, "Workstream", "Work Stream")))
+    .filter(
+      (r) =>
+        str(col(r, "Activity", "Activity Description")) || str(col(r, "Workstream", "Work Stream")),
+    )
     .map((r, i) => ({
       sn: num(col(r, "SN", "S.No", "S No", "sn")) || i + 1,
       workstream: str(col(r, "Workstream", "Work Stream")),
@@ -285,15 +315,15 @@ function parseDecision(rows: Record<string, unknown>[]): DecisionLogItem[] {
     .filter(
       (r) =>
         str(col(r, "Decision Details", "Details", "Decision Detail", "Description")) ||
-        str(col(r, "Decision Area", "Area", "Decision area")) ||
-        str(col(r, "Workstream", "Work Stream", "workstream")) ||
-        str(col(r, "SN", "S.No", "S No", "sn")),
+        str(col(r, "Decision Area", "Area", "Decision area")),
     )
     .map((r, i) => ({
       sn: num(col(r, "SN", "S.No", "S No", "sn", "Sr. No", "Sr No")) || i + 1,
       workstream: str(col(r, "Workstream", "Work Stream", "workstream", "Category")),
       area: str(col(r, "Decision Area", "Area", "area", "Decision area")),
-      details: str(col(r, "Decision Details", "Details", "details", "Decision Detail", "Description")),
+      details: str(
+        col(r, "Decision Details", "Details", "details", "Decision Detail", "Description"),
+      ),
       owner: str(col(r, "Owner", "Owner/s", "owner", "Owners", "Lead")),
       status: normalizeLogStatus(col(r, "Status", "status", "State")),
       remarks: str(col(r, "Remarks", "remarks", "Comment", "Comments")),
@@ -380,8 +410,7 @@ function parseFile(
 
   switch (type) {
     case "rag": {
-      const ragSheet =
-        pickSheet(wb, /^rag/i, /rag/i) ?? wb.Sheets[wb.SheetNames[0]];
+      const ragSheet = pickSheet(wb, /^rag/i, /rag/i) ?? wb.Sheets[wb.SheetNames[0]];
       const tsysSheet = pickSheet(wb, /tsys/i, /pending/i);
       const ragSummary = parseRag(readRecords(ragSheet, EXP_RAG));
       const pendingFromTsys = parsePending(readRecords(tsysSheet, EXP_PENDING));
@@ -400,14 +429,12 @@ function parseFile(
       let sheet = wb.Sheets[wb.SheetNames[0]];
       for (const name of wb.SheetNames) {
         const aoa = sheetToAoa(wb.Sheets[name]);
-        const found = aoa
-          .slice(0, 20)
-          .some((row) =>
-            (row || []).some((c) => {
-              const t = str(c).toLowerCase();
-              return t === "activity description" || t === "led by";
-            }),
-          );
+        const found = aoa.slice(0, 20).some((row) =>
+          (row || []).some((c) => {
+            const t = str(c).toLowerCase();
+            return t === "activity description" || t === "led by";
+          }),
+        );
         if (found) {
           sheet = wb.Sheets[name];
           break;

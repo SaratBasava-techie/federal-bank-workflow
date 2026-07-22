@@ -17,9 +17,25 @@ export const Route = createFileRoute("/decision-log")({
   component: DecisionLogPage,
 });
 
+interface DecisionLogRow {
+  sn?: number;
+  workstream?: string;
+  workStream?: string;
+  area?: string;
+  decisionArea?: string;
+  details?: string;
+  decisionDetails?: string;
+  description?: string;
+  owner?: string;
+  owners?: string;
+  status?: LogStatus;
+  remarks?: string;
+  comments?: string;
+}
+
 function DecisionLogPage() {
   const { data: response } = useDashboardData();
-  const rawLogs = (response?.data?.decisionLogs ?? staticDecisionLogs) as any[];
+  const rawLogs = (response?.data?.decisionLogs ?? staticDecisionLogs) as DecisionLogRow[];
   const decisionLogs = rawLogs.map((r, i) => ({
     sn: r.sn ?? i + 1,
     workstream: r.workstream || r.workStream || "—",
