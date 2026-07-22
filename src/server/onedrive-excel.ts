@@ -216,6 +216,10 @@ function norm(v: unknown): string {
   return str(v).toLowerCase().replace(/\s+/g, " ").trim();
 }
 
+function headingKey(v: unknown): string {
+  return norm(v).replace(/[^a-z0-9]+/g, "");
+}
+
 function readSheet(workbook: XLSX.WorkBook, sheetName: string): Record<string, unknown>[] {
   let sheet = workbook.Sheets[sheetName];
   if (!sheet) {
@@ -318,8 +322,8 @@ function col(row: Record<string, unknown>, ...keys: string[]): unknown {
   const rowKeys = Object.keys(row);
   for (const k of keys) {
     if (k in row) return row[k];
-    const nk = norm(k);
-    const found = rowKeys.find((rk) => norm(rk) === nk);
+    const expectedKey = headingKey(k);
+    const found = rowKeys.find((rowKey) => headingKey(rowKey) === expectedKey);
     if (found) return row[found];
   }
   return "";
@@ -388,23 +392,50 @@ function parseRiskLog(rows: Record<string, unknown>[]): RiskLogItem[] {
     }));
 }
 
+function decisionCell(
+  row: Record<string, unknown>,
+  fallbackIndex: number,
+  ...aliases: string[]
+): unknown {
+  const matched = col(row, ...aliases);
+  if (str(matched)) return matched;
+
+  const headings = Object.keys(row);
+  const hasExpectedLayout =
+    headings.length >= 7 &&
+    ["sn", "sno", "srno"].includes(headingKey(headings[0])) &&
+    headingKey(headings[1]) === "workstream" &&
+    ["owner", "owners"].includes(headingKey(headings[5])) &&
+    ["status", "state"].includes(headingKey(headings[6]));
+
+  return hasExpectedLayout && headings[fallbackIndex] ? row[headings[fallbackIndex]] : "";
+}
+
 function parseDecisionLog(rows: Record<string, unknown>[]): DecisionLogItem[] {
   return rows
     .filter(
       (r) =>
-        str(col(r, "Decision Details", "Details", "Decision Detail", "Description")) ||
-        str(col(r, "Decision Area", "Area", "Decision area")),
+        str(decisionCell(r, 3, "Decision Details", "Details", "Decision Detail", "Description")) ||
+        str(decisionCell(r, 2, "Decision Area", "Area", "Decision area")),
     )
     .map((r, i) => ({
-      sn: num(col(r, "SN", "S.No", "S No", "sn", "Sr. No", "Sr No")) || i + 1,
-      workstream: str(col(r, "Workstream", "Work Stream", "workstream", "Category")),
-      area: str(col(r, "Decision Area", "Area", "area", "Decision area")),
+      sn: num(decisionCell(r, 0, "SN", "S.No", "S No", "sn", "Sr. No", "Sr No")) || i + 1,
+      workstream: str(decisionCell(r, 1, "Workstream", "Work Stream", "workstream", "Category")),
+      area: str(decisionCell(r, 2, "Decision Area", "Area", "area", "Decision area")),
       details: str(
-        col(r, "Decision Details", "Details", "details", "Decision Detail", "Description"),
+        decisionCell(
+          r,
+          3,
+          "Decision Details",
+          "Details",
+          "details",
+          "Decision Detail",
+          "Description",
+        ),
       ),
-      owner: str(col(r, "Owner", "Owner/s", "owner", "Owners", "Lead")),
-      status: normalizeLogStatus(col(r, "Status", "status", "State")),
-      remarks: str(col(r, "Remarks", "remarks", "Comment", "Comments")),
+      owner: str(decisionCell(r, 5, "Owner", "Owner/s", "owner", "Owners", "Lead")),
+      status: normalizeLogStatus(decisionCell(r, 6, "Status", "status", "State")),
+      remarks: str(decisionCell(r, 7, "Remarks", "remarks", "Comment", "Comments")),
     }));
 }
 
