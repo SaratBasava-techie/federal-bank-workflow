@@ -282,14 +282,21 @@ function parseRisk(rows: Record<string, unknown>[]): RiskLogItem[] {
 
 function parseDecision(rows: Record<string, unknown>[]): DecisionLogItem[] {
   return rows
-    .filter((r) => str(col(r, "Decision Details", "Details")) || str(col(r, "Decision Area", "Area")))
+    .filter(
+      (r) =>
+        str(col(r, "Decision Details", "Details", "Decision Detail", "Description")) ||
+        str(col(r, "Decision Area", "Area", "Decision area")) ||
+        str(col(r, "Workstream", "Work Stream", "workstream")) ||
+        str(col(r, "SN", "S.No", "S No", "sn")),
+    )
     .map((r, i) => ({
-      sn: num(col(r, "SN", "S.No", "S No", "sn")) || i + 1,
-      workstream: str(col(r, "Workstream", "Work Stream")),
-      area: str(col(r, "Decision Area", "Area")),
-      details: str(col(r, "Decision Details", "Details")),
-      owner: str(col(r, "Owner", "Owner/s")),
-      status: normalizeLogStatus(col(r, "Status")),
+      sn: num(col(r, "SN", "S.No", "S No", "sn", "Sr. No", "Sr No")) || i + 1,
+      workstream: str(col(r, "Workstream", "Work Stream", "workstream", "Category")),
+      area: str(col(r, "Decision Area", "Area", "area", "Decision area")),
+      details: str(col(r, "Decision Details", "Details", "details", "Decision Detail", "Description")),
+      owner: str(col(r, "Owner", "Owner/s", "owner", "Owners", "Lead")),
+      status: normalizeLogStatus(col(r, "Status", "status", "State")),
+      remarks: str(col(r, "Remarks", "remarks", "Comment", "Comments")),
     }));
 }
 

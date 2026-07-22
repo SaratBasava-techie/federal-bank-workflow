@@ -19,14 +19,17 @@ export const Route = createFileRoute("/decision-log")({
 
 function DecisionLogPage() {
   const { data: response } = useDashboardData();
-  const decisionLogs = (response?.data?.decisionLogs ?? staticDecisionLogs) as {
-    sn: number;
-    workstream: string;
-    area: string;
-    details: string;
-    owner: string;
-    status: LogStatus;
-  }[];
+  const rawLogs = (response?.data?.decisionLogs ?? staticDecisionLogs) as any[];
+  const decisionLogs = rawLogs.map((r, i) => ({
+    sn: r.sn ?? i + 1,
+    workstream: r.workstream || r.workStream || "—",
+    area: r.area || r.decisionArea || "—",
+    details: r.details || r.decisionDetails || r.description || "—",
+    owner: r.owner || r.owners || "—",
+    status: (r.status as LogStatus) || "Open",
+    remarks: r.remarks || r.comments || "",
+  }));
+
   const [filter, setFilter] = useState<LogStatus | "All">("All");
   const rows = filter === "All" ? decisionLogs : decisionLogs.filter((r) => r.status === filter);
   const counts = decisionLogs.reduce(
@@ -61,18 +64,20 @@ function DecisionLogPage() {
             "Decision Details",
             "Owner",
             "Status",
+            "Remarks",
           ]}
         >
-          {rows.map((r) => (
-            <tr key={r.sn} className="border-t border-border/70 hover:bg-muted/40">
+          {rows.map((r, idx) => (
+            <tr key={`${r.sn}-${idx}`} className="border-t border-border/70 hover:bg-muted/40">
               <Td>{r.sn}</Td>
               <Td className="font-medium text-foreground whitespace-nowrap">{r.workstream}</Td>
               <Td className="whitespace-nowrap">{r.area}</Td>
-              <Td className="max-w-[500px] text-foreground/80">{r.details}</Td>
+              <Td className="max-w-[450px] text-foreground/80">{r.details}</Td>
               <Td className="whitespace-nowrap">{r.owner}</Td>
               <Td>
                 <LogStatusPill status={r.status} />
               </Td>
+              <Td className="max-w-[300px] text-xs text-muted-foreground">{r.remarks || "—"}</Td>
             </tr>
           ))}
         </Table>

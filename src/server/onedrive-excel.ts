@@ -212,17 +212,58 @@ async function fetchExcelBuffer(shareUrl: string): Promise<ArrayBuffer> {
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────
+function norm(v: unknown): string {
+  return str(v)
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 function readSheet(workbook: XLSX.WorkBook, sheetName: string): Record<string, unknown>[] {
-  const sheet = workbook.Sheets[sheetName];
+  let sheet = workbook.Sheets[sheetName];
   if (!sheet) {
-    // Try case-insensitive match
     const key = Object.keys(workbook.Sheets).find(
       (k) => k.toLowerCase().trim() === sheetName.toLowerCase().trim(),
     );
     if (!key) return [];
-    return XLSX.utils.sheet_to_json(workbook.Sheets[key], { defval: "" });
+    sheet = workbook.Sheets[key];
   }
-  return XLSX.utils.sheet_to_json(sheet, { defval: "" });
+  const aoa = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "", blankrows: false }) as unknown[][];
+  if (aoa.length === 0) return [];
+  let headerRow = 0;
+  for (let i = 0; i < Math.min(aoa.length, 10); i++) {
+    const row = aoa[i] || [];
+    const hasMatch = row.some((cell) => {
+      const c = norm(cell);
+      return (
+        c.includes("workstream") ||
+        c.includes("decision") ||
+        c.includes("activity") ||
+        c.includes("owner") ||
+        c.includes("status") ||
+        c === "sn" ||
+        c === "s.no" ||
+        c === "s no"
+      );
+    });
+    if (hasMatch) {
+      headerRow = i;
+      break;
+    }
+  }
+  const headers = (aoa[headerRow] || []).map((h) => str(h).replace(/\s+/g, " "));
+  const records: Record<string, unknown>[] = [];
+  for (let i = headerRow + 1; i < aoa.length; i++) {
+    const row = aoa[i] || [];
+    if (row.every((c) => str(c) === "")) continue;
+    const rec: Record<string, unknown> = {};
+    for (let j = 0; j < headers.length; j++) {
+      const h = headers[j];
+      if (h) rec[h] = row[j] ?? "";
+    }
+    records.push(rec);
+  }
+  return records;
 }
 
 function str(v: unknown): string {
@@ -244,8 +285,8 @@ function normalizeRag(v: unknown): "critical" | "warning" | "ontrack" {
 
 function normalizeLogStatus(v: unknown): "Open" | "Closed" | "WIP" {
   const s = str(v).toLowerCase();
-  if (s === "closed" || s === "done" || s === "completed") return "Closed";
-  if (s === "wip" || s === "in progress") return "WIP";
+  if (s === "closed" || s === "done" || s === "completed" || s === "complete") return "Closed";
+  if (s === "wip" || s === "in progress" || s === "inprogress") return "WIP";
   return "Open";
 }
 
@@ -269,18 +310,23 @@ function normalizeOwner(v: unknown): "SCB" | "FB" | "Jointly" {
   if (s.includes("jointly") || s.includes("joint")) return "Jointly";
   if (s.includes("fb") || s.includes("federal")) return "FB";
   if (s.includes("scb") || s.includes("standard")) return "SCB";
-  // Fallback based on first match
   return "Jointly";
 }
 
-// Column name lookup helper — finds a value by trying multiple possible column names
 function col(row: Record<string, unknown>, ...keys: string[]): unknown {
+  const rowKeys = Object.keys(row);
   for (const k of keys) {
-    // Exact match
     if (k in row) return row[k];
-    // Case-insensitive match
-    const found = Object.keys(row).find((rk) => rk.toLowerCase().trim() === k.toLowerCase().trim());
+    const nk = norm(k);
+    let found = rowKeys.find((rk) => norm(rk) === nk);
     if (found) return row[found];
+    if (nk.length >= 4) {
+      found = rowKeys.find((rk) => {
+        const nr = norm(rk);
+        return nr.includes(nk) || nk.includes(nr);
+      });
+      if (found && str(row[found])) return row[found];
+    }
   }
   return "";
 }
@@ -350,14 +396,21 @@ function parseRiskLog(rows: Record<string, unknown>[]): RiskLogItem[] {
 
 function parseDecisionLog(rows: Record<string, unknown>[]): DecisionLogItem[] {
   return rows
-    .filter((r) => col(r, "SN", "S.No", "S No", "sn"))
+    .filter(
+      (r) =>
+        str(col(r, "Decision Details", "Details", "Decision Detail", "Description")) ||
+        str(col(r, "Decision Area", "Area", "Decision area")) ||
+        str(col(r, "Workstream", "Work Stream", "workstream")) ||
+        str(col(r, "SN", "S.No", "S No", "sn")),
+    )
     .map((r, i) => ({
-      sn: num(col(r, "SN", "S.No", "S No", "sn")) || i + 1,
-      workstream: str(col(r, "Workstream", "Work Stream")),
-      area: str(col(r, "Decision Area", "Area")),
-      details: str(col(r, "Decision Details", "Details")),
-      owner: str(col(r, "Owner", "Owner/s")),
-      status: normalizeLogStatus(col(r, "Status")),
+      sn: num(col(r, "SN", "S.No", "S No", "sn", "Sr. No", "Sr No")) || i + 1,
+      workstream: str(col(r, "Workstream", "Work Stream", "workstream", "Category")),
+      area: str(col(r, "Decision Area", "Area", "area", "Decision area")),
+      details: str(col(r, "Decision Details", "Details", "details", "Decision Detail", "Description")),
+      owner: str(col(r, "Owner", "Owner/s", "owner", "Owners", "Lead")),
+      status: normalizeLogStatus(col(r, "Status", "status", "State")),
+      remarks: str(col(r, "Remarks", "remarks", "Comment", "Comments")),
     }));
 }
 

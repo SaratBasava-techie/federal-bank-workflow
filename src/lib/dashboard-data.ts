@@ -368,7 +368,7 @@ export const decisionLogs: DecisionLog[] = [
     area: "Network Connectivity",
     details:
       "Network connectivity between FB and TSYS will be established via a private link. The IT team will provide the cost details for setting up the Project Soulfire infrastructure in due course.",
-    owner: "Dinu",
+    owner: "Dinh",
     status: "Closed",
     remarks: "",
   },
@@ -379,8 +379,8 @@ export const decisionLogs: DecisionLog[] = [
     details:
       "An approach note pertaining to KYC, customer risk categorization and delivery address update to be drafted to ensure regulatory alignment for new portfolio.",
     owner: "Kishore/Sreejith",
-    status: "WIP",
-    remarks: "",
+    status: "Closed",
+    remarks: "As updated by Kishore on 15 Jul, Not completed. Awaiting Evidence",
   },
   {
     sn: 8,
@@ -400,7 +400,8 @@ export const decisionLogs: DecisionLog[] = [
       "Consent mechanism, channels, frequency and calendar plan is awaited. This is proposed to be discussed in upcoming JIC on 08-06-2026",
     owner: "Shefali",
     status: "Closed",
-    remarks: "Point discussed in 2nd JIC on 8 Jun.",
+    remarks:
+      "Point discussed in 2nd JIC on 8 Jun. Final Evidence considered as mail sent 14 Jul where he mentioned...",
   },
   {
     sn: 11,
