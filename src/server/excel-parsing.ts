@@ -508,29 +508,18 @@ function parseFile(
       break;
     }
     case "decision": {
-      let sheet = pickSheet(wb, /decision/i);
-      if (!sheet) {
-        // Look for a sheet containing decision headers
-        for (const name of wb.SheetNames) {
-          const aoa = sheetToAoa(wb.Sheets[name]);
-          const found = aoa.slice(0, 10).some((row) =>
-            (row || []).some((c) => {
-              const t = norm(c);
-              return t.includes("decision details") || t.includes("decision area");
-            }),
-          );
-          if (found) {
-            sheet = wb.Sheets[name];
-            break;
-          }
-        }
+      // A workbook can contain several decision-related sheets. Do not stop at
+      // the first name match: e.g. "Decision_Log" may use a different export
+      // schema while a later "Decision" sheet contains the dashboard columns.
+      // Parse every sheet and use the strongest dashboard-shaped result.
+      let decisionLogs: DecisionLogItem[] = [];
+      for (const name of wb.SheetNames) {
+        const candidate = parseDecision(readRecords(wb.Sheets[name], EXP_DECISION));
+        if (candidate.length > decisionLogs.length) decisionLogs = candidate;
       }
-      if (sheet) {
-        const decisionLogs = parseDecision(readRecords(sheet, EXP_DECISION));
-        if (decisionLogs.length) {
-          data.decisionLogs = decisionLogs;
-          modules.push("decisionLogs");
-        }
+      if (decisionLogs.length) {
+        data.decisionLogs = decisionLogs;
+        modules.push("decisionLogs");
       }
       break;
     }
