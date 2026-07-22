@@ -443,11 +443,29 @@ function parseFile(
       break;
     }
     case "decision": {
-      const sheet = pickSheet(wb, /decision/i) ?? wb.Sheets[wb.SheetNames[0]];
-      const decisionLogs = parseDecision(readRecords(sheet, EXP_DECISION));
-      if (decisionLogs.length) {
-        data.decisionLogs = decisionLogs;
-        modules.push("decisionLogs");
+      let sheet = pickSheet(wb, /decision/i);
+      if (!sheet) {
+        // Look for a sheet containing decision headers
+        for (const name of wb.SheetNames) {
+          const aoa = sheetToAoa(wb.Sheets[name]);
+          const found = aoa.slice(0, 10).some((row) =>
+            (row || []).some((c) => {
+              const t = norm(c);
+              return t.includes("decision details") || t.includes("decision area");
+            }),
+          );
+          if (found) {
+            sheet = wb.Sheets[name];
+            break;
+          }
+        }
+      }
+      if (sheet) {
+        const decisionLogs = parseDecision(readRecords(sheet, EXP_DECISION));
+        if (decisionLogs.length) {
+          data.decisionLogs = decisionLogs;
+          modules.push("decisionLogs");
+        }
       }
       break;
     }

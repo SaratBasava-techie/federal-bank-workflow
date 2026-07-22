@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import type { DashboardResponse } from "@/lib/dashboard-server-fn";
 import {
   applyClientExcelOverrides,
+  clearClientExcelOverrides,
   hasClientExcelOverrides,
   mergeClientExcelData,
 } from "@/lib/client-excel-upload";
@@ -65,6 +66,14 @@ export function ExcelUploadDialog() {
     setSelectedFiles([]);
     setStatus({ kind: "idle" });
     if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const handleClear = () => {
+    clearClientExcelOverrides();
+    setHasOverride(false);
+    resetForm();
+    queryClient.invalidateQueries({ queryKey: ["dashboard-data"] });
+    setOpen(false);
   };
 
   const handleUpload = async () => {
@@ -218,7 +227,20 @@ export function ExcelUploadDialog() {
           )}
         </div>
 
-        <DialogFooter>
+        <DialogFooter className="flex items-center justify-between gap-2">
+          {hasOverride ? (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="text-xs text-destructive hover:bg-destructive/10 hover:text-destructive"
+              onClick={handleClear}
+            >
+              Reset Uploaded Data
+            </Button>
+          ) : (
+            <div />
+          )}
           <Button
             type="button"
             onClick={handleUpload}
