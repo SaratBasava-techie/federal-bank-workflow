@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getDashboardData } from "../lib/dashboard-server-fn";
 import type { DashboardResponse } from "../lib/dashboard-server-fn";
-import { mergeClientExcelData } from "../lib/client-excel-upload";
 
 // Re-export types for convenience
 export type {
@@ -26,7 +25,11 @@ const POLL_INTERVAL = 10_000; // 10 seconds
 export function useDashboardData() {
   return useQuery<DashboardResponse>({
     queryKey: ["dashboard-data"],
-    queryFn: async () => mergeClientExcelData(await getDashboardData()),
+    // The server is the single source of truth: getDashboardData already
+    // overlays any uploaded data (persisted server-side) so every visitor sees
+    // it on refresh. We intentionally do NOT overlay this browser's localStorage
+    // here — doing so would mask another machine's fresh upload.
+    queryFn: () => getDashboardData(),
     refetchInterval: POLL_INTERVAL,
     refetchIntervalInBackground: false, // Only poll when tab is visible
     staleTime: 5_000, // Consider data stale after 5 seconds

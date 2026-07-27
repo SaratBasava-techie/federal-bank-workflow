@@ -13,14 +13,12 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { DashboardResponse } from "@/lib/dashboard-server-fn";
 import {
   applyClientExcelOverrides,
   clearClientExcelOverrides,
   hasClientExcelOverrides,
-  mergeClientExcelData,
 } from "@/lib/client-excel-upload";
-import { parseUploadedDashboardFiles } from "@/lib/upload-server-fn";
+import { clearUploadedDashboardData, parseUploadedDashboardFiles } from "@/lib/upload-server-fn";
 
 interface FileSummary {
   fileName: string;
@@ -68,11 +66,18 @@ export function ExcelUploadDialog() {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  const handleClear = () => {
+  const handleClear = async () => {
+    // Clear the shared server-side data so every visitor reverts to default,
+    // then clear this browser's leftover local copy and refresh.
+    try {
+      await clearUploadedDashboardData();
+    } catch {
+      /* ignore — still clear locally and refetch below */
+    }
     clearClientExcelOverrides();
     setHasOverride(false);
     resetForm();
-    queryClient.invalidateQueries({ queryKey: ["dashboard-data"] });
+    await queryClient.invalidateQueries({ queryKey: ["dashboard-data"] });
     setOpen(false);
   };
 
@@ -97,11 +102,12 @@ export function ExcelUploadDialog() {
       });
       const result = await parseUploadedDashboardFiles({ data: { files } });
 
+      // Data is now saved on the server (shared with everyone). Mark this
+      // browser as an uploader (for the reset control) and refetch so the
+      // dashboard reflects the freshly stored server data.
       applyClientExcelOverrides(result.data);
-      queryClient.setQueryData<DashboardResponse>(["dashboard-data"], (current) =>
-        current ? mergeClientExcelData(current) : current,
-      );
       setHasOverride(true);
+      await queryClient.invalidateQueries({ queryKey: ["dashboard-data"] });
 
       const parsedFiles = result.summary.filter((s) => s.rows > 0);
       const emptyFiles = result.summary.filter((s) => s.rows === 0);

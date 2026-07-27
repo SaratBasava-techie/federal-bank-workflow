@@ -67,6 +67,17 @@ export const parseUploadedDashboardFiles = createServerFn({ method: "POST" })
   });
 
 /**
+ * Clears the server-stored uploaded data so every visitor reverts to the
+ * built-in default dataset. This backs the "Reset Uploaded Data" button.
+ */
+export const clearUploadedDashboardData = createServerFn({ method: "POST" }).handler(async () => {
+  const { clearStoredOverrides } = await import("../server/dashboard-store");
+  clearStoredOverrides();
+  console.log("[Upload] Cleared stored dashboard overrides (reverted to default)");
+  return { success: true };
+});
+
+/**
  * Server function that accepts Excel file uploads from Power Automate.
  * Secured with an API_UPLOAD_KEY environment variable.
  *
