@@ -14,6 +14,27 @@ const tabs = [
   { to: "/decision-log", search: undefined, label: "Decision Log" },
 ] as const;
 
+const MONTH_NAMES = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+/** Current month and year, e.g. "June 2026". */
+function currentReportingPeriod(): string {
+  const now = new Date();
+  return `${MONTH_NAMES[now.getMonth()]} ${now.getFullYear()}`;
+}
+
 export function DashboardShell({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
   const { data: response } = useDashboardData();
@@ -65,7 +86,9 @@ export function DashboardShell({ children }: { children: ReactNode }) {
 
             <div className="mb-2 rounded-md border border-white/15 bg-white/5 px-3 py-1.5 text-[11px] text-white/80 backdrop-blur-sm transition-all duration-200 hover:bg-white/10 hover:border-white/25">
               Reporting period:
-              <span className="ml-1 font-semibold text-white">June 2026</span>
+              <span suppressHydrationWarning className="ml-1 font-semibold text-white">
+                {currentReportingPeriod()}
+              </span>
             </div>
           </div>
         </div>
