@@ -50,6 +50,15 @@ export const parseUploadedDashboardFiles = createServerFn({ method: "POST" })
       );
     }
 
+    // Persist the parsed data on the server so every visitor sees it, not just
+    // the browser that uploaded. Failure to persist must not fail the upload.
+    try {
+      const { mergeStoredOverrides } = await import("../server/dashboard-store");
+      mergeStoredOverrides(result.data);
+    } catch (error) {
+      console.error("[Upload] Failed to persist parsed data:", error);
+    }
+
     console.log(
       `[Upload] Parsed ${files.length} file(s): ${result.totalRows} rows across ` +
         `${result.summary.filter((s) => s.rows > 0).length} module(s)`,

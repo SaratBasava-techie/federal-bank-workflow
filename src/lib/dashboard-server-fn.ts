@@ -61,30 +61,16 @@ export const getDashboardData = createServerFn({ method: "GET" }).handler(
       checklist: staticChecklist as unknown as ChecklistItem[],
     };
 
-    if (!hasAnyUrl && !useLocalFiles) {
-      console.log("[DashboardData] No OneDrive URLs or local files configured, using static data");
-      return {
-        data: staticData,
-        isConnected: true, // Mocked as connected to hide error
-      };
-    }
+    // Build the base dataset (static, or OneDrive/local when configured).
+    let baseData: DashboardData = staticData;
 
-    try {
-      // Dynamic import to prevent bundler from dragging server-only dependencies to the client
-      const { fetchDashboardDataFromOneDrive } = await import("../server/onedrive-excel");
-      const data = await fetchDashboardDataFromOneDrive();
+    if (hasAnyUrl || useLocalFiles) {
+      try {
+        // Dynamic import to prevent bundler from dragging server-only dependencies to the client
+        const { fetchDashboardDataFromOneDrive } = await import("../server/onedrive-excel");
+        const data = await fetchDashboardDataFromOneDrive();
 
-      // Check if at least one URL succeeded in returning rows
-      const anyDataLoaded =
-        data.ragSummary.length > 0 ||
-        data.pendingFromTsys.length > 0 ||
-        data.activities.length > 0 ||
-        data.riskLogs.length > 0 ||
-        data.decisionLogs.length > 0 ||
-        data.checklist.length > 0;
-
-      return {
-        data: {
+        baseData = {
           // Force static data for RAG and TSYS to reflect recent manual updates
           ragSummary: staticData.ragSummary,
           pendingFromTsys: staticData.pendingFromTsys,
@@ -92,15 +78,34 @@ export const getDashboardData = createServerFn({ method: "GET" }).handler(
           riskLogs: data.riskLogs.length > 0 ? data.riskLogs : staticData.riskLogs,
           decisionLogs: data.decisionLogs.length > 0 ? data.decisionLogs : staticData.decisionLogs,
           checklist: data.checklist.length > 0 ? data.checklist : staticData.checklist,
-        },
-        isConnected: true, // Mocked as connected to hide error
-      };
-    } catch (error: any) {
-      console.error("[DashboardData] Error fetching from OneDrive, falling back to static:", error);
-      return {
-        data: staticData,
-        isConnected: true, // Mocked as connected to hide error
-      };
+        };
+      } catch (error: any) {
+        console.error(
+          "[DashboardData] Error fetching from OneDrive, falling back to static:",
+          error,
+        );
+      }
+    } else {
+      console.log("[DashboardData] No OneDrive URLs or local files configured, using static data");
     }
+
+    // Overlay any data uploaded via the "Upload Excel" button. This is stored
+    // server-side, so it is shared with every visitor. Modules that were never
+    // uploaded keep their base (default) data.
+    let data = baseData;
+    try {
+      const { readStoredOverrides } = await import("../server/dashboard-store");
+      const stored = readStoredOverrides();
+      if (Object.keys(stored).length > 0) {
+        data = { ...baseData, ...stored };
+      }
+    } catch (error) {
+      console.error("[DashboardData] Failed to read stored uploads:", error);
+    }
+
+    return {
+      data,
+      isConnected: true, // Mocked as connected to hide error
+    };
   },
 );
