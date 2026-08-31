@@ -158,7 +158,7 @@ function ProgramPage() {
     <DashboardShell>
       <section className="mb-6">
         <h2 className="text-xl font-semibold tracking-tight text-foreground">
-          Programme Overview — July&nbsp;2026
+          Programme Overview
         </h2>
         <p className="mt-1 text-sm text-muted-foreground">
           Snapshot of activity throughput, phase progress and weekly demand.

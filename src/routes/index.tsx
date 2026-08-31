@@ -903,7 +903,7 @@ function DashboardPage() {
       <section className="mb-6 flex flex-wrap items-end justify-between gap-3 soulfire-entrance soulfire-delay-0">
         <div>
           <h2 className="text-xl font-semibold tracking-tight text-foreground">
-            RAG Summary Dashboard for June&apos;26
+            RAG Summary Dashboard
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
             Open risks, blockers and dependencies tracked across workstreams.
